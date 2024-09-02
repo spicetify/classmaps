@@ -174,7 +174,7 @@
 				}
 			}
 		},
-		"right_sidebar": {
+		"panel": {
 			"root": "OTfMDdomT5S7B5dbYTT8",
 			"wrapper": "XOawmCGZcQx4cesyNfVO",
 			"aside": "ffFwfKcPDbmAPLXzxzKq",
@@ -199,7 +199,7 @@
 			"root": "BdcvqBAid96FaHAmPYw_",
 			"container": "lYpiKR_qEjl1jGGyEvsA",
 			"section": "lHJd4oSttKLxkxuoZ0Lr",
-			"navbar": {
+			"navlinks": {
 				"container": "fFvRIGtMIgsOLVSq_JNS",
 				"link": {
 					"wrapper": "KAcp7QFuEYSouAsuC5i_",
@@ -242,7 +242,7 @@
 		"button": "lihLVK",
 		"active": "E1ikFpkPVaoLplbQdrTP"
 	},
-	"progress_bar": {
+	"slider": {
 		"wrapper": "p1ULRzPc4bD8eQ4T_wyp",
 		"bar": "TywOcKZEqNynWecCiATc",
 		"background": "NoOAOv6U6vtqj_ybS1Cd",
