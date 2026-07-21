@@ -1,0 +1,63 @@
+{
+  "spotify_version": "1.2.92.148",
+  "classmap_key": "1020092",
+  "status": "verified",
+  "generated": "2026-07-21",
+  "pipeline": "migrate(1020040 -> 1020092) + static verify + CDP e2e (deep) + manual DOM probe",
+  "guards": [
+    "playbar!=actionBar",
+    "content!=closeBtn",
+    "settings!=equalizer/NPV/actionBar",
+    "semantic-only requires target CSS presence (sem>=0.75)"
+  ],
+  "stats": {
+    "leaves": 36,
+    "verified": 21,
+    "verified_cdp": 19,
+    "verified_dom_probe": 2,
+    "unverified_modals": 6,
+    "stale": 9,
+    "verify_rate": 0.5833,
+    "threshold": 0.55,
+    "css_map_entries": 2585
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified",
+    "main.topbar.wrapper": "verified",
+    "main.navbar.link.wrapper": "verified",
+    "tracklist.column_header": "verified",
+    "context_menu.menu_item": "verified",
+    "search_box.container": "verified",
+    "search_chips.wrapper": "verified",
+    "sort_box.list.button": "verified",
+    "settings.button.wrapper": "verified",
+    "settings.header.container": "verified (DOM probe)",
+    "settings.section.container": "verified (DOM probe)"
+  },
+  "stale_leaves": [
+    "main.topbar.left.button.icon.wrapper",
+    "main.topbar.left.button_t.wrapper",
+    "main.topbar.right.upgrade_button.wrapper",
+    "search_chips.wrapper_wrapper",
+    "modal.widget_generator.content.container",
+    "modal.track_credits.content.container",
+    "settings.text_input",
+    "scrollable_text.container",
+    "scrollable_text.wrapper"
+  ],
+  "unverified_leaves": [
+    "modal.track_credits.container",
+    "modal.track_credits.header.container",
+    "modal.track_credits.header.close",
+    "modal.widget_generator.container",
+    "modal.widget_generator.header.container",
+    "modal.widget_generator.header.close"
+  ],
+  "notes": [
+    "CDP e2e (deep navigation: home/search/library/playlist/context menu/settings) verified 19 leaves by hashed-class DOM presence on a stock 1.2.92.148 client.",
+    "settings.header.container and settings.section.container were falsified by CDP (zero-evidence semantic matches) and re-mapped via manual DOM probe of the live preferences page.",
+    "main.topbar.left.button_t.wrapper was falsified by CDP (artist-artistDiscography-topBar is artist-page, not main topbar) and reverted to the stale base hash.",
+    "Modal leaves keep migrate values but are unverified: the credits and embed-widget modals were not opened during navigation.",
+    "Stale leaves keep their 1.2.40 base hashes; do not rely on them until re-mapped."
+  ]
+}
