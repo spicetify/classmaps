@@ -1,0 +1,69 @@
+{
+  "spotify_version": "1.2.94.583",
+  "classmap_key": "1020094",
+  "status": "verified",
+  "generated": "2026-07-21",
+  "pipeline": "migrate(1020092 -> 1020094) + static verify + CDP e2e (deep) on live 1.2.94.583",
+  "guards": [
+    "playbar!=actionBar",
+    "content!=closeBtn",
+    "settings!=equalizer/NPV/actionBar",
+    "semantic-only requires target CSS presence (sem>=0.75)"
+  ],
+  "stats": {
+    "leaves": 36,
+    "identity_from_1020092": 27,
+    "verified": 20,
+    "verified_cdp": 20,
+    "unverified": 7,
+    "stale": 9,
+    "verify_rate": 0.5556,
+    "threshold": 0.55,
+    "css_map_entries": 2585
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified",
+    "main.topbar.wrapper": "verified",
+    "main.navbar.link.wrapper": "verified",
+    "tracklist.column_header": "verified",
+    "context_menu.menu_item": "verified",
+    "search_box.container": "verified",
+    "search_chips.wrapper": "verified",
+    "sort_box.list.button": "verified",
+    "settings.header.container": "verified",
+    "settings.section.container": "verified",
+    "settings.button.wrapper": "unverified (in CSS, not rendered without settings scroll)"
+  },
+  "stale_leaves": [
+    "main.topbar.left.button.icon.wrapper",
+    "main.topbar.left.button_t.wrapper",
+    "main.topbar.right.upgrade_button.wrapper",
+    "search_chips.wrapper_wrapper",
+    "modal.widget_generator.content.container",
+    "modal.track_credits.content.container",
+    "settings.text_input",
+    "scrollable_text.container",
+    "scrollable_text.wrapper"
+  ],
+  "unverified_leaves": [
+    "modal.track_credits.container",
+    "modal.track_credits.header.container",
+    "modal.track_credits.header.close",
+    "modal.widget_generator.container",
+    "modal.widget_generator.header.container",
+    "modal.widget_generator.header.close",
+    "settings.button.wrapper"
+  ],
+  "notes": [
+    "27 of 28 good 1020092 leaves survived unchanged into 1.2.94 (identity); the only non-identity migrate hit was the known artist-artistDiscography-topBar false friend and was reverted to stale.",
+    "CDP e2e (deep navigation) on a live stock 1.2.94.583 client verified 20 leaves by hashed-class DOM presence, including the two settings fixes hand-mapped during 1020092 verification.",
+    "settings.button.wrapper is present in 1.2.94 CSS but was not rendered during navigation (proxy section requires settings scroll); left unverified.",
+    "Modal leaves keep migrate values but are unverified: the credits and embed-widget modals were not opened during navigation.",
+    "Stale leaves keep their 1.2.40 base hashes; do not rely on them until re-mapped."
+  ],
+  "overlay": {
+    "file": "css-map.json",
+    "entries": 2,
+    "note": "Flat hash -> semantic bridge for the classic preprocess pipeline; only verified corrections the global css-map lacks. Hashes already covered by the global css-map are intentionally excluded."
+  }
+}
