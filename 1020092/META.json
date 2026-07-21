@@ -59,5 +59,10 @@
     "main.topbar.left.button_t.wrapper was falsified by CDP (artist-artistDiscography-topBar is artist-page, not main topbar) and reverted to the stale base hash.",
     "Modal leaves keep migrate values but are unverified: the credits and embed-widget modals were not opened during navigation.",
     "Stale leaves keep their 1.2.40 base hashes; do not rely on them until re-mapped."
-  ]
+  ],
+  "overlay": {
+    "file": "css-map.json",
+    "entries": 2,
+    "note": "Flat hash -> semantic bridge for the classic preprocess pipeline; only verified corrections the global css-map lacks. Hashes already covered by the global css-map are intentionally excluded."
+  }
 }
