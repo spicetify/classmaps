@@ -13,10 +13,10 @@
   "stats": {
     "leaves": 36,
     "identity_from_1020092": 27,
-    "verified": 32,
-    "verified_cdp": 20,
-    "stale": 3,
-    "verify_rate": 0.8889,
+    "verified": 33,
+    "verified_cdp": 21,
+    "stale": 2,
+    "verify_rate": 0.9167,
     "threshold": 0.55,
     "css_map_entries": 2585,
     "unverified": 1
@@ -38,8 +38,7 @@
   },
   "stale_leaves": [
     "main.topbar.left.button.icon.wrapper",
-    "main.topbar.right.upgrade_button.wrapper",
-    "settings.text_input"
+    "main.topbar.right.upgrade_button.wrapper"
   ],
   "unverified_leaves": [
     "settings.button.wrapper"
@@ -53,7 +52,8 @@
     "scrollable_text.container/wrapper remapped via css-map reverse lookup (single candidate in spa) and verified in live DOM on a search results page.",
     "search_chips.wrapper_wrapper remapped to the 1.2.9x search results chips bar (qZHfdckfFVY5AURF), DOM-verified; search_chips.chip corrected from the home filterChips class to the search page chip link (U4idT8HUFwfj7PWP).",
     "main.topbar.left.button_t.wrapper remapped to main-globalNav-link-icon (_Bg_zSvFrEutyacG), live on the nav buttons custom navlinks clone.",
-    "Retired in 1.2.9x (kept stale, no candidate hash anywhere in the spa): topbar.left.button.icon.wrapper (icon span unclassed), topbar.right.upgrade_button.wrapper (no Upgrade button surface), settings.text_input (settings inputs are Encore form controls now)."
+    "Retired in 1.2.9x (kept stale, no candidate hash anywhere in the spa): topbar.left.button.icon.wrapper (icon span unclassed), topbar.right.upgrade_button.wrapper (no Upgrade button surface).",
+    "settings.text_input remapped to the Encore form control classes (e-10451-form-input e-10451-form-control encore-text-body-medium), CDP-verified on a live 1.2.94.583 settings page (Search locations input). Multi-class value; valid for className contexts, which is the leaf's only use."
   ],
   "overlay": {
     "file": "css-map.json",
