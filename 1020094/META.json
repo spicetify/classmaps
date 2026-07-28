@@ -1,0 +1,63 @@
+{
+  "spotify_version": "1.2.94.583",
+  "classmap_key": "1020094",
+  "status": "verified",
+  "generated": "2026-07-21",
+  "pipeline": "migrate(1020092 -> 1020094) + static verify + CDP e2e (deep) on live 1.2.94.583",
+  "guards": [
+    "playbar!=actionBar",
+    "content!=closeBtn",
+    "settings!=equalizer/NPV/actionBar",
+    "semantic-only requires target CSS presence (sem>=0.75)"
+  ],
+  "stats": {
+    "leaves": 36,
+    "identity_from_1020092": 27,
+    "verified": 33,
+    "verified_cdp": 21,
+    "stale": 2,
+    "verify_rate": 0.9167,
+    "threshold": 0.55,
+    "css_map_entries": 2585,
+    "unverified": 1
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified",
+    "main.topbar.wrapper": "verified",
+    "main.navbar.link.wrapper": "verified",
+    "tracklist.column_header": "verified",
+    "context_menu.menu_item": "verified",
+    "search_box.container": "verified",
+    "search_chips.wrapper": "verified",
+    "sort_box.list.button": "verified",
+    "settings.header.container": "verified",
+    "settings.section.container": "verified",
+    "settings.button.wrapper": "unverified (in CSS, not rendered without settings scroll)",
+    "modal.track_credits.container": "verified",
+    "modal.widget_generator.container": "verified"
+  },
+  "stale_leaves": [
+    "main.topbar.left.button.icon.wrapper",
+    "main.topbar.right.upgrade_button.wrapper"
+  ],
+  "unverified_leaves": [
+    "settings.button.wrapper"
+  ],
+  "notes": [
+    "27 of 28 good 1020092 leaves survived unchanged into 1.2.94 (identity); the only non-identity migrate hit was the known artist-artistDiscography-topBar false friend and was reverted to stale.",
+    "CDP e2e (deep navigation) on a live stock 1.2.94.583 client verified 20 leaves by hashed-class DOM presence, including the two settings fixes hand-mapped during 1020092 verification.",
+    "settings.button.wrapper is present in 1.2.94 CSS but was not rendered during navigation (proxy section requires settings scroll); left unverified.",
+    "modal.track_credits.* remapped to trackCreditsModalV2 classes (Spotify replaced the V1 modal); V2 hashes verified in live DOM via View credits.",
+    "modal.widget_generator.* verified in live DOM via Share > Embed, including content.container (ywtSYUL2xRwVlvSo, previously stale).",
+    "scrollable_text.container/wrapper remapped via css-map reverse lookup (single candidate in spa) and verified in live DOM on a search results page.",
+    "search_chips.wrapper_wrapper remapped to the 1.2.9x search results chips bar (qZHfdckfFVY5AURF), DOM-verified; search_chips.chip corrected from the home filterChips class to the search page chip link (U4idT8HUFwfj7PWP).",
+    "main.topbar.left.button_t.wrapper remapped to main-globalNav-link-icon (_Bg_zSvFrEutyacG), live on the nav buttons custom navlinks clone.",
+    "Retired in 1.2.9x (kept stale, no candidate hash anywhere in the spa): topbar.left.button.icon.wrapper (icon span unclassed), topbar.right.upgrade_button.wrapper (no Upgrade button surface).",
+    "settings.text_input remapped to the Encore form control classes (e-10451-form-input e-10451-form-control encore-text-body-medium), CDP-verified on a live 1.2.94.583 settings page (Search locations input). Multi-class value; valid for className contexts, which is the leaf's only use."
+  ],
+  "overlay": {
+    "file": "css-map.json",
+    "entries": 2,
+    "note": "Flat hash -> semantic bridge for the classic preprocess pipeline; only verified corrections the global css-map lacks. Hashes already covered by the global css-map are intentionally excluded."
+  }
+}

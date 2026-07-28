@@ -1,0 +1,109 @@
+{
+  "main": {
+    "topbar": {
+      "wrapper": "NXttmW3KPwE1r4Am",
+      "left": {
+        "button": {
+          "wrapper": "kUHE42xvQVzWqabl",
+          "icon": {
+            "wrapper": "IYDlXmBmmUKHveMzIPCF"
+          }
+        },
+        "button_t": {
+          "wrapper": "_Bg_zSvFrEutyacG"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "kUHE42xvQVzWqabl"
+        },
+        "button_t": {
+          "wrapper": "sXjzYBob5Y4psogB"
+        },
+        "upgrade_button": {
+          "wrapper": "Upqw01TOXETOmR5Td7Dj"
+        }
+      }
+    },
+    "playbar": {
+      "widget": {},
+      "controls": {},
+      "buttons": {
+        "button": {
+          "wrapper": "kBq3sMkivgMPe5qr",
+          "wrapper__active": "kBq3sMkivgMPe5qr",
+          "wrapper__indicator": "kBq3sMkivgMPe5qr"
+        }
+      }
+    },
+    "navbar": {
+      "link": {
+        "wrapper": "kUHE42xvQVzWqabl",
+        "container": "kUHE42xvQVzWqabl",
+        "container__active": "kUHE42xvQVzWqabl"
+      }
+    },
+    "global_navbar": {},
+    "sidebar": {},
+    "panel": {}
+  },
+  "tracklist": {
+    "column_header": "F_VvNCRKZ2cKj1a9"
+  },
+  "search_chips": {
+    "wrapper_wrapper": "qZHfdckfFVY5AURF",
+    "wrapper": "x_HLN829yDsvJDgl",
+    "container": "dxlv5wfAu8zgm7HY",
+    "chip": "U4idT8HUFwfj7PWP"
+  },
+  "modal": {
+    "widget_generator": {
+      "container": "gx9qsprOAO4ubEFc",
+      "header": {
+        "container": "g9sFYudWkUldbuNa",
+        "close": "Pk4GI8WfBMjS5R2J"
+      },
+      "content": {
+        "container": "ywtSYUL2xRwVlvSo"
+      }
+    },
+    "track_credits": {
+      "container": "p5LJBmlswjcRT458",
+      "header": {
+        "container": "idsrX6VAUY49Eczw",
+        "close": "_18qFNPzv7Eyyck8"
+      },
+      "content": {
+        "container": "yKG9lWaUWIBUyVCu"
+      }
+    }
+  },
+  "settings": {
+    "header": {
+      "container": "fEEfljGMIEhhmWVi"
+    },
+    "section": {
+      "container": "nWR7PbHjFXQJiYNL"
+    },
+    "button": {
+      "wrapper": "nHgEqWYM1q0omZ6y"
+    },
+    "text_input": "e-10451-form-input e-10451-form-control encore-text-body-medium"
+  },
+  "scrollable_text": {
+    "container": "MyaStf5D5Im3gt9M",
+    "wrapper": "dxlv5wfAu8zgm7HY"
+  },
+  "sort_box": {
+    "list": {
+      "button": "LQ6y2jhZZtMS7xCr"
+    }
+  },
+  "search_box": {
+    "container": "S0nU7XTXYMOBcASz",
+    "expand_button": "eu6ObgEHE5owtzi_"
+  },
+  "context_menu": {
+    "menu_item": "yqG4N5YYcY4uEujt"
+  }
+}
