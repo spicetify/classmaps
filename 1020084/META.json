@@ -1,0 +1,56 @@
+{
+  "spotify_version": "1.2.84.476",
+  "classmap_key": "1020084",
+  "status": "verified",
+  "generated": "2026-09-02",
+  "inherited_from": null,
+  "pipeline": "css-map inversion over stock target CSS + migrate(1020040) cross-check + static target-CSS verification + CDP e2e (deep, live Linux client)",
+  "stats": {
+    "leaves": 36,
+    "inherited": 0,
+    "static_present": 31,
+    "verified_cdp": 20,
+    "live_only": 2,
+    "unresolved_missing": 3,
+    "stale": 3,
+    "cdp_hit_rate": 0.5556,
+    "overlay_entries": 0
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified_cdp",
+    "main.topbar.wrapper": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
+    "tracklist.column_header": "verified_cdp",
+    "context_menu.menu_item": "verified_cdp",
+    "search_box.container": "verified_cdp",
+    "search_chips.wrapper": "verified_cdp",
+    "sort_box.list.button": "verified_cdp",
+    "settings.header.container": "verified_cdp",
+    "settings.section.container": "verified (present in target CSS)",
+    "settings.button.wrapper": "verified (present in target CSS)",
+    "modal.track_credits.container": "verified (present in target CSS)",
+    "modal.widget_generator.container": "verified (present in target CSS)"
+  },
+  "stale_leaves": [
+    "main.topbar.right.upgrade_button.wrapper",
+    "search_chips.chip",
+    "search_chips.wrapper_wrapper"
+  ],
+  "unverified_leaves": [
+    "main.playbar.buttons.button.wrapper__active",
+    "main.playbar.buttons.button.wrapper__indicator",
+    "main.topbar.left.button_t.wrapper"
+  ],
+  "notes": [
+    "1.2.84 is the current Linux build; its hashes match no published key (verified: 0/36 raw-hash hits for both 1020045 and 1020092 against this build), so this key was derived rather than inherited.",
+    "Primary derivation inverts the CLI's embedded css-map over the classes present in the stock 1.2.84 bundle: 27/36 paths resolve to a unique hash whose semantic matches the 1020097 ABI meaning; a migrate(1020040) run agreed on 14 and was overruled on 13 where the inversion disagreed.",
+    "The three main.playbar.buttons.button.* leaves were corrected from the migration's collapse onto the player-controls__buttons container (the known text-theme ghost-button drift); the live fullscreen button carries the corrected wrapper hash.",
+    "Two leaves are encore literals on this build (e-91000-button__icon-wrapper, e-91000-form-input family); both are absent from the static stylesheet but verified live in the DOM (223 and 2 instances).",
+    "Three leaves keep dead 1020097-era hashes deliberately (upgrade button not rendered on this build's sessions observed, category grid items not present in css-map for this build): a dead class is a harmless no-op where a wrong live class would misstyle.",
+    "Deep CDP verification observed 20/36 paths by raw hash on the routes and surfaces exercised by the verifier; modal and playback-state leaves need surfaces the verifier does not open."
+  ],
+  "verification_summary": {
+    "needs_manual_check": 31,
+    "missing_in_css": 5
+  }
+}

@@ -18,6 +18,18 @@
 				"sha256": "97dd9b8882fa3e1eb39b63d6d52303a6550147e8553276ddf7639dcfde9b29ef"
 			}
 		},
+		"1020084": {
+			"classmap": {
+				"file": "classmap-1a05f280501.json",
+				"sha256": "e5800bf048dfe57043d5e3611da043d44f3480e1fa6dba4781085f9ec37c784e"
+			},
+			"meta": {
+				"file": "META.json",
+				"sha256": "0670e8c0d8e34b31612f986ba1bb3ab917c38fdbd4006255b4f27efdb48093ba"
+			},
+			"spotifyVersion": "1.2.84.476",
+			"status": "verified"
+		},
 		"1020092": {
 			"classmap": {
 				"file": "classmap-19f8522e902.json",
