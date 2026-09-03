@@ -70,7 +70,13 @@ def build() -> dict:
             print(f"skipping {key_dir.name}: no classmap file", file=sys.stderr)
             continue
         keys[key_dir.name] = entry
-    return {"version": 1, "keys": keys}
+    index = {"version": 1, "keys": keys}
+    # The exposure patch set is one file for every build, so it sits beside the
+    # keys rather than under one; older CLIs ignore the entry.
+    expose = ROOT / "expose.json"
+    if expose.is_file():
+        index["expose"] = {"file": expose.name, "sha256": sha256(expose)}
+    return index
 
 
 def main() -> int:

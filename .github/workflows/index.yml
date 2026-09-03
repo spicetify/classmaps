@@ -15,3 +15,6 @@ jobs:
 
       - name: Verify index
         run: python3 scripts/build_index.py --check
+
+      - name: Validate exposure patches
+        run: python3 scripts/validate_expose.py

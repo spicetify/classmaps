@@ -1,4 +1,8 @@
 {
+	"expose": {
+		"file": "expose.json",
+		"sha256": "3c609aca27255ad637cae51c1355482ef02fe6c1e61156d3e82039e1fe6a372a"
+	},
 	"keys": {
 		"1020038": {
 			"classmap": {
