@@ -1,0 +1,109 @@
+{
+  "main": {
+    "topbar": {
+      "wrapper": "oy96nRTKcIs7wm5K",
+      "left": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium",
+          "icon": {
+            "wrapper": "e-10810-icon e-10810-icon--auto-mirror"
+          }
+        },
+        "button_t": {
+          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--condensed-all"
+        },
+        "button_t": {
+          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--condensed-all"
+        },
+        "upgrade_button": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-primary"
+        }
+      }
+    },
+    "playbar": {
+      "widget": {},
+      "controls": {},
+      "buttons": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-small",
+          "wrapper__active": "e-10810-legacy-button e-10810-legacy-button-primary",
+          "wrapper__indicator": "e-10810-button-primary__inner"
+        }
+      }
+    },
+    "navbar": {
+      "link": {
+        "wrapper": "main-globalNav-navLink",
+        "container": "main-globalNav-navLink",
+        "container__active": "main-globalNav-navLinkActive"
+      }
+    },
+    "global_navbar": {},
+    "sidebar": {},
+    "panel": {}
+  },
+  "tracklist": {
+    "column_header": "e-10810-legacy-list-row__header"
+  },
+  "search_chips": {
+    "wrapper_wrapper": "e-10810-chip-group",
+    "wrapper": "e-10810-chip-group__component",
+    "container": "e-10810-chip-group__component",
+    "chip": "e-10810-legacy-chip"
+  },
+  "modal": {
+    "widget_generator": {
+      "container": "main-embedWidgetGenerator-container",
+      "header": {
+        "container": "main-embedWidgetGenerator-header",
+        "close": "main-embedWidgetGenerator-closeBtn"
+      },
+      "content": {
+        "container": "main-embedWidgetGenerator-content"
+      }
+    },
+    "track_credits": {
+      "container": "main-trackCreditsModalV2-container",
+      "header": {
+        "container": "main-trackCreditsModalV2-header",
+        "close": "main-trackCreditsModalV2-closeBtn"
+      },
+      "content": {
+        "container": "main-trackCreditsModalV2-mainSection"
+      }
+    }
+  },
+  "settings": {
+    "header": {
+      "container": "fEEfljGMIEhhmWVi"
+    },
+    "section": {
+      "container": "nWR7PbHjFXQJiYNL"
+    },
+    "button": {
+      "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
+    },
+    "text_input": "e-10810-form-input e-10810-form-control encore-text-body-medium"
+  },
+  "scrollable_text": {
+    "container": "e-10810-legacy-box e-10810-legacy-box--naked",
+    "wrapper": "e-10810-legacy-box"
+  },
+  "sort_box": {
+    "list": {
+      "button": "x-sortBox-sortDropdown"
+    }
+  },
+  "search_box": {
+    "container": "main-globalNav-searchContainer",
+    "expand_button": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium main-globalNav-link-icon"
+  },
+  "context_menu": {
+    "menu_item": "main-contextMenu-menuItemButton"
+  }
+}
