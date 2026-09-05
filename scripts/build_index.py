@@ -94,7 +94,7 @@ def main() -> int:
         print("index.json is up to date")
         return 0
 
-    INDEX.write_text(rendered)
+    INDEX.write_text(rendered, encoding="utf-8", newline="\n")
     print(f"wrote {INDEX.relative_to(ROOT)} ({len(build()['keys'])} keys)")
     return 0
 
