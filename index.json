@@ -97,6 +97,22 @@
 			},
 			"spotifyVersion": "1.2.97.270",
 			"status": "verified"
+		},
+		"1020098": {
+			"classmap": {
+				"file": "classmap-19f856aefd5.json",
+				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
+			},
+			"cssMapOverlay": {
+				"file": "css-map.json",
+				"sha256": "8c05d9ca347e4e13fb31013df4c42bdbf16046408b989afe4d0ea6a25037800e"
+			},
+			"meta": {
+				"file": "META.json",
+				"sha256": "fa0334b0b336907d6a796e259c2607907bf4e1a028545c1a4e105621130bab87"
+			},
+			"spotifyVersion": "1.2.98.301",
+			"status": "verified"
 		}
 	},
 	"version": 1
