@@ -98,18 +98,34 @@
 			"spotifyVersion": "1.2.97.270",
 			"status": "verified"
 		},
-		"1020099": {
+		"1020098": {
 			"classmap": {
 				"file": "classmap-19f856aefd5.json",
-				"sha256": "02b9c0201ad7082defd3c4429798e10f762ebc20e89e04213cfa56eaccff6124"
+				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
 			},
 			"cssMapOverlay": {
 				"file": "css-map.json",
-				"sha256": "ae0ef99a36e12c888d274d90be68e2a6ed10496153886ec3b858daf47d5dbbda"
+				"sha256": "8c05d9ca347e4e13fb31013df4c42bdbf16046408b989afe4d0ea6a25037800e"
 			},
 			"meta": {
 				"file": "META.json",
-				"sha256": "3818511c78fd07f2140f244dbdd2cf98716d596494254eb632274bc313a599cf"
+				"sha256": "fa0334b0b336907d6a796e259c2607907bf4e1a028545c1a4e105621130bab87"
+			},
+			"spotifyVersion": "1.2.98.301",
+			"status": "verified"
+		},
+		"1020099": {
+			"classmap": {
+				"file": "classmap-19f856aefd5.json",
+				"sha256": "33fca18a6d319bd9f455426517b6aaefe5e86d7d379933f21b1f1807ae9ed4d5"
+			},
+			"cssMapOverlay": {
+				"file": "css-map.json",
+				"sha256": "c84480a673ab8587482958a943a04abffc9b8c658284c649452db3b61196692d"
+			},
+			"meta": {
+				"file": "META.json",
+				"sha256": "c38e1dbf9bb63abf0983d7f563482d778fdeefd230ef0906ce999f62cd3b8e1c"
 			},
 			"spotifyVersion": "1.2.99.317",
 			"status": "verified"

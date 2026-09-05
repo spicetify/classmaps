@@ -12,6 +12,7 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import promote_inherited as promote  # noqa: E402
+import build_index  # noqa: E402
 
 
 class PromoteInheritedTests(unittest.TestCase):
@@ -114,6 +115,7 @@ class PromoteInheritedTests(unittest.TestCase):
             {"customHash": "semantic-name"},
         )
         meta = json.loads((target / "META.json").read_text())
+        self.assertNotIn(b"\r", (target / "META.json").read_bytes())
         self.assertEqual(meta["status"], "verified")
         self.assertEqual(meta["inherited_from"], "1020094")
         self.assertEqual(
@@ -125,6 +127,23 @@ class PromoteInheritedTests(unittest.TestCase):
         self.assertEqual(meta["stats"]["verified_cdp"], 1)
         self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "verified_cdp")
         self.assertEqual(meta["required_paths"]["main.playbar.indicator"], "unverified")
+
+    def test_generated_index_uses_lf_and_hashes_published_bytes(self):
+        index_path = self.root / "index.json"
+        with (
+            mock.patch.object(build_index, "ROOT", self.root),
+            mock.patch.object(build_index, "INDEX", index_path),
+            mock.patch.object(sys, "argv", ["build_index.py"]),
+        ):
+            self.assertEqual(build_index.main(), 0)
+        index_bytes = index_path.read_bytes()
+        self.assertNotIn(b"\r", index_bytes)
+        entry = json.loads(index_bytes)["keys"]["1020094"]
+        for field in ("classmap", "cssMapOverlay", "meta"):
+            self.assertEqual(
+                entry[field]["sha256"],
+                hashlib.sha256((self.source / entry[field]["file"]).read_bytes()).hexdigest(),
+            )
 
     def test_refuses_a_report_from_another_spotify_version(self):
         self.cdp_report["cdp"]["browser"]["User-Agent"] = "Spotify/1.2.95.453 Chrome/146"

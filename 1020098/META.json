@@ -1,0 +1,53 @@
+{
+  "spotify_version": "1.2.98.301",
+  "classmap_key": "1020098",
+  "status": "verified",
+  "generated": "2026-09-05",
+  "inherited_from": "1020097",
+  "pipeline": "inherit(1020097 -> 1020098) + static target-CSS verification + CDP e2e (deep)",
+  "stats": {
+    "leaves": 36,
+    "inherited": 36,
+    "static_present": 32,
+    "verified_cdp": 21,
+    "live_only": 0,
+    "unresolved_missing": 4,
+    "stale": 2,
+    "cdp_hit_rate": 0.5833,
+    "overlay_entries": 3
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified_cdp",
+    "main.topbar.wrapper": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
+    "tracklist.column_header": "verified_cdp",
+    "context_menu.menu_item": "verified_cdp",
+    "search_box.container": "verified_cdp",
+    "search_chips.wrapper": "verified_cdp",
+    "sort_box.list.button": "verified_cdp",
+    "settings.header.container": "verified_cdp",
+    "settings.section.container": "verified_cdp",
+    "settings.button.wrapper": "verified_cdp",
+    "modal.track_credits.container": "verified (inherited; present in target CSS)",
+    "modal.widget_generator.container": "verified (inherited; present in target CSS)"
+  },
+  "stale_leaves": [
+    "main.topbar.left.button.icon.wrapper",
+    "main.topbar.right.upgrade_button.wrapper"
+  ],
+  "unverified_leaves": [
+    "main.playbar.buttons.button.wrapper__indicator",
+    "settings.text_input"
+  ],
+  "notes": [
+    "Classmap inherited byte-for-byte from 1020097; no migration guesses were accepted.",
+    "Static verification found 32/36 paths in the target CSS.",
+    "0 CSS-only misses were observed live and remain verified.",
+    "Deep CDP verification observed 21/36 paths on the routes and transient surfaces exercised by the verifier.",
+    "Unresolved new misses remain usable but are marked unverified; inherited stale paths stay blocked."
+  ],
+  "verification_summary": {
+    "needs_manual_check": 32,
+    "missing_in_css": 4
+  }
+}

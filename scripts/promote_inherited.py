@@ -319,7 +319,9 @@ def promote_inherited_release(
         shutil.copy2(source_classmap, staging_dir / source_classmap.name)
         if overlay.is_file():
             shutil.copy2(overlay, staging_dir / overlay.name)
-        (staging_dir / "META.json").write_text(json.dumps(meta, indent=2, allow_nan=False) + "\n")
+        (staging_dir / "META.json").write_text(
+            json.dumps(meta, indent=2, allow_nan=False) + "\n", encoding="utf-8", newline="\n"
+        )
         staging_dir.rename(target_dir)
     except Exception:
         shutil.rmtree(staging_dir, ignore_errors=True)
