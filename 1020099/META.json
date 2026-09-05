@@ -1,0 +1,58 @@
+{
+  "spotify_version": "1.2.99.317",
+  "classmap_key": "1020099",
+  "status": "verified",
+  "generated": "2026-09-05",
+  "inherited_from": "1020097",
+  "pipeline": "runtime CDP extraction (Spotify --remote-debugging-port=9222) + live DOM/CSS verification + static xpui CSS cross-check",
+  "stats": {
+    "leaves": 36,
+    "inherited": 2,
+    "static_present": 36,
+    "verified_cdp": 25,
+    "live_only": 0,
+    "unresolved_missing": 0,
+    "stale": 2,
+    "cdp_hit_rate": 1.0,
+    "overlay_entries": 2
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified_cdp",
+    "main.topbar.wrapper": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
+    "tracklist.column_header": "verified_cdp",
+    "context_menu.menu_item": "verified_cdp",
+    "search_box.container": "verified_cdp",
+    "sort_box.list.button": "verified_cdp",
+    "settings.header.container": "verified_cdp",
+    "settings.section.container": "verified_cdp",
+    "settings.button.wrapper": "verified_cdp",
+    "modal.track_credits.container": "verified_cdp",
+    "modal.widget_generator.container": "verified_cdp"
+  },
+  "stale_leaves": [
+    "main.topbar.left.button.icon.wrapper",
+    "main.topbar.right.upgrade_button.wrapper"
+  ],
+  "unverified_leaves": [
+    "main.topbar.right.upgrade_button.wrapper"
+  ],
+  "notes": [
+    "Values were extracted from the live 1.2.99.317 client over CDP (port 9222), not guessed.",
+    "Spotify 1.2.99 replaced most hashed css-module classnames with readable names; encore build tag moved e-10451 -> e-10810.",
+    "Final CDP verification: 25/36 leaves observed live in DOM, 11/36 present in live CSS, 0 misses (hit rate 1.0).",
+    "Topbar merged into Root__globalNav; wrapper class oy96nRTKcIs7wm5K observed on [data-testid=global-nav-bar].",
+    "Playbar controls use encore legacy-button shapes; active state = legacy-button-primary.",
+    "Search category chips render through the encore chip factory (e-10810-chip-group* rules verified in CSS).",
+    "Track credits modal now ships readable main-trackCreditsModalV2-* classes.",
+    "settings.section.container (nWR7PbHjFXQJiYNL) and settings.header.container (fEEfljGMIEhhmWVi) are unchanged from 1020097 and still live.",
+    "upgrade_button has no rendered instance on this premium account; value taken from the encore legacy-button-primary factory shape (stale-marked, same policy as 1020097)."
+  ],
+  "verification_summary": {
+    "cdp_dom_probes": 47,
+    "css_classes_live": 4726,
+    "dom_hits": 25,
+    "css_only_hits": 11,
+    "misses": 0
+  }
+}
