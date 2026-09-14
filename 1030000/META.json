@@ -1,0 +1,55 @@
+{
+  "spotify_version": "1.3.0.277",
+  "classmap_key": "1030000",
+  "status": "verified",
+  "generated": "2026-09-14",
+  "inherited_from": null,
+  "pipeline": "exact stock-CSS signature migration from 1020097 + static target-CSS verification + CDP e2e (deep) + targeted live DOM/CSSOM probes",
+  "stats": {
+    "leaves": 36,
+    "inherited": 0,
+    "static_present": 17,
+    "verified_cdp": 23,
+    "verified_targeted": 13,
+    "live_only": 19,
+    "unresolved_missing": 0,
+    "stale": 0,
+    "cdp_hit_rate": 0.6389,
+    "overlay_entries": 280
+  },
+  "required_paths": {
+    "main.playbar.buttons.button.wrapper": "verified_cdp",
+    "main.topbar.wrapper": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
+    "tracklist.column_header": "verified_cdp",
+    "context_menu.menu_item": "verified_cdp",
+    "search_box.container": "verified_cdp",
+    "search_chips.wrapper": "verified_live_cssom",
+    "sort_box.list.button": "verified_cdp",
+    "settings.header.container": "verified_targeted_cdp",
+    "settings.section.container": "verified_targeted_cdp",
+    "settings.button.wrapper": "verified_cdp",
+    "modal.track_credits.container": "verified_targeted_cdp",
+    "modal.widget_generator.container": "verified_targeted_cdp"
+  },
+  "stale_leaves": [],
+  "unverified_leaves": [],
+  "notes": [
+    "Spotify 1.3.0 is a CSS-module rehash, so this key was derived rather than inherited from a 1.2.x classmap.",
+    "The 280-entry css-map overlay was generated only from unique exact selector/declaration signatures shared by the stock 1.2.97 and 1.3.0 xpui stylesheets; 82 ambiguous signatures were excluded and 0 generated mappings conflicted with targeted live overrides.",
+    "Deep CDP verification on the stock 1.3.0.277 client observed 23/36 paths by raw hash across home, search, library, playlist, context-menu, sort, and settings flows (63.89% hit rate).",
+    "Targeted CDP probes verified both modal families and the two settings container hashes that the deep verifier did not render.",
+    "The remaining search chip-group and Encore control literals are absent from the static xpui stylesheet because Encore loads them at runtime; exact e-10860 selectors were verified recursively in the live CSSOM and the corresponding chip/control instances were observed in the DOM.",
+    "The source artifact was Spotify's notarized 1.3.0.277 macOS DMG (sha256 27c56ce7f18ed661690376359b1fff3eb1f7b358b361251b075336dd5b8f7a64)."
+  ],
+  "verification_summary": {
+    "deep_dom_hits": 23,
+    "targeted_live_hits": 13,
+    "target_static_hits": 17,
+    "target_static_misses_verified_live": 19,
+    "deep_navigation_attempted": 8,
+    "deep_navigation_succeeded": 7,
+    "css_overlay_conflicts": 0,
+    "css_overlay_ambiguous_excluded": 82
+  }
+}
