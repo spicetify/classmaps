@@ -51,5 +51,20 @@
     "deep_navigation_succeeded": 7,
     "css_overlay_conflicts": 0,
     "css_overlay_ambiguous_excluded": 82
+  },
+  "regression_checks": {
+    "topbar_right_button": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "path": "main.topbar.right.button_t.wrapper",
+      "class": "nR3ekhH3c1IU7dX9smcR",
+      "staged_class": "main-topBar-buddyFeed",
+      "before_hitbox_px": [16, 16],
+      "after_hitbox_px": [32, 32],
+      "native_hitbox_px": [32, 32],
+      "gap_px": 8,
+      "visual_evidence": "visual/1030000/toolbar/README.md",
+      "verification": "Measured Bookmark, Full App Display, and Popup Lyrics after Rust apply and a client restart. Their hitboxes and gaps match the native notification and activity buttons. The unchanged 1.2.97 classmap resolves to the same semantic class, whose archived CSS also specifies 32px width and height."
+    }
   }
 }

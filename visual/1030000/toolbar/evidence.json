@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-09-15",
+  "platform": "macOS",
+  "classmapSha256": "17d9575c38a5a7cce9d6bb28665aff0c6e88b4ce4d94955bad297e19c97b33dc",
+  "stdlib": "1.11.3",
+  "controls": [
+    "bookmark@0.4.2",
+    "full-app-display@0.2.2",
+    "popup-lyrics@0.2.3",
+    "native notifications",
+    "native activity"
+  ],
+  "capture": {
+    "shots": [
+      {
+        "theme": "_unthemed",
+        "scheme": null,
+        "route": "/",
+        "surface": "home",
+        "file": "_unthemed--home.png",
+        "main": "",
+        "stable": true
+      },
+      {
+        "theme": "text",
+        "themeVersion": "0.1.5",
+        "scheme": "Spotify",
+        "route": "/",
+        "surface": "home",
+        "file": "text--home.png",
+        "main": "#121212",
+        "stable": true
+      }
+    ],
+    "failures": [],
+    "restored": "text",
+    "clientVersion": "1.3.0.277",
+    "viewport": {
+      "width": 1656,
+      "height": 1039,
+      "dpr": 1.8257418870925903
+    },
+    "selector": ".main-actionButtons"
+  },
+  "beforeSource": "Controlled live DOM reproduction of the former staged wrapper class, restored after each capture; not a historical client screenshot.",
+  "regression": [
+    {
+      "file": "_unthemed--home.png",
+      "status": "resized",
+      "mismatch": "baseline is 279x59, render is 366x59",
+      "changedRatio": 1
+    },
+    {
+      "file": "text--home.png",
+      "status": "resized",
+      "mismatch": "baseline is 278x60, render is 366x60",
+      "changedRatio": 1
+    }
+  ],
+  "repeat": [
+    {
+      "file": "_unthemed--home.png",
+      "status": "same",
+      "changedPixels": 0,
+      "changedRatio": 0
+    },
+    {
+      "file": "text--home.png",
+      "status": "same",
+      "changedPixels": 0,
+      "changedRatio": 0
+    }
+  ],
+  "excluded": [
+    {
+      "theme": "flow@0.1.2",
+      "scheme": "Pink",
+      "reason": "Toolbar occluded by right-side player; baseline not accepted."
+    }
+  ]
+}

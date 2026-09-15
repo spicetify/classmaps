@@ -25,8 +25,9 @@ node scripts/classmap_cdp_verify.mjs \
   --out /tmp/1020096-cdp.json
 ```
 
-Inspect the reports. If no replacements are justified, promote the inherited
-map from this repository:
+Inspect the reports and complete [visual verification](#visual-verification).
+If no replacements are justified, promote the inherited map from this
+repository:
 
 ```sh
 python3 scripts/promote_inherited.py \
@@ -45,6 +46,50 @@ only paths already known to be stale remain blocked by the CLI.
 If migration proposes changed hashes, do not use inheritance. Run the full
 capture pipeline from the CLI repository and verify each changed leaf before
 publishing it.
+
+## Visual verification
+
+Use the existing `scripts/theme-report.ts` in the modules checkout to capture
+Spotify through CDP and compare PNGs. This is a required agent-driven review
+before publication, not an automatic visual test in CI. Read
+[AGENTS.md](AGENTS.md) for the acceptance criteria.
+
+From the modules repository, with dependencies installed and Spotify running
+with CDP enabled, capture one or two installed themes. For a toolbar change:
+
+```sh
+node scripts/theme-report.ts --port 9229 --themes text --routes / \
+  --selector .main-actionButtons --out /tmp/classmap-toolbar
+```
+
+The selector crops each screenshot to the actual element after the theme is
+applied, accounting for client zoom. It excludes unrelated content only when
+that element does: inspect every image before committing it. For a new map,
+also capture the full affected routes without `--selector` and inspect settings
+controls, menus, and panels that require additional interaction.
+
+Inspect `current/*.png`, `shots.json`, and `index.html`. On a known-good client,
+accept the inspected images as a baseline without recapturing:
+
+```sh
+node scripts/theme-report.ts --out /tmp/classmap-toolbar --no-capture --accept
+```
+
+Apply the candidate map and rerun the capture command against the same output
+directory. The report compares `current/` with `baseline/` and writes pixel
+diffs into `delta/`. A resized image is reported separately; it is not compared
+by stretching it. New or animated frames need manual review. A zero exit code
+alone is not approval, and the binding percentage of a small crop does not
+measure whole-theme compatibility.
+
+Commit the reviewed reference images under `visual/<key>/<surface>/baseline/`,
+with environment metadata and the relevant before/after/delta images. Keep the
+large generated HTML and unrelated captures outside git. For the next run,
+copy those reference PNGs into a fresh output directory's `baseline/` first.
+Use the same environment or document why its differences prevent comparison.
+
+The [Spotify 1.3.0 toolbar evidence](visual/1030000/toolbar/README.md) is a
+scoped example, not proof that every surface or platform has been tested.
 
 
 ## Exposure patches
