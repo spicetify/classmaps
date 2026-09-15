@@ -7,33 +7,33 @@ behavior. Keep semantic roles working across supported Spotify versions.
 
 ## Required review before publication
 
-Treat the screenshots as a review gate alongside the static and deep CDP
-reports, including when promoting an unchanged map.
+Complete the README's named `classmaps` suite twice against the candidate after
+applying it through the v3 CLI and restarting Spotify. Compare with the PR target
+branch's approved baseline, even when the working branch proposes replacements.
+Inspect every requested page state and image, including small localized diffs,
+resized images, missing references, and unstable captures.
 
-1. Capture the known-good client before applying the candidate. Reuse
-   `modules/scripts/theme-report.ts`; start with one or two representative
-   themes and the unthemed client. Keep viewport, zoom, theme versions,
-   schemes, modules, and control states consistent.
-2. Apply the candidate through the v3 CLI and restart Spotify. Capture the
-   same surfaces against the saved baseline. Read `shots.json` and inspect
-   the actual PNGs and diffs, including resized, new, and unstable frames.
-3. Exercise each changed control through the UI. For toolbar classes, check
-   module and native buttons together, including focus and opening/closing a
-   harmless panel. A screenshot alone does not prove a button works.
-4. For a new Spotify line, cover navigation, library, settings controls,
-   menus/modals, topbar, and playbar. For a scoped correction, cover affected
-   surfaces. Check the previous supported line too; distinguish live evidence
-   from archived CSS checks. Keep unrelated version maps unchanged.
-5. Commit privacy-reviewed reference PNGs, changed before/after images, and
-   available delta images under `visual/<key>/<surface>/`. Record the actual
-   environment, classmap digest, inspected outcomes, and coverage gaps there;
-   link that evidence from `META.json`. Regenerate the index last.
+Exercise affected controls through the UI. Verify navigation and player scheme
+colors, panel borders, toolbar spacing, dropdowns, Settings controls, and
+unthemed styling. For toolbar classes, check module and native buttons together,
+including focus and opening and closing a harmless panel. Check the previous
+supported line too; distinguish live evidence from archived CSS checks. Keep
+unrelated version maps unchanged. Confirm capture cleanup restored the original
+client configuration.
 
-Missing themes, absent controls, occlusion, absent baselines, and captures that
-never settle mean incomplete coverage, not a pass. Fix regressions before
-accepting replacement baselines. Accept intentional design changes only after
-reviewing their diffs; preserve the previous image in the change for review.
-Keep private artwork, avatars, library contents, and account data out of git.
+Missing themes, absent controls, failed navigation, occlusion, missing baselines,
+and captures that never settle mean incomplete coverage. Report those gaps and
+fix regressions before proposing replacement references. Select Albums in Your
+Library before capturing and verify that playlist rows are absent. Preserve real
+album artwork and music content; mask credentials, personal account identifiers,
+and playlist titles and artwork still recommended on Home without changing layout.
 
-CI checks data contracts and integrity; it does not run Spotify. The promotion
-script's success does not replace this agent-driven visual and functional gate.
+Commit only reviewed baseline candidate PNGs under
+`visual/baseline/<theme>/<state>.png`. Keep captures, diffs, and reports outside
+Git. Explain intentional changes in the classmaps PR. Candidates become approved
+references only when the user approves and merges that PR; never automatically
+accept or merge them. Keep screenshots independent of `META.json`, publication
+indexes, and runtime support verification. Regenerate the index after data edits.
+
+CI checks data contracts and integrity; it does not run Spotify. Promotion
+success does not replace this visual and functional review.

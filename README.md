@@ -49,48 +49,95 @@ publishing it.
 
 ## Visual verification
 
-Use the existing `scripts/theme-report.ts` in the modules checkout to capture
-Spotify through CDP and compare PNGs. This is a required agent-driven review
-before publication, not an automatic visual test in CI. Read
-[AGENTS.md](AGENTS.md) for the acceptance criteria.
+Use `scripts/theme-report.ts` in the modules checkout to compare complete
+Spotify page states with the shared approved references. This review is required
+before publication. Read [AGENTS.md](AGENTS.md) for the completion criteria.
+Screenshots remain separate from classmap indexes and runtime support checks.
 
-From the modules repository, with dependencies installed and Spotify running
-with CDP enabled, capture one or two installed themes. For a toolbar change:
+### Capture the classmaps suite
 
-```sh
-node scripts/theme-report.ts --port 9229 --themes text --routes / \
-  --selector .main-actionButtons --out /tmp/classmap-toolbar
-```
-
-The selector crops each screenshot to the actual element after the theme is
-applied, accounting for client zoom. It excludes unrelated content only when
-that element does: inspect every image before committing it. For a new map,
-also capture the full affected routes without `--selector` and inspect settings
-controls, menus, and panels that require additional interaction.
-
-Inspect `current/*.png`, `shots.json`, and `index.html`. On a known-good client,
-accept the inspected images as a baseline without recapturing:
+With dependencies installed and Spotify running with CDP enabled, run the
+named suite from the modules repository:
 
 ```sh
-node scripts/theme-report.ts --out /tmp/classmap-toolbar --no-capture --accept
+node scripts/theme-report.ts --port 9229 --suite classmaps \
+  --baseline-dir ../classmaps/visual/baseline --baseline-ref origin/main \
+  --out /tmp/classmaps-candidate-run-1
 ```
 
-Apply the candidate map and rerun the capture command against the same output
-directory. The report compares `current/` with `baseline/` and writes pixel
-diffs into `delta/`. A resized image is reported separately; it is not compared
-by stretching it. New or animated frames need manual review. A zero exit code
-alone is not approval, and the binding percentage of a small crop does not
-measure whole-theme compatibility.
+The script opens the generated HTML report in your default browser when it
+finishes. Pass `--no-open` to leave it on disk without opening a browser.
 
-Commit the reviewed reference images under `visual/<key>/<surface>/baseline/`,
-with environment metadata and the relevant before/after/delta images. Keep the
-large generated HTML and unrelated captures outside git. For the next run,
-copy those reference PNGs into a fresh output directory's `baseline/` first.
-Use the same environment or document why its differences prevent comparison.
+Set `--baseline-ref` to the PR target branch. For a baseline directory inside a
+Git checkout, the tool reads that directory from the selected Git ref, ignoring
+replacement images proposed on the working branch. You can instead extract the
+PR target branch's references to a directory outside Git and pass that path to
+`--baseline-dir`. An absent reference is reported as missing coverage.
 
-The [Spotify 1.3.0 toolbar evidence](visual/1030000/toolbar/README.md) is a
-scoped example, not proof that every surface or platform has been tested.
+The suite captures the full viewport at 1440 × 1000 CSS pixels, device scale
+factor 1, and English UI. It uses Text's **Spicetify** scheme and an unthemed
+reference. Select **Albums** in **Your Library** before starting; the suite
+refuses to capture if that filter is not active or playlist rows remain.
+Each theme has these seven states:
 
+| State | Filename |
+| --- | --- |
+| Home | `home.png` |
+| Home with the profile dropdown open | `home-profile.png` |
+| Settings at the top | `settings-top.png` |
+| Settings scrolled to Your Library | `settings-library.png` |
+| Search landing page | `search.png` |
+| Liked Songs | `liked-songs.png` |
+| Spicetify Settings | `spicetify-settings.png` |
+
+Keep real album artwork and music content. Mask credentials, personal account
+identifiers, and playlist titles and artwork still recommended on Home while
+preserving their layout. Inspect every PNG
+for privacy and confirm that it shows the requested state. Record the client,
+theme, and module versions in the run report. After capture, verify that cleanup
+restored the original theme, scheme, route, and client configuration.
+
+Apply the candidate through the v3 CLI, restart Spotify, and run the complete
+suite twice with separate output directories. Inspect all current images,
+`shots.json`, the HTML reports, and available pixel diffs. Separate changing
+content from layout changes. Inspect small localized differences even when
+their share of the full screenshot is small. Resized images, missing references,
+failed navigation, missing controls, and captures that never settle require
+review and remain incomplete coverage. A successful exit code is not approval.
+
+Exercise the affected controls through the UI, including dropdowns, Settings
+controls, library controls, and topbar and player actions. Check Text's
+navigation and player colors, panel borders, spacing, and player gutters.
+Check unthemed styling and the previous supported line too. Distinguish live
+verification from archived CSS inspection, and report any untested platform.
+
+### Propose shared references
+
+The approved set lives at `visual/baseline/<theme>/<state>.png`, with `text` and
+`unthemed` theme directories. Filenames are independent of Spotify versions.
+Keep candidate captures, diffs, HTML, and run reports outside Git. Baseline PNGs
+are the only committed visual artifacts.
+
+After reviewing a complete run, prepare replacement candidates outside Git:
+
+```sh
+node scripts/theme-report.ts --suite classmaps \
+  --baseline-dir ../classmaps/visual/baseline --baseline-ref origin/main \
+  --out /tmp/classmaps-candidate-run-1 --no-capture \
+  --prepare-baseline /tmp/classmaps-proposed-baseline
+```
+
+Preparation requires all 14 stable states and successful cleanup. The
+destination must be new and outside Git. This command prepares candidates; it
+does not approve them. The classmaps suite rejects `--accept`.
+
+Propose reviewed PNGs at `visual/baseline/<theme>/<state>.png` in the classmaps
+PR. Explain intentional UI changes and incomplete coverage in its description.
+Continue comparing against the PR target branch's approved references until
+the user approves and merges the PR. This also applies to the initial set,
+which has no approved reference yet. Git history preserves previous baselines.
+Do not include screenshots in `index.json`, link them from `META.json`, or use
+them as runtime support evidence.
 
 ## Exposure patches
 

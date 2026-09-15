@@ -15,7 +15,7 @@
     "unresolved_missing": 0,
     "stale": 0,
     "cdp_hit_rate": 0.6389,
-    "overlay_entries": 280
+    "overlay_entries": 283
   },
   "required_paths": {
     "main.playbar.buttons.button.wrapper": "verified_cdp",
@@ -59,12 +59,42 @@
       "path": "main.topbar.right.button_t.wrapper",
       "class": "nR3ekhH3c1IU7dX9smcR",
       "staged_class": "main-topBar-buddyFeed",
-      "before_hitbox_px": [16, 16],
-      "after_hitbox_px": [32, 32],
-      "native_hitbox_px": [32, 32],
+      "before_hitbox_px": [
+        16,
+        16
+      ],
+      "after_hitbox_px": [
+        32,
+        32
+      ],
+      "native_hitbox_px": [
+        32,
+        32
+      ],
       "gap_px": 8,
-      "visual_evidence": "visual/1030000/toolbar/README.md",
       "verification": "Measured Bookmark, Full App Display, and Popup Lyrics after Rust apply and a client restart. Their hitboxes and gaps match the native notification and activity buttons. The unchanged 1.2.97 classmap resolves to the same semantic class, whose archived CSS also specifies 32px width and height."
+    },
+    "root_containers": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "mappings": {
+        "bQetA_KiP9n0DQVcGa7m": "Root__globalNav",
+        "PIP22o58Crv8RXY4wB2o": "Root__nav-bar",
+        "itzKVxWhS4n59fp_KIVc": "Root__now-playing-bar"
+      },
+      "verification": "Stock CSS and live child controls confirm the global-nav, left-sidebar, and now-playing-bar roles. After applying with Rust CLI 3.0.0-beta.17 on macOS Spotify 1.3.0.277, all three hooks exist and Text's Spicetify scheme paints them rgb(46, 40, 55). Navigation borders and spacing return; no Text CSS change was needed. Unthemed container rectangles, padding, borders, and backgrounds match the pre-apply measurements. Flow's player occupies its own 200px right column without overlapping the main view. Profile navigation, library sorting, the compact-library toggle and restoration, a Settings select, Bookmark, and the queue were exercised through pointer events. Module and native toolbar buttons retain 32px hitboxes and 8px gaps.",
+      "previous_version_check": {
+        "spotify_version": "1.2.94",
+        "method": "archived stock CSS inspection",
+        "verification": "The embedded CSS-map already maps qPaMr9Jzt0_Doy3C, vEHGULrufZMHBNrp, and YdGOYWQYr6kqh7KU to the same three hooks. Their stock declarations preserve the same grid areas, sizing, and player gutters as 1.3.0; black library and player container backgrounds are already present in 1.2.94. Older version maps remain unchanged. This is archived CSS evidence, not a live older-client check."
+      }
+    },
+    "settings_toggle_input": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "class": "utdiMuyxdKvPowN1CIBs",
+      "staged_class": "x-toggle-input",
+      "verification": "The native checkbox uses opacity:0, pointer-events:none, and position:absolute in five stock stylesheets. The missing semantic hook left stdlib Settings rows showing both a native checkbox and their styled indicator. Reapply restores the shared input styling; live Spicetify Settings inputs have opacity 0 and absolute positioning while their toggle indicators remain visible. Regression coverage fails without the mapping."
     }
   }
 }
