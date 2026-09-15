@@ -16,5 +16,8 @@ jobs:
       - name: Verify index
         run: python3 scripts/build_index.py --check
 
+      - name: Test classmap contracts and promotion
+        run: python3 -m unittest discover -s scripts
+
       - name: Validate exposure patches
         run: python3 scripts/validate_expose.py
