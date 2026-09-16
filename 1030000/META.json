@@ -104,7 +104,7 @@
         "LppHcR524PsiPr4sz5IV": "playback-bar__progress-time-elapsed",
         "TcCS0BhwDXw_s2HufffR": "main-playbackBarRemainingTime-container"
       },
-      "verification": "Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS. Text restores its full-width 16px seek track. Spotify 1.3 also absolutely positions the inner timestamp spans; the companion Text theme change restores their normal flow to prevent overlap. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.",
+      "verification": "Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS with published Text 0.1.6. Text restores its full-width 16px seek track. Text 0.1.6 returns the absolutely positioned timestamp spans to normal flow and aligns the seek handle. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.",
       "previous_version_check": "Archived Spotify 1.2.94 CSS maps o9SONbmdTWwKgbUo, _xaGcuWD6w4FNkGu, and jYB3Yggec0UDIsZh to the same hooks and preserves their container and timestamp roles. Older maps are unchanged. No older client was run live."
     }
   }
