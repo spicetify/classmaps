@@ -24,6 +24,21 @@ class TopbarButtonContractTests(unittest.TestCase):
         )
 
 
+class PlaybackBarContractTests(unittest.TestCase):
+    def test_spotify_130_restores_seek_bar_and_time_label_hooks(self):
+        overlay = json.loads((ROOT / "1030000" / "css-map.json").read_text())
+        # Roles checked against the stock CSS and live playback controls.
+        expected = {
+            "Ox6fJ7l6WeB1wD0MqHXb": "playback-bar",
+            "LppHcR524PsiPr4sz5IV": "playback-bar__progress-time-elapsed",
+            "TcCS0BhwDXw_s2HufffR": "main-playbackBarRemainingTime-container",
+        }
+        for source, target in expected.items():
+            with self.subTest(control=target):
+                self.assertEqual(overlay.get(source), target)
+                self.assertEqual(list(overlay.values()).count(target), 1)
+
+
 class RootContainerContractTests(unittest.TestCase):
     def test_settings_toggle_hides_the_native_input_behind_its_indicator(self):
         overlay = json.loads((ROOT / "1030000" / "css-map.json").read_text())

@@ -15,7 +15,7 @@
     "unresolved_missing": 0,
     "stale": 0,
     "cdp_hit_rate": 0.6389,
-    "overlay_entries": 284
+    "overlay_entries": 287
   },
   "required_paths": {
     "main.playbar.buttons.button.wrapper": "verified_cdp",
@@ -95,6 +95,17 @@
       "class": "utdiMuyxdKvPowN1CIBs",
       "staged_class": "x-toggle-input",
       "verification": "The native checkbox uses opacity:0, pointer-events:none, and position:absolute in five stock stylesheets. The missing semantic hook left stdlib Settings rows showing both a native checkbox and their styled indicator. Reapply restores the shared input styling; live Spicetify Settings inputs have opacity 0 and absolute positioning while their toggle indicators remain visible. Regression coverage fails without the mapping."
+    },
+    "playback_bar": {
+      "date": "2026-09-16",
+      "spotify_version": "1.3.0.277",
+      "mappings": {
+        "Ox6fJ7l6WeB1wD0MqHXb": "playback-bar",
+        "LppHcR524PsiPr4sz5IV": "playback-bar__progress-time-elapsed",
+        "TcCS0BhwDXw_s2HufffR": "main-playbackBarRemainingTime-container"
+      },
+      "verification": "Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS. Text restores its full-width 16px seek track. Spotify 1.3 also absolutely positions the inner timestamp spans; the companion Text theme change restores their normal flow to prevent overlap. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.",
+      "previous_version_check": "Archived Spotify 1.2.94 CSS maps o9SONbmdTWwKgbUo, _xaGcuWD6w4FNkGu, and jYB3Yggec0UDIsZh to the same hooks and preserves their container and timestamp roles. Older maps are unchanged. No older client was run live."
     }
   }
 }
