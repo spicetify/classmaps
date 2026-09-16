@@ -1,7 +1,7 @@
 {
   "main": {
     "topbar": {
-      "wrapper": "bQetA_KiP9n0DQVcGa7m",
+      "wrapper": "qg_42ZApML1d5uSzYT2A",
       "left": {
         "button": {
           "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium",
@@ -38,9 +38,9 @@
     },
     "navbar": {
       "link": {
-        "wrapper": "xlH6FJnBzFT4l3TgUBre",
-        "container": "xlH6FJnBzFT4l3TgUBre",
-        "container__active": "ajKYUZPcNmFVzcAzzlwe"
+        "wrapper": "RTmbDc5S8vYrrQIJPpXv",
+        "container": "RTmbDc5S8vYrrQIJPpXv",
+        "container__active": "main-globalNav-navLinkActive"
       }
     },
     "global_navbar": {},
@@ -58,32 +58,32 @@
   },
   "modal": {
     "widget_generator": {
-      "container": "_XeAt3IgtZQepOYqU2g4",
+      "container": "main-embedWidgetGenerator-container",
       "header": {
-        "container": "mnU1hqlaF5JIcrTxLnZF",
-        "close": "AslPcD0TRZBBGZofe58g"
+        "container": "main-embedWidgetGenerator-header",
+        "close": "main-embedWidgetGenerator-closeBtn"
       },
       "content": {
-        "container": "Xu_Z4l6TIOF1f5kDB9dt"
+        "container": "main-embedWidgetGenerator-content"
       }
     },
     "track_credits": {
-      "container": "gtXQasDkhtg93wGk6yNG",
+      "container": "main-trackCreditsModalV2-container",
       "header": {
-        "container": "nQ_c7yoZ2XOD6fWtmv18",
-        "close": "CaHvWv36mAu4x5QTKlb1"
+        "container": "main-trackCreditsModalV2-header",
+        "close": "main-trackCreditsModalV2-closeBtn"
       },
       "content": {
-        "container": "wYQNBdH2rNMGe_B4oumf"
+        "container": "main-trackCreditsModalV2-mainSection"
       }
     }
   },
   "settings": {
     "header": {
-      "container": "Hwax_pfCzrntLhnYXiqL"
+      "container": "CKzVdirOciG89hOtE2wk"
     },
     "section": {
-      "container": "HdwEUcX8xijMdU7doYPt"
+      "container": "UDd6VhjOTDGlgJq8l5Fk"
     },
     "button": {
       "wrapper": "e-10860-legacy-button e-10860-legacy-button--small e-10860-legacy-button-secondary"
@@ -96,14 +96,14 @@
   },
   "sort_box": {
     "list": {
-      "button": "MYWr4UY4pKAAscUXvqrB"
+      "button": "x-sortBox-sortDropdown"
     }
   },
   "search_box": {
-    "container": "mlx0CgXAnGz0dADVsCdS",
+    "container": "f0G3CvZVXIxBqmSarCt9",
     "expand_button": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium aslJk0YypwKvyKXaBJcG"
   },
   "context_menu": {
-    "menu_item": "fmmygDM45MTS7I35OyLh"
+    "menu_item": "main-contextMenu-menuItemButton"
   }
 }

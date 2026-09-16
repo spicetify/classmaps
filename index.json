@@ -13,7 +13,7 @@
 		"1020040": {
 			"classmap": {
 				"file": "classmap-190747c4b8f.json",
-				"sha256": "d281c6c73b4ae40d9bddc5ade971b818a69325b0626e5347a3a47615df2fcde3"
+				"sha256": "7b0a1dd62bb5331e0bdd3c064c686f5664a562d071317edef5e723e73b545fc7"
 			}
 		},
 		"1020045": {
@@ -133,7 +133,7 @@
 		"1030000": {
 			"classmap": {
 				"file": "classmap-19f856aefd5.json",
-				"sha256": "17d9575c38a5a7cce9d6bb28665aff0c6e88b4ce4d94955bad297e19c97b33dc"
+				"sha256": "4460e304f104086042c4768a1b7de4c46b95f7a597c4633ee59916ef02fdf6dc"
 			},
 			"cssMapOverlay": {
 				"file": "css-map.json",
@@ -141,7 +141,7 @@
 			},
 			"meta": {
 				"file": "META.json",
-				"sha256": "fee7854bc9391380d4fdc515859af5c3eed56f74cd09090a4a52b30cd350f186"
+				"sha256": "a706a8550c82a94e1273b96c448b8dec07449c2a4157c7f4ddde5be17df48d47"
 			},
 			"spotifyVersion": "1.3.0.277",
 			"status": "verified"
