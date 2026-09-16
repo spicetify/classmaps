@@ -57,11 +57,11 @@
 			},
 			"cssMapOverlay": {
 				"file": "css-map.json",
-				"sha256": "8c05d9ca347e4e13fb31013df4c42bdbf16046408b989afe4d0ea6a25037800e"
+				"sha256": "63828d9b3b7ad07d4a8dda92a22706a491c12106e817c12f0b701e289fd07efc"
 			},
 			"meta": {
 				"file": "META.json",
-				"sha256": "1733318f5c5f6811057fd0a94f33213b50829d15a9e066b066c5ad3654ba1409"
+				"sha256": "b9924ef7604c1707e9e3732141fca4b552b63e1f2d3f4729aea83c2b360976ac"
 			},
 			"spotifyVersion": "1.2.94.583",
 			"status": "verified"
