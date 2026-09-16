@@ -133,7 +133,7 @@
 		"1030000": {
 			"classmap": {
 				"file": "classmap-19f856aefd5.json",
-				"sha256": "4460e304f104086042c4768a1b7de4c46b95f7a597c4633ee59916ef02fdf6dc"
+				"sha256": "879140c1dddb65b2ff14440c34abe3b2d166274a1309ce3214108e21c8430bc7"
 			},
 			"cssMapOverlay": {
 				"file": "css-map.json",
@@ -141,7 +141,7 @@
 			},
 			"meta": {
 				"file": "META.json",
-				"sha256": "a706a8550c82a94e1273b96c448b8dec07449c2a4157c7f4ddde5be17df48d47"
+				"sha256": "6e76fbef6aa8851a155b41d37aa9f61aec6946fe5c305a6c09717d79c091d7ce"
 			},
 			"spotifyVersion": "1.3.0.277",
 			"status": "verified"

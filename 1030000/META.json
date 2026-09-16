@@ -2,20 +2,20 @@
   "spotify_version": "1.3.0.277",
   "classmap_key": "1030000",
   "status": "verified",
-  "generated": "2026-09-16",
+  "generated": "2026-09-17",
   "inherited_from": null,
-  "pipeline": "runtime DOM extraction and verification on Windows Spotify 1.3.0.277",
+  "pipeline": "exact stock-CSS signature migration from 1020097 + static target-CSS verification + deep CDP e2e on macOS and Windows + targeted live DOM/CSSOM probes",
   "stats": {
     "leaves": 36,
     "inherited": 0,
-    "static_present": 36,
-    "verified_cdp": 35,
-    "verified_targeted": 0,
-    "live_only": 0,
+    "static_present": 7,
+    "verified_cdp": 24,
+    "verified_targeted": 12,
+    "live_only": 19,
     "unresolved_missing": 0,
-    "stale": 1,
-    "cdp_hit_rate": 0.9722,
-    "overlay_entries": 5
+    "stale": 0,
+    "cdp_hit_rate": 0.6667,
+    "overlay_entries": 287
   },
   "required_paths": {
     "main.playbar.buttons.button.wrapper": "verified_cdp",
@@ -24,24 +24,90 @@
     "tracklist.column_header": "verified_cdp",
     "context_menu.menu_item": "verified_cdp",
     "search_box.container": "verified_cdp",
-    "search_chips.wrapper": "verified_cdp",
+    "search_chips.wrapper": "verified_live_cssom",
     "sort_box.list.button": "verified_cdp",
-    "settings.header.container": "verified_cdp",
-    "settings.section.container": "verified_cdp",
+    "settings.header.container": "verified_targeted_cdp",
+    "settings.section.container": "verified_targeted_cdp",
     "settings.button.wrapper": "verified_cdp",
-    "modal.track_credits.container": "verified_cdp",
-    "modal.widget_generator.container": "verified_cdp"
+    "modal.track_credits.container": "verified_targeted_cdp",
+    "modal.widget_generator.container": "verified_targeted_cdp"
   },
-  "stale_leaves": [
-    "main.topbar.right.upgrade_button.wrapper"
-  ],
+  "stale_leaves": [],
   "unverified_leaves": [],
   "notes": [
-    "Spotify 1.3.0.277 verified live on Windows via DevTools runtime extraction.",
-    "Encore e-10860 design system classes verified across tracklist, inputs, and chips.",
-    "macOS-specific webpack hashes were replaced with verified Windows equivalents.",
-    "Topbar right buddy feed verified as main-topBar-buddyFeed via live DOM event capture.",
-    "Upgrade button marked as stale due to lack of rendered UI surface in client build.",
-    "CSS map overlay provides 5 targeted bridges for classic theme compatibility."
-  ]
+    "Spotify 1.3.0 is a CSS-module rehash, so this key was derived rather than inherited from a 1.2.x classmap.",
+    "The 280-entry css-map overlay was generated only from unique exact selector/declaration signatures shared by the stock 1.2.97 and 1.3.0 xpui stylesheets; 82 ambiguous signatures were excluded and 0 generated mappings conflicted with targeted live overrides.",
+    "Deep CDP verification on the stock 1.3.0.277 client observed 23/36 paths on macOS (63.89%) and 24/36 paths on Windows (66.67% hit rate, PASS).",
+    "Targeted CDP probes verified both modal families and the two settings container hashes that the deep verifier did not render.",
+    "The remaining search chip-group and Encore control literals are absent from the static xpui stylesheet because Encore loads them at runtime; exact e-10860 selectors were verified recursively in the live CSSOM and the corresponding chip/control instances were observed in the DOM.",
+    "Home nav link casing verified as RTmbDc5S8vYrrQIJpPXv, matching both Windows and macOS stock DOM and CSS.",
+    "Confirmed settings.section.container (HdwEUcX8xijMdU7doYPt -> x-settings-section) and settings.header.container (Hwax_pfCzrntLhnYXiqL -> x-settings-outputSectionHeader) bridge correctly across both platforms.",
+    "The source artifacts were Spotify's notarized 1.3.0.277 macOS DMG and Windows Desktop 1.3.0.277 stock installation."
+  ],
+  "verification_summary": {
+    "deep_dom_hits": 24,
+    "targeted_live_hits": 12,
+    "target_static_hits": 7,
+    "target_static_misses_verified_live": 19,
+    "deep_navigation_attempted": 8,
+    "deep_navigation_succeeded": 8,
+    "css_overlay_conflicts": 0,
+    "css_overlay_ambiguous_excluded": 82
+  },
+  "regression_checks": {
+    "topbar_right_button": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "path": "main.topbar.right.button_t.wrapper",
+      "class": "nR3ekhH3c1IU7dX9smcR",
+      "staged_class": "main-topBar-buddyFeed",
+      "before_hitbox_px": [
+        16,
+        16
+      ],
+      "after_hitbox_px": [
+        32,
+        32
+      ],
+      "native_hitbox_px": [
+        32,
+        32
+      ],
+      "gap_px": 8,
+      "verification": "Measured Bookmark, Full App Display, and Popup Lyrics after Rust apply and a client restart. Their hitboxes and gaps match the native notification and activity buttons. The unchanged 1.2.97 classmap resolves to the same semantic class, whose archived CSS also specifies 32px width and height."
+    },
+    "root_containers": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "mappings": {
+        "bQetA_KiP9n0DQVcGa7m": "Root__globalNav",
+        "PIP22o58Crv8RXY4wB2o": "Root__nav-bar",
+        "itzKVxWhS4n59fp_KIVc": "Root__now-playing-bar"
+      },
+      "verification": "Stock CSS and live child controls confirm the global-nav, left-sidebar, and now-playing-bar roles. After applying with Rust CLI 3.0.0-beta.17 on macOS Spotify 1.3.0.277, all three hooks exist and Text's Spicetify scheme paints them rgb(46, 40, 55). Navigation borders and spacing return; no Text CSS change was needed. Unthemed container rectangles, padding, borders, and backgrounds match the pre-apply measurements. Flow's player occupies its own 200px right column without overlapping the main view. Profile navigation, library sorting, the compact-library toggle and restoration, a Settings select, Bookmark, and the queue were exercised through pointer events. Module and native toolbar buttons retain 32px hitboxes and 8px gaps.",
+      "previous_version_check": {
+        "spotify_version": "1.2.94",
+        "method": "archived stock CSS inspection",
+        "verification": "The embedded CSS-map already maps qPaMr9Jzt0_Doy3C, vEHGULrufZMHBNrp, and YdGOYWQYr6kqh7KU to the same three hooks. Their stock declarations preserve the same grid areas, sizing, and player gutters as 1.3.0; black library and player container backgrounds are already present in 1.2.94. Older version maps remain unchanged. This is archived CSS evidence, not a live older-client check."
+      }
+    },
+    "settings_toggle_input": {
+      "date": "2026-09-15",
+      "spotify_version": "1.3.0.277",
+      "class": "utdiMuyxdKvPowN1CIBs",
+      "staged_class": "x-toggle-input",
+      "verification": "The native checkbox uses opacity:0, pointer-events:none, and position:absolute in five stock stylesheets. The missing semantic hook left stdlib Settings rows showing both a native checkbox and their styled indicator. Reapply restores the shared input styling; live Spicetify Settings inputs have opacity 0 and absolute positioning while their toggle indicators remain visible. Regression coverage fails without the mapping."
+    },
+    "playback_bar": {
+      "date": "2026-09-16",
+      "spotify_version": "1.3.0.277",
+      "mappings": {
+        "Ox6fJ7l6WeB1wD0MqHXb": "playback-bar",
+        "LppHcR524PsiPr4sz5IV": "playback-bar__progress-time-elapsed",
+        "TcCS0BhwDXw_s2HufffR": "main-playbackBarRemainingTime-container"
+      },
+      "verification": "Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS with published Text 0.1.6. Text restores its full-width 16px seek track. Text 0.1.6 returns the absolutely positioned timestamp spans to normal flow and aligns the seek handle. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.",
+      "previous_version_check": "Archived Spotify 1.2.94 CSS maps o9SONbmdTWwKgbUo, _xaGcuWD6w4FNkGu, and jYB3Yggec0UDIsZh to the same hooks and preserves their container and timestamp roles. Older maps are unchanged. No older client was run live."
+    }
+  }
 }
