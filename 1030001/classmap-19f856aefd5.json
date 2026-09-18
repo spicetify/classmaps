@@ -1,0 +1,109 @@
+{
+  "main": {
+    "topbar": {
+      "wrapper": "bQetA_KiP9n0DQVcGa7m",
+      "left": {
+        "button": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium",
+          "icon": {
+            "wrapper": "e-10860-icon e-10860-icon--auto-mirror"
+          }
+        },
+        "button_t": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--condensed-all"
+        },
+        "button_t": {
+          "wrapper": "nR3ekhH3c1IU7dX9smcR"
+        },
+        "upgrade_button": {
+          "wrapper": "e-10860-legacy-button e-10860-legacy-button-primary"
+        }
+      }
+    },
+    "playbar": {
+      "widget": {},
+      "controls": {},
+      "buttons": {
+        "button": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-small",
+          "wrapper__active": "e-10860-legacy-button e-10860-legacy-button-primary",
+          "wrapper__indicator": "e-10860-button-primary__inner"
+        }
+      }
+    },
+    "navbar": {
+      "link": {
+        "wrapper": "xlH6FJnBzFT4l3TgUBre",
+        "container": "xlH6FJnBzFT4l3TgUBre",
+        "container__active": "ajKYUZPcNmFVzcAzzlwe"
+      }
+    },
+    "global_navbar": {},
+    "sidebar": {},
+    "panel": {}
+  },
+  "tracklist": {
+    "column_header": "e-10860-legacy-list-row__header"
+  },
+  "search_chips": {
+    "wrapper_wrapper": "e-10860-chip-group",
+    "wrapper": "e-10860-chip-group__component",
+    "container": "e-10860-chip-group__component",
+    "chip": "e-10860-legacy-chip"
+  },
+  "modal": {
+    "widget_generator": {
+      "container": "_XeAt3IgtZQepOYqU2g4",
+      "header": {
+        "container": "mnU1hqlaF5JIcrTxLnZF",
+        "close": "AslPcD0TRZBBGZofe58g"
+      },
+      "content": {
+        "container": "Xu_Z4l6TIOF1f5kDB9dt"
+      }
+    },
+    "track_credits": {
+      "container": "gtXQasDkhtg93wGk6yNG",
+      "header": {
+        "container": "nQ_c7yoZ2XOD6fWtmv18",
+        "close": "CaHvWv36mAu4x5QTKlb1"
+      },
+      "content": {
+        "container": "wYQNBdH2rNMGe_B4oumf"
+      }
+    }
+  },
+  "settings": {
+    "header": {
+      "container": "Hwax_pfCzrntLhnYXiqL"
+    },
+    "section": {
+      "container": "HdwEUcX8xijMdU7doYPt"
+    },
+    "button": {
+      "wrapper": "e-10860-legacy-button e-10860-legacy-button--small e-10860-legacy-button-secondary"
+    },
+    "text_input": "e-10860-form-input e-10860-form-control encore-text-body-medium"
+  },
+  "scrollable_text": {
+    "container": "e-10860-legacy-box e-10860-legacy-box--naked",
+    "wrapper": "e-10860-legacy-box"
+  },
+  "sort_box": {
+    "list": {
+      "button": "MYWr4UY4pKAAscUXvqrB"
+    }
+  },
+  "search_box": {
+    "container": "mlx0CgXAnGz0dADVsCdS",
+    "expand_button": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium aslJk0YypwKvyKXaBJcG"
+  },
+  "context_menu": {
+    "menu_item": "fmmygDM45MTS7I35OyLh"
+  }
+}
