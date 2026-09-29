@@ -6,25 +6,25 @@
 	"keys": {
 		"1020038": {
 			"classmap": {
-				"file": "classmap-1718192021222.json",
+				"file": "classmap.json",
 				"sha256": "29522d09a1de092d6ba4c68f249d8a0bcfa1539d0c0f74f9347328443ec09d73"
 			}
 		},
 		"1020040": {
 			"classmap": {
-				"file": "classmap-190747c4b8f.json",
+				"file": "classmap.json",
 				"sha256": "d281c6c73b4ae40d9bddc5ade971b818a69325b0626e5347a3a47615df2fcde3"
 			}
 		},
 		"1020045": {
 			"classmap": {
-				"file": "classmap-191b119b48e.json",
+				"file": "classmap.json",
 				"sha256": "97dd9b8882fa3e1eb39b63d6d52303a6550147e8553276ddf7639dcfde9b29ef"
 			}
 		},
 		"1020084": {
 			"classmap": {
-				"file": "classmap-1a05f280501.json",
+				"file": "classmap.json",
 				"sha256": "e5800bf048dfe57043d5e3611da043d44f3480e1fa6dba4781085f9ec37c784e"
 			},
 			"meta": {
@@ -36,7 +36,7 @@
 		},
 		"1020092": {
 			"classmap": {
-				"file": "classmap-19f8522e902.json",
+				"file": "classmap.json",
 				"sha256": "817cf36500c70d90d6c77944e86095b084f0c56482c4ef9e345fc3c211ffaa53"
 			},
 			"cssMapOverlay": {
@@ -52,7 +52,7 @@
 		},
 		"1020094": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
 			},
 			"cssMapOverlay": {
@@ -68,7 +68,7 @@
 		},
 		"1020095": {
 			"classmap": {
-				"file": "classmap-1020095.json",
+				"file": "classmap.json",
 				"sha256": "57cbc252b22f7fd914be7c8d7fc1e932168b28ebde8a4ecaa2129297fe6010a2"
 			},
 			"cssMapOverlay": {
@@ -84,7 +84,7 @@
 		},
 		"1020096": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
 			},
 			"cssMapOverlay": {
@@ -100,7 +100,7 @@
 		},
 		"1020097": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
 			},
 			"cssMapOverlay": {
@@ -116,7 +116,7 @@
 		},
 		"1020098": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "d69d189567b5ddb7fcafffa9f4e7d84ee8b2ed27160ae168ae7bd8c8d03d7956"
 			},
 			"cssMapOverlay": {
@@ -132,7 +132,7 @@
 		},
 		"1020099": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "7a520fd3af3e3da2e79d0b6660fd9cafd16de9fb74041c434251f062de0db64a"
 			},
 			"cssMapOverlay": {
@@ -148,7 +148,7 @@
 		},
 		"1030000": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "17d9575c38a5a7cce9d6bb28665aff0c6e88b4ce4d94955bad297e19c97b33dc"
 			},
 			"cssMapOverlay": {
@@ -164,7 +164,7 @@
 		},
 		"1030001": {
 			"classmap": {
-				"file": "classmap-19f856aefd5.json",
+				"file": "classmap.json",
 				"sha256": "17d9575c38a5a7cce9d6bb28665aff0c6e88b4ce4d94955bad297e19c97b33dc"
 			},
 			"cssMapOverlay": {
