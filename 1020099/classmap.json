@@ -1,13 +1,31 @@
 {
+  "context_menu": {
+    "menu_item": "KzLH25pAEr43wpSc"
+  },
   "main": {
+    "navbar": {
+      "link": {
+        "container": "kUHE42xvQVzWqabl",
+        "container__active": "kxv3By32Og8yDEXy",
+        "wrapper": "kUHE42xvQVzWqabl"
+      }
+    },
+    "playbar": {
+      "buttons": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only e-10810-button-tertiary--icon-only-small",
+          "wrapper__active": "e-10810-legacy-button e-10810-legacy-button-primary",
+          "wrapper__indicator": "e-10810-button-primary__inner"
+        }
+      }
+    },
     "topbar": {
-      "wrapper": "oy96nRTKcIs7wm5K",
       "left": {
         "button": {
-          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only",
           "icon": {
             "wrapper": "e-10810-icon e-10810-icon--auto-mirror"
-          }
+          },
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only"
         },
         "button_t": {
           "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only"
@@ -23,87 +41,64 @@
         "upgrade_button": {
           "wrapper": "e-10810-legacy-button e-10810-legacy-button-primary"
         }
-      }
-    },
-    "playbar": {
-      "widget": {},
-      "controls": {},
-      "buttons": {
-        "button": {
-          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only e-10810-button-tertiary--icon-only-small",
-          "wrapper__active": "e-10810-legacy-button e-10810-legacy-button-primary",
-          "wrapper__indicator": "e-10810-button-primary__inner"
-        }
-      }
-    },
-    "navbar": {
-      "link": {
-        "wrapper": "kUHE42xvQVzWqabl",
-        "container": "kUHE42xvQVzWqabl",
-        "container__active": "kxv3By32Og8yDEXy"
-      }
-    },
-    "global_navbar": {},
-    "sidebar": {},
-    "panel": {}
-  },
-  "tracklist": {
-    "column_header": "e-10810-legacy-list-row__header"
-  },
-  "search_chips": {
-    "wrapper_wrapper": "e-10810-chip-group",
-    "wrapper": "e-10810-chip-group__component",
-    "container": "e-10810-chip-group__component",
-    "chip": "e-10810-legacy-chip"
+      },
+      "wrapper": "oy96nRTKcIs7wm5K"
+    }
   },
   "modal": {
-    "widget_generator": {
-      "container": "gx9qsprOAO4ubEFc",
-      "header": {
-        "container": "g9sFYudWkUldbuNa",
-        "close": "Pk4GI8WfBMjS5R2J"
-      },
-      "content": {
-        "container": "ywtSYUL2xRwVlvSo"
-      }
-    },
     "track_credits": {
       "container": "p5LJBmlswjcRT458",
-      "header": {
-        "container": "idsrX6VAUY49Eczw",
-        "close": "_18qFNPzv7Eyyck8"
-      },
       "content": {
         "container": "yKG9lWaUWIBUyVCu"
+      },
+      "header": {
+        "close": "_18qFNPzv7Eyyck8",
+        "container": "idsrX6VAUY49Eczw"
+      }
+    },
+    "widget_generator": {
+      "container": "gx9qsprOAO4ubEFc",
+      "content": {
+        "container": "ywtSYUL2xRwVlvSo"
+      },
+      "header": {
+        "close": "Pk4GI8WfBMjS5R2J",
+        "container": "g9sFYudWkUldbuNa"
       }
     }
   },
+  "scrollable_text": {
+    "container": "e-10810-legacy-box e-10810-legacy-box--naked",
+    "wrapper": "e-10810-legacy-box"
+  },
+  "search_box": {
+    "container": "YsP3Gj4aJDYsaOC5",
+    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only _Bg_zSvFrEutyacG"
+  },
+  "search_chips": {
+    "chip": "e-10810-legacy-chip",
+    "container": "e-10810-chip-group__component",
+    "wrapper": "e-10810-chip-group__component",
+    "wrapper_wrapper": "e-10810-chip-group"
+  },
   "settings": {
+    "button": {
+      "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
+    },
     "header": {
       "container": "KsnD09q3oqAjJX3e"
     },
     "section": {
       "container": "fNaaQ0Cp8Yzy19j8"
     },
-    "button": {
-      "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
-    },
     "text_input": "e-10810-form-input e-10810-form-control encore-text-body-medium"
-  },
-  "scrollable_text": {
-    "container": "e-10810-legacy-box e-10810-legacy-box--naked",
-    "wrapper": "e-10810-legacy-box"
   },
   "sort_box": {
     "list": {
       "button": "LQ6y2jhZZtMS7xCr"
     }
   },
-  "search_box": {
-    "container": "YsP3Gj4aJDYsaOC5",
-    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only _Bg_zSvFrEutyacG"
-  },
-  "context_menu": {
-    "menu_item": "KzLH25pAEr43wpSc"
+  "tracklist": {
+    "column_header": "e-10810-legacy-list-row__header"
   }
 }

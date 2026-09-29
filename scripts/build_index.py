@@ -84,7 +84,7 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="fail if index.json is stale")
     args = parser.parse_args()
 
-    rendered = json.dumps(build(), indent="\t", sort_keys=True) + "\n"
+    rendered = json.dumps(build(), indent=2, sort_keys=True) + "\n"
 
     if args.check:
         current = INDEX.read_text() if INDEX.is_file() else ""
