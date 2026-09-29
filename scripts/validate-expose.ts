@@ -1,16 +1,16 @@
 // Checks expose.json before it is published: the schema the CLI reads, every
 // pattern compiles, and every `${N}` in a template names a group the pattern
-// has. V8's regex engine is close to the Rust regex crate for the syntax these
-// patterns use; the CLI is the final authority and skips a pattern it cannot
+// has. Patterns are compiled with V8 after rewriting the two Rust-only forms
+// it lacks, Python-style named groups `(?P<name>` and a leading flag group
+// such as `(?s)`. The CLI is the final authority and skips a pattern it cannot
 // compile, so a construct only one side accepts still surfaces at apply as a
 // `did not match` warning rather than a crash.
 //
 //   node scripts/validate-expose.ts
 
-import { readFileSync } from "node:fs";
 import path from "node:path";
 
-import { ROOT } from "./lib.ts";
+import { readUtf8, ROOT } from "./lib.ts";
 
 const TEMPLATE_REF = /\$\{(\d+)\}|\$(\d+)/g;
 const BUILD = /^\d+\.\d+\.\d+$/;
@@ -20,7 +20,11 @@ export function renderExpose(doc: unknown): string {
 }
 
 function groupCount(pattern: string): number {
-	return (new RegExp(`${pattern}|`).exec("") as RegExpExecArray).length - 1;
+	const leading = /^\(\?([imsx]+)\)/.exec(pattern);
+	const body = (leading ? pattern.slice(leading[0].length) : pattern).replaceAll("(?P<", "(?<");
+	const flags = (leading?.[1] ?? "").replace("x", "");
+	if (leading?.[1].includes("x")) throw new Error("the verbose flag (?x) has no V8 equivalent");
+	return (new RegExp(`${body}|`, flags).exec("") as RegExpExecArray).length - 1;
 }
 
 export function exposeErrors(raw: string): string[] {
@@ -74,7 +78,7 @@ export function exposeErrors(raw: string): string[] {
 			}
 		}
 		if ("once" in patch && typeof patch.once !== "boolean") errors.push(`${name}: \`once\` must be a boolean`);
-		if (!["warn", "quiet"].includes((patch.onMiss ?? "warn") as string)) {
+		if (!["warn", "quiet"].includes(("onMiss" in patch ? patch.onMiss : "warn") as string)) {
 			errors.push(`${name}: \`onMiss\` must be \`warn\` or \`quiet\``);
 		}
 		const hits = patch.hits;
@@ -93,7 +97,13 @@ export function exposeErrors(raw: string): string[] {
 }
 
 export function validateExpose(root = ROOT): number {
-	const raw = readFileSync(path.join(root, "expose.json"), "utf8");
+	let raw: string;
+	try {
+		raw = readUtf8(path.join(root, "expose.json"));
+	} catch (e) {
+		console.error(`expose.json: ${(e as Error).message}`);
+		return 1;
+	}
 	const errors = exposeErrors(raw);
 	for (const e of errors) console.error(e);
 	if (errors.length) return 1;

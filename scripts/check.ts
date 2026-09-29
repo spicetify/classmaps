@@ -1,15 +1,17 @@
 // Runs every data check CI runs, then the unit tests. With --fix, first
-// rewrites the JSON files in canonical form and rebuilds index.json.
+// rewrites the JSON files in canonical form and rebuilds index.json. With
+// --fix and file arguments, only formats those files.
 //
 //   node scripts/check.ts
 //   node scripts/check.ts --fix
+//   node scripts/check.ts --fix /tmp/candidate.json
 
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 import { indexIsCurrent, writeIndex } from "./build-index.ts";
-import { keyDirs, renderJson, ROOT, writeText } from "./lib.ts";
+import { keyDirs, readUtf8, renderJson, ROOT, writeText } from "./lib.ts";
 import { validateClassmaps } from "./validate-classmaps.ts";
 import { renderExpose, validateExpose } from "./validate-expose.ts";
 
@@ -26,14 +28,30 @@ function fix(): void {
 }
 
 function main(): number {
-	if (process.argv.includes("--fix")) fix();
-	const failed: string[] = [];
-	if (!indexIsCurrent()) {
-		console.error("index.json is out of date; run node scripts/check.ts --fix");
-		failed.push("index");
+	const args = process.argv.slice(2);
+	const files = args.filter((arg) => arg !== "--fix");
+	if (args.includes("--fix") && files.length) {
+		for (const file of files) writeText(file, renderJson(JSON.parse(readUtf8(file))));
+		console.log(`formatted ${files.join(", ")}`);
+		return 0;
 	}
-	if (validateClassmaps() !== 0) failed.push("classmaps");
-	if (validateExpose() !== 0) failed.push("expose");
+	if (args.includes("--fix")) fix();
+	const failed: string[] = [];
+	const step = (name: string, run: () => boolean) => {
+		try {
+			if (!run()) failed.push(name);
+		} catch (e) {
+			console.error(`${name}: ${(e as Error).message}`);
+			failed.push(name);
+		}
+	};
+	step("index", () => {
+		if (indexIsCurrent()) return true;
+		console.error("index.json is out of date; run pnpm fix");
+		return false;
+	});
+	step("classmaps", () => validateClassmaps() === 0);
+	step("expose", () => validateExpose() === 0);
 	const tests = spawnSync(process.execPath, ["--test", "scripts/*.test.mts"], { cwd: ROOT, stdio: "inherit" });
 	if (tests.status !== 0) failed.push("tests");
 	if (failed.length) {
