@@ -19,16 +19,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 EXPOSE = ROOT / "expose.json"
 TEMPLATE_REF = re.compile(r"\$\{(\d+)\}|\$(\d+)")
+BUILD = re.compile(r"\d+\.\d+\.\d+")
 
 
 def main() -> int:
     try:
-        doc = json.loads(EXPOSE.read_text())
+        raw = EXPOSE.read_text(encoding="utf-8")
+        doc = json.loads(raw)
     except (OSError, json.JSONDecodeError) as e:
         print(f"expose.json: {e}", file=sys.stderr)
         return 1
 
     errors: list[str] = []
+    if raw != json.dumps(doc, indent=2, ensure_ascii=False) + "\n":
+        errors.append("expose.json: not canonical (2-space indent, trailing newline)")
     patches = doc.get("patches")
     if not isinstance(patches, list) or not patches:
         errors.append("`patches` must be a non-empty list")
@@ -69,6 +73,14 @@ def main() -> int:
             errors.append(f"{name}: `once` must be a boolean")
         if patch.get("onMiss", "warn") not in ("warn", "quiet"):
             errors.append(f"{name}: `onMiss` must be `warn` or `quiet`")
+        hits = patch.get("hits")
+        if not isinstance(hits, dict) or not hits or not all(
+            BUILD.fullmatch(build) and isinstance(n, int) and not isinstance(n, bool) and n >= 0
+            for build, n in hits.items()
+        ):
+            errors.append(f"{name}: `hits` must map major.minor.patch builds to match counts")
+        if "note" in patch and (not isinstance(patch["note"], str) or not patch["note"]):
+            errors.append(f"{name}: `note` must be a non-empty string when present")
 
     for e in errors:
         print(e, file=sys.stderr)
