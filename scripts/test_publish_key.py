@@ -11,12 +11,12 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import promote_inherited as promote  # noqa: E402
+import publish_key as publish  # noqa: E402
 import build_index  # noqa: E402
 from validate_classmaps import render_json  # noqa: E402
 
 
-class PromoteInheritedTests(unittest.TestCase):
+class PublishKeyTests(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -103,9 +103,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.temp_dir.cleanup()
 
     def test_promotes_an_unchanged_map_and_records_new_stale_paths(self):
-        target = promote.promote_inherited_release(
+        target = publish.publish_release(
             root=self.root,
-            source_key="1020094",
+            inherit_from="1020094",
             spotify_version="1.2.96.518",
             static_report=self.static_report,
             cdp_report=self.cdp_report,
@@ -138,12 +138,10 @@ class PromoteInheritedTests(unittest.TestCase):
 
     def test_generated_index_uses_lf_and_hashes_published_bytes(self):
         index_path = self.root / "index.json"
-        with (
-            mock.patch.object(build_index, "ROOT", self.root),
-            mock.patch.object(build_index, "INDEX", index_path),
-            mock.patch.object(sys, "argv", ["build_index.py"]),
-        ):
-            self.assertEqual(build_index.main(), 0)
+        with mock.patch.object(build_index, "ROOT", self.root):
+            with mock.patch.object(build_index, "INDEX", index_path):
+                with mock.patch.object(sys, "argv", ["build_index.py"]):
+                    self.assertEqual(build_index.main(), 0)
         index_bytes = index_path.read_bytes()
         self.assertNotIn(b"\r", index_bytes)
         entry = json.loads(index_bytes)["keys"]["1020094"]
@@ -157,9 +155,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["cdp"]["browser"]["User-Agent"] = "Spotify/1.2.95.453 Chrome/146"
 
         with self.assertRaisesRegex(ValueError, "does not match Spotify 1.2.96.518"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -171,9 +169,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["cdp"]["browser"]["User-Agent"] = "Spotify/1.2.96.5189 Chrome/146"
 
         with self.assertRaisesRegex(ValueError, "does not match Spotify 1.2.96.518"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -187,9 +185,9 @@ class PromoteInheritedTests(unittest.TestCase):
         (self.source / "META.json").write_text(json.dumps(source_meta) + "\n")
 
         with self.assertRaisesRegex(ValueError, "source metadata key"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -203,9 +201,9 @@ class PromoteInheritedTests(unittest.TestCase):
                 row["hit"] = True
         self.cdp_report["summary"].update({"hits": 2, "hitRate": 0.6667})
 
-        target = promote.promote_inherited_release(
+        target = publish.publish_release(
             root=self.root,
-            source_key="1020094",
+            inherit_from="1020094",
             spotify_version="1.2.96.518",
             static_report=self.static_report,
             cdp_report=self.cdp_report,
@@ -226,9 +224,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["summary"].update({"hits": 0, "hitRate": 0.0})
 
         with self.assertRaisesRegex(ValueError, "below required 0.2500"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -240,9 +238,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["rows"][0]["hit"] = False
 
         with self.assertRaisesRegex(ValueError, "summary does not match rows"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -253,9 +251,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_non_finite_rates_and_bypass_thresholds(self):
         self.cdp_report["summary"]["hitRate"] = float("nan")
         with self.assertRaisesRegex(ValueError, "finite"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -264,9 +262,9 @@ class PromoteInheritedTests(unittest.TestCase):
             )
         self.cdp_report["summary"]["hitRate"] = 0.3333
         with self.assertRaisesRegex(ValueError, "at least 0.25"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -277,9 +275,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_shallow_or_mismatched_reports(self):
         self.cdp_report["deep"] = False
         with self.assertRaisesRegex(ValueError, "deep CDP"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -290,9 +288,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_missing_mode_or_failed_deep_navigation(self):
         del self.cdp_report["mode"]
         with self.assertRaisesRegex(ValueError, "mode 'both'"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -306,9 +304,9 @@ class PromoteInheritedTests(unittest.TestCase):
             "failed": [f"step-{index}" for index in range(8)],
         }
         with self.assertRaisesRegex(ValueError, "deep navigation coverage"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -319,9 +317,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_inconsistent_navigation_ledger(self):
         self.cdp_report["navigation"] = {"attempted": 8, "succeeded": 9, "failed": []}
         with self.assertRaisesRegex(ValueError, "navigation ledger"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -330,9 +328,9 @@ class PromoteInheritedTests(unittest.TestCase):
             )
         self.cdp_report["navigation"] = {"attempted": 8, "succeeded": 7, "failed": []}
         with self.assertRaisesRegex(ValueError, "navigation ledger"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -342,9 +340,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_static_summary_that_disagrees_with_rows(self):
         self.static_report["summary"] = {"missing_in_css": 0, "needs_manual_check": 3}
         with self.assertRaisesRegex(ValueError, "static summary does not match rows"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -354,9 +352,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["deep"] = True
         self.static_report["target"]["spotify_version"] = "1.2.95.453"
         with self.assertRaisesRegex(ValueError, "static report does not match"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -367,9 +365,9 @@ class PromoteInheritedTests(unittest.TestCase):
     def test_refuses_report_leaf_or_digest_mismatch(self):
         self.cdp_report["rows"][0]["hash"] = "anotherHashZZ"
         with self.assertRaisesRegex(ValueError, "does not match classmap"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -379,9 +377,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["rows"][0]["hash"] = "topbarHashAA"
         self.cdp_report["classmap"]["sha256"] = "b" * 64
         with self.assertRaisesRegex(ValueError, "classmap digest"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -395,9 +393,9 @@ class PromoteInheritedTests(unittest.TestCase):
                 row["hit"] = True
         self.cdp_report["summary"].update({"hits": 2, "hitRate": 0.6667})
 
-        target = promote.promote_inherited_release(
+        target = publish.publish_release(
             root=self.root,
-            source_key="1020094",
+            inherit_from="1020094",
             spotify_version="1.2.96.518",
             static_report=self.static_report,
             cdp_report=self.cdp_report,
@@ -416,9 +414,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.cdp_report["rows"][0]["hit"] = False
         self.cdp_report["rows"][2]["hit"] = True
 
-        target = promote.promote_inherited_release(
+        target = publish.publish_release(
             root=self.root,
-            source_key="1020094",
+            inherit_from="1020094",
             spotify_version="1.2.96.518",
             static_report=self.static_report,
             cdp_report=self.cdp_report,
@@ -436,9 +434,9 @@ class PromoteInheritedTests(unittest.TestCase):
         source_meta["unverified_leaves"] = ["main.topbar.wrapper"]
         (self.source / "META.json").write_text(render_json(source_meta))
 
-        target = promote.promote_inherited_release(
+        target = publish.publish_release(
             root=self.root,
-            source_key="1020094",
+            inherit_from="1020094",
             spotify_version="1.2.96.518",
             static_report=self.static_report,
             cdp_report=self.cdp_report,
@@ -456,9 +454,9 @@ class PromoteInheritedTests(unittest.TestCase):
         (self.source / "META.json").write_text(render_json(source_meta))
 
         with self.assertRaisesRegex(ValueError, "required path main.topbar.retired is stale"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
@@ -469,11 +467,11 @@ class PromoteInheritedTests(unittest.TestCase):
         self.assertEqual(list(self.root.glob(".1020096-*")), [])
 
     def test_failed_copy_leaves_no_partial_target(self):
-        with mock.patch.object(promote.shutil, "copy2", side_effect=OSError("disk full")):
+        with mock.patch.object(publish, "write_text", side_effect=OSError("disk full")):
             with self.assertRaisesRegex(OSError, "disk full"):
-                promote.promote_inherited_release(
+                publish.publish_release(
                     root=self.root,
-                    source_key="1020094",
+                    inherit_from="1020094",
                     spotify_version="1.2.96.518",
                     static_report=self.static_report,
                     cdp_report=self.cdp_report,
@@ -487,14 +485,14 @@ class PromoteInheritedTests(unittest.TestCase):
         index = self.root / "index.json"
         index.write_text('{"old": true}\n')
         with mock.patch.object(
-            promote.subprocess,
+            publish.subprocess,
             "run",
             side_effect=subprocess.CalledProcessError(1, ["build_index.py"]),
         ):
             with self.assertRaises(subprocess.CalledProcessError):
-                promote.publish_inherited_release(
+                publish.publish_and_index(
                     root=self.root,
-                    source_key="1020094",
+                    inherit_from="1020094",
                     spotify_version="1.2.96.518",
                     static_report=self.static_report,
                     cdp_report=self.cdp_report,
@@ -508,9 +506,86 @@ class PromoteInheritedTests(unittest.TestCase):
         (self.root / "1020096").mkdir()
 
         with self.assertRaisesRegex(FileExistsError, "1020096 already exists"):
-            promote.promote_inherited_release(
+            publish.publish_release(
                 root=self.root,
-                source_key="1020094",
+                inherit_from="1020094",
+                spotify_version="1.2.96.518",
+                static_report=self.static_report,
+                cdp_report=self.cdp_report,
+                generated="2026-08-12",
+                min_hit_rate=0.25,
+            )
+
+    def bind_reports_to(self, candidate: Path) -> None:
+        digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
+        self.static_report["target"]["classmap_sha256"] = digest
+        self.cdp_report["classmap"]["sha256"] = digest
+
+    def test_publishes_a_derived_key_from_a_candidate_map(self):
+        candidate = self.root / "candidate.json"
+        candidate.write_text(json.dumps(self.classmap, indent="\t"))
+        overlay = self.root / "overlay.json"
+        overlay.write_text('{"topbarHashAA":"Root__globalNav"}')
+        self.bind_reports_to(candidate)
+
+        target = publish.publish_release(
+            root=self.root,
+            classmap_path=candidate,
+            overlay_path=overlay,
+            derived_from="1020094",
+            stale=("main.topbar.retired",),
+            notes=("The retired leaf has no rendered instance.",),
+            spotify_version="1.2.96.518",
+            static_report=self.static_report,
+            cdp_report=self.cdp_report,
+            generated="2026-08-12",
+            min_hit_rate=0.25,
+        )
+
+        self.assertEqual((target / "classmap.json").read_text(), render_json(self.classmap))
+        self.assertEqual(
+            (target / "css-map.json").read_text(), render_json({"topbarHashAA": "Root__globalNav"})
+        )
+        meta = json.loads((target / "META.json").read_text())
+        self.assertEqual(meta["source"], {"method": "derived", "key": "1020094"})
+        self.assertEqual(meta["stale_leaves"], ["main.topbar.retired"])
+        self.assertEqual(meta["unverified_leaves"], ["main.playbar.indicator"])
+        self.assertEqual(
+            meta["required_paths"],
+            {"main.topbar.wrapper": "verified_cdp", "main.playbar.indicator": "unverified"},
+        )
+        verification = (target / "VERIFICATION.md").read_text()
+        self.assertIn("- Classmap derived from 1020094.", verification)
+        self.assertIn("- The retired leaf has no rendered instance.", verification)
+
+    def test_refuses_a_derived_candidate_that_stores_spicetify_names(self):
+        candidate = self.root / "candidate.json"
+        candidate.write_text(render_json(self.classmap))
+        overlay = self.root / "overlay.json"
+        overlay.write_text(render_json({"someHash": "topbarHashAA"}))
+        self.bind_reports_to(candidate)
+
+        with self.assertRaisesRegex(ValueError, "stores the Spicetify name topbarHashAA"):
+            publish.publish_release(
+                root=self.root,
+                classmap_path=candidate,
+                overlay_path=overlay,
+                derived_from="1020094",
+                stale=("main.topbar.retired",),
+                spotify_version="1.2.96.518",
+                static_report=self.static_report,
+                cdp_report=self.cdp_report,
+                generated="2026-08-12",
+                min_hit_rate=0.25,
+            )
+        self.assertFalse((self.root / "1020096").exists())
+
+    def test_refuses_stale_paths_for_an_inherited_key(self):
+        with self.assertRaisesRegex(ValueError, "takes its map, overlay and stale paths"):
+            publish.publish_release(
+                root=self.root,
+                inherit_from="1020094",
+                stale=("main.topbar.wrapper",),
                 spotify_version="1.2.96.518",
                 static_report=self.static_report,
                 cdp_report=self.cdp_report,
