@@ -14,15 +14,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 import sys
 from pathlib import Path
 
-from validate_classmaps import render_json
+from validate_classmaps import KEY_DIR, render_json
 
 ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "index.json"
-KEY_DIR = re.compile(r"^\d+$")
 
 
 def sha256(path: Path) -> str:
