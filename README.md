@@ -65,50 +65,76 @@ reformatted, and the 1020099 and 1030000 leaves stored as Spicetify names were
 rewritten to their stock classes. Those older digests therefore no longer
 match the published bytes, but the classes the CLI stages are unchanged.
 
-## Unchanged patch release
+## Publishing a key
 
-From the CLI repository, generate reports bound to the exact Spotify version,
-classmap digest, target CSS digest, and a deep live CDP run:
+You never write `META.json`, `VERIFICATION.md`, or `index.json` by hand.
+`scripts/publish_key.py` generates them from two CLI verification reports,
+formats the map and overlay, validates the new key, and rebuilds the index.
+It refuses mismatched versions, maps, leaf values, shallow CDP runs,
+inconsistent summaries, low hit rates, and existing targets. If any step
+fails, it rolls back both the key and `index.json`.
 
-```sh
-python3 scripts/classmap_capture.py verify \
-  --classmap ../classmaps/1020094/classmap.json \
-  --css-map css-map.json \
-  --target-spa "/path/to/stock/xpui.spa" \
-  --target-version 1.2.96.518 \
-  --out /tmp/1020096-static.json
+To publish a key, follow these steps:
 
-node scripts/classmap_cdp_verify.mjs \
-  --port 9229 --mode both --deep \
-  --classmap ../classmaps/1020094/classmap.json \
-  --css-map css-map.json \
-  --out /tmp/1020096-cdp.json
-```
+1. From the CLI repository, verify the candidate map against the stock client
+   of the new build. For an unchanged patch release, the candidate is the
+   previous key's `classmap.json`. For a derived key, it's the output of
+   `classmap_capture.py migrate` or your edited copy.
 
-Inspect the reports. If no replacements are justified, promote the inherited
-map from this repository:
+   ```sh
+   python3 scripts/classmap_capture.py verify \
+     --classmap ../classmaps/1020094/classmap.json \
+     --css-map css-map.json \
+     --target-spa "/path/to/stock/xpui.spa" \
+     --target-version 1.2.96.518 \
+     --out /tmp/1020096-static.json
 
-```sh
-python3 scripts/promote_inherited.py \
-  --from-key 1020094 \
-  --spotify-version 1.2.96.518 \
-  --static-report /tmp/1020096-static.json \
-  --cdp-report /tmp/1020096-cdp.json
-```
+   node scripts/classmap_cdp_verify.mjs \
+     --port 9229 --mode both --deep \
+     --classmap ../classmaps/1020094/classmap.json \
+     --css-map css-map.json \
+     --out /tmp/1020096-cdp.json
+   ```
 
-The promoter refuses mismatched versions, maps, leaf values, shallow CDP runs,
-inconsistent summaries, low hit rates, and existing targets. It writes
-`META.json` and `VERIFICATION.md`, validates the new key, copies through a
-temporary directory, and rolls back both the release and `index.json` if
-publication preparation fails. Newly absent paths are marked `unverified`,
-and paths the source already marked `unverified` stay that way until the deep
-CDP run observes them. Only paths already known to be stale remain blocked by
-the CLI.
+2. Inspect the reports. If no leaf needs a new class, publish an inherited key
+   from this repository:
 
-If migration proposes changed hashes, do not use inheritance. Run the full
-capture pipeline from the CLI repository and verify each changed leaf before
-publishing it.
+   ```sh
+   python3 scripts/publish_key.py --inherit-from 1020094 \
+     --spotify-version 1.2.96.518 \
+     --static-report /tmp/1020096-static.json \
+     --cdp-report /tmp/1020096-cdp.json
+   ```
 
+   Otherwise, publish the candidate as a derived key. Pass each decision the
+   reports can't make as a flag: `--stale PATH` for a leaf whose class is known
+   to be wrong, and `--note TEXT` for anything a reviewer needs to know.
+
+   ```sh
+   python3 scripts/publish_key.py --classmap /tmp/1030002.json \
+     --css-map /tmp/1030002-css-map.json --derived-from 1030001 \
+     --spotify-version 1.3.2.100 \
+     --static-report /tmp/1030002-static.json \
+     --cdp-report /tmp/1030002-cdp.json \
+     --stale main.topbar.right.upgrade_button.wrapper \
+     --note "The upgrade button has no rendered instance on a premium account."
+   ```
+
+3. Run `python3 scripts/check.py` and open a pull request.
+
+The publisher marks a path `unverified` when it's missing from the target CSS
+and wasn't observed live. An inherited key also keeps its source's
+`unverified` paths until the deep CDP run observes them, and its stale paths
+until a live hit clears them. A derived key tracks the `required_paths` of
+`--derived-from`, or of the newest key when you don't pass one.
+
+## Checks
+
+`python3 scripts/check.py` runs everything CI runs: the index check, the key
+validator, the exposure patch validator, and the unit tests. The scripts need
+only Python 3.9 or later and the standard library. Run
+`python3 scripts/check.py --fix` to rewrite every JSON file in canonical form
+and rebuild `index.json` before checking.
 
 ## Exposure patches
 
@@ -116,8 +142,9 @@ publishing it.
 `xpui-modules.js` so `Spicetify.Platform`, `Spicetify.Snackbar`, and the
 other globals exist. It is one file for every build: the CLI fetches it
 through `index.json` beside the classmaps, verifies its digest, and falls back
-to the copy embedded in the binary when it cannot. A Spotify update that reshapes the minified code is
-answered here, with a data commit, instead of a CLI release.
+to the copy embedded in the binary when it cannot. A Spotify update that
+reshapes the minified code is answered here, with a data commit, instead of a
+CLI release.
 
 To change a pattern, measure it against real bundles first. From the CLI
 repository, with the unpatched `xpui-modules.js` of each build you care about
@@ -145,12 +172,11 @@ Each patch has these fields:
 Record the hit counts in the patch's `hits`, then:
 
 ```sh
-python3 scripts/validate_expose.py
-python3 scripts/build_index.py
+python3 scripts/check.py --fix
 ```
 
-Both run in CI. `onMiss: quiet` is for a patch that is expected to miss on
-some supported builds; a `warn` miss is reported by `apply` as
+CI runs the same checks. `onMiss: quiet` is for a patch that is expected to
+miss on some supported builds; a `warn` miss is reported by `apply` as
 `api exposure patches that did not match`. Keep the CLI repository's own
 `expose.json` in step with this one when cutting a release: it is only the
 offline baseline, but a stale one degrades a first run without network.
