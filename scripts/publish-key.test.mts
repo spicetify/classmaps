@@ -322,6 +322,19 @@ test("--replace re-verifies a key, keeping its first publication date", () => {
 	assert.deepEqual(stagingDirs(), []);
 });
 
+test("--replace keeps an earlier live status the new run didn't reach", () => {
+	publishRelease(options());
+	setHit("main.topbar.wrapper", false, { hits: 0, hitRate: 0 });
+	setHit("main.playbar.indicator", false, {});
+	assert.throws(() => publishRelease(options({ replace: true })), /below required/);
+	const reports = reportsFor(classmap, "1.2.96.518", new Set(["main.topbar.wrapper", "main.playbar.indicator"]), new Set(["main.playbar.indicator"]));
+	const target = publishRelease(options({ replace: true, staticReport: reports.static, cdpReport: reports.cdp }));
+	const meta = readMeta(target);
+	assert.equal(meta.required_paths["main.topbar.wrapper"], "verified_cdp", "unchanged class, earlier live hit");
+	assert.equal(meta.required_paths["main.playbar.indicator"], "verified_cdp");
+	assert.ok(readVerification(target).includes("Kept the earlier live status of main.topbar.wrapper"));
+});
+
 test("--replace refuses a map that would break the keys inheriting from it", () => {
 	publishRelease(options());
 	const changed = { ...classmap, main: { ...classmap.main, playbar: { indicator: "otherHashDD" } } };

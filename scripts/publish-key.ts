@@ -342,6 +342,12 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	if (exists && !o.replace) throw new Error(`${targetKey} already exists; pass --replace to re-verify it`);
 	if (!exists && o.replace) throw new Error(`${targetKey} does not exist, so there is nothing to replace`);
 	const generated = exists ? (readMeta(o.root, targetKey).generated ?? o.generated) : o.generated;
+	const replaced = exists
+		? {
+				meta: readMeta(o.root, targetKey),
+				values: leafValues(JSON.parse(readUtf8(path.join(targetDir, "classmap.json")))),
+			}
+		: null;
 
 	const sourceKey = o.inheritFrom ?? o.derivedFrom ?? null;
 	const sourceMeta: Meta = sourceKey ? readMeta(o.root, sourceKey) : {};
@@ -418,6 +424,23 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	}
 	const unverified = new Set([...doubted].filter((p) => !live.has(p) && !stale.has(p)));
 
+	// Earlier live evidence for an unchanged class on the same build still holds
+	// when the new run didn't reach that surface.
+	const statuses = requiredStatuses(required, unverified, live);
+	if (replaced) {
+		const kept: string[] = [];
+		for (const [leaf, status] of Object.entries(statuses)) {
+			const before = replaced.meta.required_paths?.[leaf];
+			const unchanged = replaced.values.get(leaf) === values.get(leaf);
+			if (status !== "verified_cdp" && (before === "verified_cdp" || before === "verified_targeted") && unchanged && !stale.has(leaf)) {
+				statuses[leaf] = before;
+				unverified.delete(leaf);
+				kept.push(leaf);
+			}
+		}
+		if (kept.length) notes.push(`Kept the earlier live status of ${kept.sort().join(", ")}, which this run didn't reach.`);
+	}
+
 	const method = inherited ? "inherited" : "derived";
 	const meta = {
 		schema_version: 2,
@@ -426,7 +449,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		status: "verified",
 		generated,
 		source: { method, key: sourceKey },
-		required_paths: requiredStatuses(required, unverified, live),
+		required_paths: statuses,
 		stale_leaves: [...stale].sort(),
 		unverified_leaves: [...unverified].sort(),
 		verified_classmap_sha256: sha256(classmapBytes),
