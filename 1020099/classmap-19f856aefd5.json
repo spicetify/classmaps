@@ -38,9 +38,9 @@
     },
     "navbar": {
       "link": {
-        "wrapper": "main-globalNav-navLink",
-        "container": "main-globalNav-navLink",
-        "container__active": "main-globalNav-navLinkActive"
+        "wrapper": "kUHE42xvQVzWqabl",
+        "container": "kUHE42xvQVzWqabl",
+        "container__active": "kxv3By32Og8yDEXy"
       }
     },
     "global_navbar": {},
@@ -58,32 +58,32 @@
   },
   "modal": {
     "widget_generator": {
-      "container": "main-embedWidgetGenerator-container",
+      "container": "gx9qsprOAO4ubEFc",
       "header": {
-        "container": "main-embedWidgetGenerator-header",
-        "close": "main-embedWidgetGenerator-closeBtn"
+        "container": "g9sFYudWkUldbuNa",
+        "close": "Pk4GI8WfBMjS5R2J"
       },
       "content": {
-        "container": "main-embedWidgetGenerator-content"
+        "container": "ywtSYUL2xRwVlvSo"
       }
     },
     "track_credits": {
-      "container": "main-trackCreditsModalV2-container",
+      "container": "p5LJBmlswjcRT458",
       "header": {
-        "container": "main-trackCreditsModalV2-header",
-        "close": "main-trackCreditsModalV2-closeBtn"
+        "container": "idsrX6VAUY49Eczw",
+        "close": "_18qFNPzv7Eyyck8"
       },
       "content": {
-        "container": "main-trackCreditsModalV2-mainSection"
+        "container": "yKG9lWaUWIBUyVCu"
       }
     }
   },
   "settings": {
     "header": {
-      "container": "x-settings-outputSectionHeader"
+      "container": "KsnD09q3oqAjJX3e"
     },
     "section": {
-      "container": "x-settings-section"
+      "container": "fNaaQ0Cp8Yzy19j8"
     },
     "button": {
       "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
@@ -96,14 +96,14 @@
   },
   "sort_box": {
     "list": {
-      "button": "x-sortBox-sortDropdown"
+      "button": "LQ6y2jhZZtMS7xCr"
     }
   },
   "search_box": {
-    "container": "main-globalNav-searchContainer",
-    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only main-globalNav-link-icon"
+    "container": "YsP3Gj4aJDYsaOC5",
+    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only _Bg_zSvFrEutyacG"
   },
   "context_menu": {
-    "menu_item": "main-contextMenu-menuItemButton"
+    "menu_item": "KzLH25pAEr43wpSc"
   }
 }
