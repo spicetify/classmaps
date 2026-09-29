@@ -25,8 +25,7 @@ but only the stock form can be checked against a stock archive. Keys
 
 Every JSON file uses two-space indentation and ends with a newline.
 `classmap.json`, `css-map.json`, `META.json`, and `index.json` also sort their
-keys. `python3 scripts/validate_classmaps.py` enforces the layout, and CI runs
-it on every pull request.
+keys. `pnpm check` enforces the layout, and CI runs it on every pull request.
 
 ## META.json
 
@@ -68,7 +67,7 @@ match the published bytes, but the classes the CLI stages are unchanged.
 ## Publishing a key
 
 You never write `META.json`, `VERIFICATION.md`, or `index.json` by hand.
-`scripts/publish_key.py` generates them from two CLI verification reports,
+`pnpm publish-key` generates them from two CLI verification reports,
 formats the map and overlay, validates the new key, and rebuilds the index.
 It refuses mismatched versions, maps, leaf values, shallow CDP runs,
 inconsistent summaries, low hit rates, and existing targets. If any step
@@ -100,7 +99,7 @@ To publish a key, follow these steps:
    from this repository:
 
    ```sh
-   python3 scripts/publish_key.py --inherit-from 1020094 \
+   pnpm publish-key --inherit-from 1020094 \
      --spotify-version 1.2.96.518 \
      --static-report /tmp/1020096-static.json \
      --cdp-report /tmp/1020096-cdp.json
@@ -111,7 +110,7 @@ To publish a key, follow these steps:
    to be wrong, and `--note TEXT` for anything a reviewer needs to know.
 
    ```sh
-   python3 scripts/publish_key.py --classmap /tmp/1030002.json \
+   pnpm publish-key --classmap /tmp/1030002.json \
      --css-map /tmp/1030002-css-map.json --derived-from 1030001 \
      --spotify-version 1.3.2.100 \
      --static-report /tmp/1030002-static.json \
@@ -120,7 +119,7 @@ To publish a key, follow these steps:
      --note "The upgrade button has no rendered instance on a premium account."
    ```
 
-3. Run `python3 scripts/check.py` and open a pull request.
+3. Run `pnpm check` and open a pull request.
 
 The publisher marks a path `unverified` when it's missing from the target CSS
 and wasn't observed live. An inherited key also keeps its source's
@@ -130,11 +129,11 @@ until a live hit clears them. A derived key tracks the `required_paths` of
 
 ## Checks
 
-`python3 scripts/check.py` runs everything CI runs: the index check, the key
-validator, the exposure patch validator, and the unit tests. The scripts need
-only Python 3.9 or later and the standard library. Run
-`python3 scripts/check.py --fix` to rewrite every JSON file in canonical form
-and rebuild `index.json` before checking.
+`pnpm check` runs everything CI runs: the type check, the index check, the key
+validator, the exposure patch validator, and the unit tests. The scripts are
+TypeScript that Node 24 or later runs directly, and `pnpm install` only adds
+the type checker. Run `pnpm fix` to rewrite every JSON file in canonical form
+and rebuild `index.json`.
 
 ## Exposure patches
 
@@ -172,7 +171,7 @@ Each patch has these fields:
 Record the hit counts in the patch's `hits`, then:
 
 ```sh
-python3 scripts/check.py --fix
+pnpm fix
 ```
 
 CI runs the same checks. `onMiss: quiet` is for a patch that is expected to
