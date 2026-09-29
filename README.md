@@ -74,8 +74,10 @@ You never write `META.json`, `VERIFICATION.md`, or `index.json` by hand.
 validates the new key and every key inheriting from it, and rebuilds the index.
 It refuses mismatched versions, maps, leaf values, shallow CDP runs,
 inconsistent summaries, low hit rates, and existing keys. If any step fails, it
-rolls back both the key and `index.json`. Run `pnpm publish-key --help` for
-every flag.
+rolls back both the key and `index.json`. When the CDP report records the
+overlay it applied, that overlay must be the one being published; otherwise
+`VERIFICATION.md` notes that the overlay's names were not checked live. Run
+`pnpm publish-key --help` for every flag.
 
 The CLI commands below run from a spicetify/cli checkout next to this
 repository. They need the stock `xpui.spa` of each Spotify build involved, taken
@@ -101,7 +103,7 @@ against the new build and publish it as inherited:
 
    node scripts/classmap-cdp-verify.mjs --port 9229 --mode both --deep \
      --classmap ../classmaps/1020094/classmap.json --css-map css-map.json \
-     --out /tmp/1020096-cdp.json
+     --overlay ../classmaps/1020094/css-map.json --out /tmp/1020096-cdp.json
    ```
 
 2. From this repository, publish the inherited key:
@@ -146,7 +148,8 @@ and publish the result as a derived key:
 
 4. Verify the candidate with the same two commands as an unchanged release,
    passing `--classmap /tmp/1030002.json`, `--target-version 1.3.2.100`, and
-   `--report /tmp/1030002-migrate.json` to `verify`. Alternatively, run the whole
+   `--report /tmp/1030002-migrate.json` to `verify`, and
+   `--overlay /tmp/1030002-overlay.json` to the CDP verifier. Alternatively, run the whole
    CLI side in one command with
    `SPOTIFY_VERSION=1.3.2.100 BASE_CLASSMAP=... BASE_CSS_DIR=... OUT_DIR=... scripts/classmap-e2e.sh --deep`.
 
