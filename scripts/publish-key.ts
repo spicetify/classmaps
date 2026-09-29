@@ -298,6 +298,17 @@ function verificationMarkdown(o: {
 	].join("\n");
 }
 
+/** Appends a replaced key's previous VERIFICATION.md, its headings one level deeper. */
+function withHistory(verification: string, targetDir: string): string {
+	const file = path.join(targetDir, "VERIFICATION.md");
+	if (!isFile(file)) return verification;
+	const previous = readUtf8(file)
+		.replace(/^# .*\n+/, "")
+		.replace(/^(#+) /gm, "#$1 ")
+		.trimEnd();
+	return `${verification}\n## Earlier verification\n\n${previous}\n`;
+}
+
 function newestVerifiedKey(root: string, below: string): string | undefined {
 	return keyDirs(root)
 		.filter((key) => key < below && isFile(path.join(root, key, "META.json")) && readMeta(root, key).status === "verified")
@@ -331,6 +342,12 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	if (exists && !o.replace) throw new Error(`${targetKey} already exists; pass --replace to re-verify it`);
 	if (!exists && o.replace) throw new Error(`${targetKey} does not exist, so there is nothing to replace`);
 	const generated = exists ? (readMeta(o.root, targetKey).generated ?? o.generated) : o.generated;
+	const replaced = exists
+		? {
+				meta: readMeta(o.root, targetKey),
+				values: leafValues(JSON.parse(readUtf8(path.join(targetDir, "classmap.json")))),
+			}
+		: null;
 
 	const sourceKey = o.inheritFrom ?? o.derivedFrom ?? null;
 	const sourceMeta: Meta = sourceKey ? readMeta(o.root, sourceKey) : {};
@@ -398,7 +415,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	}
 	const observedStale = [...stale].filter((p) => live.has(p)).sort();
 	if (observedStale.length) notes.push(`Marked stale although observed live: ${observedStale.join(", ")}.`);
-	if (exists) notes.push(`Replaces an earlier verification of this key; its history is in git.`);
+	if (exists) notes.push("Replaces an earlier verification of this key, kept below under Earlier verification.");
 	if (liveOverlaySha !== undefined && liveOverlaySha !== overlaySha) {
 		throw new Error("the CDP report was run with a different overlay than the one being published");
 	}
@@ -406,6 +423,23 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		notes.push("The CDP run did not apply this key's overlay, so its names were not checked live.");
 	}
 	const unverified = new Set([...doubted].filter((p) => !live.has(p) && !stale.has(p)));
+
+	// Earlier live evidence for an unchanged class on the same build still holds
+	// when the new run didn't reach that surface.
+	const statuses = requiredStatuses(required, unverified, live);
+	if (replaced) {
+		const kept: string[] = [];
+		for (const [leaf, status] of Object.entries(statuses)) {
+			const before = replaced.meta.required_paths?.[leaf];
+			const unchanged = replaced.values.get(leaf) === values.get(leaf);
+			if (status !== "verified_cdp" && (before === "verified_cdp" || before === "verified_targeted") && unchanged && !stale.has(leaf)) {
+				statuses[leaf] = before;
+				unverified.delete(leaf);
+				kept.push(leaf);
+			}
+		}
+		if (kept.length) notes.push(`Kept the earlier live status of ${kept.sort().join(", ")}, which this run didn't reach.`);
+	}
 
 	const method = inherited ? "inherited" : "derived";
 	const meta = {
@@ -415,7 +449,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		status: "verified",
 		generated,
 		source: { method, key: sourceKey },
-		required_paths: requiredStatuses(required, unverified, live),
+		required_paths: statuses,
 		stale_leaves: [...stale].sort(),
 		unverified_leaves: [...unverified].sort(),
 		verified_classmap_sha256: sha256(classmapBytes),
@@ -444,7 +478,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		writeFileSync(path.join(staging, "classmap.json"), classmapBytes);
 		if (overlayText) writeText(path.join(staging, "css-map.json"), overlayText);
 		writeText(path.join(staging, "META.json"), renderJson(meta));
-		writeText(path.join(staging, "VERIFICATION.md"), verification);
+		writeText(path.join(staging, "VERIFICATION.md"), exists ? withHistory(verification, targetDir) : verification);
 		const errors = keyErrors(staging, targetKey, o.root);
 		if (errors.length) throw new Error(`published key fails validation: ${errors.join("; ")}`);
 		if (exists) {
