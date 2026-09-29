@@ -1,0 +1,104 @@
+{
+  "context_menu": {
+    "menu_item": "yqG4N5YYcY4uEujt"
+  },
+  "main": {
+    "navbar": {
+      "link": {
+        "container": "kUHE42xvQVzWqabl",
+        "container__active": "kUHE42xvQVzWqabl",
+        "wrapper": "kUHE42xvQVzWqabl"
+      }
+    },
+    "playbar": {
+      "buttons": {
+        "button": {
+          "wrapper": "_EuXSrqTA94N1Evn",
+          "wrapper__active": "v1kNYVvW5P8Wa4jS",
+          "wrapper__indicator": "EHxL6K_6WWDlTCZP6x5w"
+        }
+      }
+    },
+    "topbar": {
+      "left": {
+        "button": {
+          "icon": {
+            "wrapper": "IYDlXmBmmUKHveMzIPCF"
+          },
+          "wrapper": "kUHE42xvQVzWqabl"
+        },
+        "button_t": {
+          "wrapper": "_Bg_zSvFrEutyacG"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "kUHE42xvQVzWqabl"
+        },
+        "button_t": {
+          "wrapper": "sXjzYBob5Y4psogB"
+        },
+        "upgrade_button": {
+          "wrapper": "Upqw01TOXETOmR5Td7Dj"
+        }
+      },
+      "wrapper": "NXttmW3KPwE1r4Am"
+    }
+  },
+  "modal": {
+    "track_credits": {
+      "container": "p5LJBmlswjcRT458",
+      "content": {
+        "container": "yKG9lWaUWIBUyVCu"
+      },
+      "header": {
+        "close": "_18qFNPzv7Eyyck8",
+        "container": "idsrX6VAUY49Eczw"
+      }
+    },
+    "widget_generator": {
+      "container": "gx9qsprOAO4ubEFc",
+      "content": {
+        "container": "ywtSYUL2xRwVlvSo"
+      },
+      "header": {
+        "close": "Pk4GI8WfBMjS5R2J",
+        "container": "g9sFYudWkUldbuNa"
+      }
+    }
+  },
+  "scrollable_text": {
+    "container": "MyaStf5D5Im3gt9M",
+    "wrapper": "dxlv5wfAu8zgm7HY"
+  },
+  "search_box": {
+    "container": "S0nU7XTXYMOBcASz",
+    "expand_button": "eu6ObgEHE5owtzi_"
+  },
+  "search_chips": {
+    "chip": "U4idT8HUFwfj7PWP",
+    "container": "dxlv5wfAu8zgm7HY",
+    "wrapper": "x_HLN829yDsvJDgl",
+    "wrapper_wrapper": "qZHfdckfFVY5AURF"
+  },
+  "settings": {
+    "button": {
+      "wrapper": "e-10451-legacy-button e-10451-legacy-button--small e-10451-legacy-button-secondary"
+    },
+    "header": {
+      "container": "KsnD09q3oqAjJX3e"
+    },
+    "section": {
+      "container": "fNaaQ0Cp8Yzy19j8"
+    },
+    "text_input": "e-10451-form-input e-10451-form-control encore-text-body-medium"
+  },
+  "sort_box": {
+    "list": {
+      "button": "LQ6y2jhZZtMS7xCr"
+    }
+  },
+  "tracklist": {
+    "column_header": "F_VvNCRKZ2cKj1a9"
+  }
+}

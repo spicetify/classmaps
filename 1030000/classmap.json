@@ -1,0 +1,104 @@
+{
+  "context_menu": {
+    "menu_item": "fmmygDM45MTS7I35OyLh"
+  },
+  "main": {
+    "navbar": {
+      "link": {
+        "container": "xlH6FJnBzFT4l3TgUBre",
+        "container__active": "ajKYUZPcNmFVzcAzzlwe",
+        "wrapper": "xlH6FJnBzFT4l3TgUBre"
+      }
+    },
+    "playbar": {
+      "buttons": {
+        "button": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-small",
+          "wrapper__active": "e-10860-legacy-button e-10860-legacy-button-primary",
+          "wrapper__indicator": "e-10860-button-primary__inner"
+        }
+      }
+    },
+    "topbar": {
+      "left": {
+        "button": {
+          "icon": {
+            "wrapper": "e-10860-icon e-10860-icon--auto-mirror"
+          },
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium"
+        },
+        "button_t": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "e-10860-legacy-button e-10860-button-tertiary--condensed-all"
+        },
+        "button_t": {
+          "wrapper": "nR3ekhH3c1IU7dX9smcR"
+        },
+        "upgrade_button": {
+          "wrapper": "e-10860-legacy-button e-10860-legacy-button-primary"
+        }
+      },
+      "wrapper": "bQetA_KiP9n0DQVcGa7m"
+    }
+  },
+  "modal": {
+    "track_credits": {
+      "container": "gtXQasDkhtg93wGk6yNG",
+      "content": {
+        "container": "wYQNBdH2rNMGe_B4oumf"
+      },
+      "header": {
+        "close": "CaHvWv36mAu4x5QTKlb1",
+        "container": "nQ_c7yoZ2XOD6fWtmv18"
+      }
+    },
+    "widget_generator": {
+      "container": "_XeAt3IgtZQepOYqU2g4",
+      "content": {
+        "container": "Xu_Z4l6TIOF1f5kDB9dt"
+      },
+      "header": {
+        "close": "AslPcD0TRZBBGZofe58g",
+        "container": "mnU1hqlaF5JIcrTxLnZF"
+      }
+    }
+  },
+  "scrollable_text": {
+    "container": "e-10860-legacy-box e-10860-legacy-box--naked",
+    "wrapper": "e-10860-legacy-box"
+  },
+  "search_box": {
+    "container": "mlx0CgXAnGz0dADVsCdS",
+    "expand_button": "e-10860-legacy-button e-10860-button-tertiary--icon-only-medium aslJk0YypwKvyKXaBJcG"
+  },
+  "search_chips": {
+    "chip": "e-10860-legacy-chip",
+    "container": "e-10860-chip-group__component",
+    "wrapper": "e-10860-chip-group__component",
+    "wrapper_wrapper": "e-10860-chip-group"
+  },
+  "settings": {
+    "button": {
+      "wrapper": "e-10860-legacy-button e-10860-legacy-button--small e-10860-legacy-button-secondary"
+    },
+    "header": {
+      "container": "Hwax_pfCzrntLhnYXiqL"
+    },
+    "section": {
+      "container": "HdwEUcX8xijMdU7doYPt"
+    },
+    "text_input": "e-10860-form-input e-10860-form-control encore-text-body-medium"
+  },
+  "sort_box": {
+    "list": {
+      "button": "MYWr4UY4pKAAscUXvqrB"
+    }
+  },
+  "tracklist": {
+    "column_header": "e-10860-legacy-list-row__header"
+  }
+}

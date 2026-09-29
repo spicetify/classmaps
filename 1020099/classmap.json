@@ -1,0 +1,104 @@
+{
+  "context_menu": {
+    "menu_item": "KzLH25pAEr43wpSc"
+  },
+  "main": {
+    "navbar": {
+      "link": {
+        "container": "kUHE42xvQVzWqabl",
+        "container__active": "kxv3By32Og8yDEXy",
+        "wrapper": "kUHE42xvQVzWqabl"
+      }
+    },
+    "playbar": {
+      "buttons": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only e-10810-button-tertiary--icon-only-small",
+          "wrapper__active": "e-10810-legacy-button e-10810-legacy-button-primary",
+          "wrapper__indicator": "e-10810-button-primary__inner"
+        }
+      }
+    },
+    "topbar": {
+      "left": {
+        "button": {
+          "icon": {
+            "wrapper": "e-10810-icon e-10810-icon--auto-mirror"
+          },
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only"
+        },
+        "button_t": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only"
+        }
+      },
+      "right": {
+        "button": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--condensed-all"
+        },
+        "button_t": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--condensed-all"
+        },
+        "upgrade_button": {
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-primary"
+        }
+      },
+      "wrapper": "oy96nRTKcIs7wm5K"
+    }
+  },
+  "modal": {
+    "track_credits": {
+      "container": "p5LJBmlswjcRT458",
+      "content": {
+        "container": "yKG9lWaUWIBUyVCu"
+      },
+      "header": {
+        "close": "_18qFNPzv7Eyyck8",
+        "container": "idsrX6VAUY49Eczw"
+      }
+    },
+    "widget_generator": {
+      "container": "gx9qsprOAO4ubEFc",
+      "content": {
+        "container": "ywtSYUL2xRwVlvSo"
+      },
+      "header": {
+        "close": "Pk4GI8WfBMjS5R2J",
+        "container": "g9sFYudWkUldbuNa"
+      }
+    }
+  },
+  "scrollable_text": {
+    "container": "e-10810-legacy-box e-10810-legacy-box--naked",
+    "wrapper": "e-10810-legacy-box"
+  },
+  "search_box": {
+    "container": "YsP3Gj4aJDYsaOC5",
+    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only _Bg_zSvFrEutyacG"
+  },
+  "search_chips": {
+    "chip": "e-10810-legacy-chip",
+    "container": "e-10810-chip-group__component",
+    "wrapper": "e-10810-chip-group__component",
+    "wrapper_wrapper": "e-10810-chip-group"
+  },
+  "settings": {
+    "button": {
+      "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
+    },
+    "header": {
+      "container": "KsnD09q3oqAjJX3e"
+    },
+    "section": {
+      "container": "fNaaQ0Cp8Yzy19j8"
+    },
+    "text_input": "e-10810-form-input e-10810-form-control encore-text-body-medium"
+  },
+  "sort_box": {
+    "list": {
+      "button": "LQ6y2jhZZtMS7xCr"
+    }
+  },
+  "tracklist": {
+    "column_header": "e-10810-legacy-list-row__header"
+  }
+}

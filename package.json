@@ -1,0 +1,19 @@
+{
+	"name": "spicetify-classmaps",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">=24.2.0"
+	},
+	"packageManager": "pnpm@10.0.0",
+	"scripts": {
+		"check": "tsc && node scripts/check.ts",
+		"fix": "node scripts/check.ts --fix",
+		"test": "node --test 'scripts/*.test.mts'",
+		"publish-key": "node scripts/publish-key.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^24.19.0",
+		"typescript": "^7.0.2"
+	}
+}
