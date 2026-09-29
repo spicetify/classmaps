@@ -298,6 +298,17 @@ function verificationMarkdown(o: {
 	].join("\n");
 }
 
+/** Appends a replaced key's previous VERIFICATION.md, its headings one level deeper. */
+function withHistory(verification: string, targetDir: string): string {
+	const file = path.join(targetDir, "VERIFICATION.md");
+	if (!isFile(file)) return verification;
+	const previous = readUtf8(file)
+		.replace(/^# .*\n+/, "")
+		.replace(/^(#+) /gm, "#$1 ")
+		.trimEnd();
+	return `${verification}\n## Earlier verification\n\n${previous}\n`;
+}
+
 function newestVerifiedKey(root: string, below: string): string | undefined {
 	return keyDirs(root)
 		.filter((key) => key < below && isFile(path.join(root, key, "META.json")) && readMeta(root, key).status === "verified")
@@ -398,7 +409,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	}
 	const observedStale = [...stale].filter((p) => live.has(p)).sort();
 	if (observedStale.length) notes.push(`Marked stale although observed live: ${observedStale.join(", ")}.`);
-	if (exists) notes.push(`Replaces an earlier verification of this key; its history is in git.`);
+	if (exists) notes.push("Replaces an earlier verification of this key, kept below under Earlier verification.");
 	if (liveOverlaySha !== undefined && liveOverlaySha !== overlaySha) {
 		throw new Error("the CDP report was run with a different overlay than the one being published");
 	}
@@ -444,7 +455,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		writeFileSync(path.join(staging, "classmap.json"), classmapBytes);
 		if (overlayText) writeText(path.join(staging, "css-map.json"), overlayText);
 		writeText(path.join(staging, "META.json"), renderJson(meta));
-		writeText(path.join(staging, "VERIFICATION.md"), verification);
+		writeText(path.join(staging, "VERIFICATION.md"), exists ? withHistory(verification, targetDir) : verification);
 		const errors = keyErrors(staging, targetKey, o.root);
 		if (errors.length) throw new Error(`published key fails validation: ${errors.join("; ")}`);
 		if (exists) {

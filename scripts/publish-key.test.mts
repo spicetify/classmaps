@@ -316,6 +316,9 @@ test("--replace re-verifies a key, keeping its first publication date", () => {
 	assert.equal(meta.generated, "2026-08-12");
 	assert.equal(meta.required_paths["main.playbar.indicator"], "verified_cdp");
 	assert.ok(readVerification(target).includes("Replaces an earlier verification"));
+	const [current, earlier] = readVerification(target).split("## Earlier verification\n");
+	assert.ok(current.includes("| verified_cdp | 2 |"));
+	assert.ok(earlier.includes("### Notes") && earlier.includes("| verified_cdp | 1 |"), "the replaced history is kept, one level deeper");
 	assert.deepEqual(stagingDirs(), []);
 });
 
