@@ -4,11 +4,11 @@ The README is the reference for the key layout, the META schema, and the
 publishing steps. This file holds what the README and the scripts don't make
 obvious.
 
-- Generate every published file. `pnpm publish-key` writes a new key's
+- Generate every published file. `pnpm publish-key` writes a key's
   `META.json` and `VERIFICATION.md`, `pnpm fix` formats JSON and rebuilds
   `index.json`, and `pnpm check` is done when it prints `all checks passed`.
-  To change an existing key, edit its `classmap.json`, `css-map.json` or
-  `META.json` fields, then run `pnpm fix`.
+  To change a published key's classes, verify the corrected map and run
+  `pnpm publish-key --replace`; a hand edit fails the verified digest check.
 - Leaves hold the class exactly as the stock Spotify archive ships it. A class
   observed on a patched client has already been renamed by the css-map, so
   translate it back to the one stock hash the effective css-map (the CLI's

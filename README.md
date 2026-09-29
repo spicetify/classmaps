@@ -43,6 +43,7 @@ counts, or run details, in `VERIFICATION.md`.
 | `required_paths` | Status of each path the ecosystem depends on. |
 | `stale_leaves` | Paths known to be wrong. The CLI refuses to resolve them. |
 | `unverified_leaves` | Paths not observed on this build. They still resolve. |
+| `verified_classmap_sha256` | Digest of the `classmap.json` the reports verified, or `null` for keys published before September 30, 2026. |
 
 An `inherited` key's `classmap.json` must be byte-identical to its source
 key's map. If you change a map, you must also change every key that inherits
@@ -56,7 +57,9 @@ Each `required_paths` value is one of the following statuses:
 - `verified`: verified before the method was recorded (1020092 and 1020094).
 - `unverified`: not observed. The path must also be in `unverified_leaves`.
 
-A required path can't be stale.
+A required path can't be stale. When `verified_classmap_sha256` is set, the
+validator rejects a `classmap.json` whose bytes differ from it, so a map
+changed after verification has to be verified again.
 
 Digests recorded in `VERIFICATION.md` identify the exact file that was tested.
 On September 30, 2026, every map was renamed to `classmap.json` and
@@ -68,72 +71,126 @@ match the published bytes, but the classes the CLI stages are unchanged.
 
 You never write `META.json`, `VERIFICATION.md`, or `index.json` by hand.
 `pnpm publish-key` generates them from two CLI verification reports,
-formats the map and overlay, validates the new key, and rebuilds the index.
+validates the new key and every key inheriting from it, and rebuilds the index.
 It refuses mismatched versions, maps, leaf values, shallow CDP runs,
-inconsistent summaries, low hit rates, and existing targets. If any step
-fails, it rolls back both the key and `index.json`.
+inconsistent summaries, low hit rates, and existing keys. If any step fails, it
+rolls back both the key and `index.json`. Run `pnpm publish-key --help` for
+every flag.
 
-To publish a key, follow these steps:
+The CLI commands below run from a spicetify/cli checkout next to this
+repository. They need the stock `xpui.spa` of each Spotify build involved, taken
+before Spicetify patched it. Spicetify keeps that copy at
+`~/Library/Application Support/spicetify/Backup/xpui.spa` on macOS and
+`~/.local/state/spicetify/Backup/xpui.spa` on Linux; an unapplied client has it
+at `Spotify.app/Contents/Resources/Apps/xpui.spa`. The CDP verifier needs
+Spotify running with `--remote-debugging-port`, and `scripts/classmap-e2e.sh`
+in the CLI sets that up for you.
 
-1. From the CLI repository, verify the candidate map against the stock client
-   of the new build. For an unchanged patch release, the candidate is the
-   previous key's `classmap.json`. For a derived key, it's the output of
-   `classmap_capture.py migrate` or your edited copy.
+### Unchanged patch release
+
+When a patch release keeps the previous key's classes, verify that key's map
+against the new build and publish it as inherited:
+
+1. From the CLI repository, produce both reports for the previous key's map:
 
    ```sh
-   python3 scripts/classmap_capture.py verify \
-     --classmap ../classmaps/1020094/classmap.json \
-     --css-map css-map.json \
-     --target-spa "/path/to/stock/xpui.spa" \
-     --target-version 1.2.96.518 \
+   node scripts/classmap-capture.ts verify \
+     --classmap ../classmaps/1020094/classmap.json --css-map css-map.json \
+     --target-spa "/path/to/stock/xpui.spa" --target-version 1.2.96.518 \
      --out /tmp/1020096-static.json
 
-   node scripts/classmap_cdp_verify.mjs \
-     --port 9229 --mode both --deep \
-     --classmap ../classmaps/1020094/classmap.json \
-     --css-map css-map.json \
+   node scripts/classmap-cdp-verify.mjs --port 9229 --mode both --deep \
+     --classmap ../classmaps/1020094/classmap.json --css-map css-map.json \
      --out /tmp/1020096-cdp.json
    ```
 
-2. Inspect the reports. If no leaf needs a new class, publish an inherited key
-   from this repository:
+2. From this repository, publish the inherited key:
 
    ```sh
-   pnpm publish-key --inherit-from 1020094 \
-     --spotify-version 1.2.96.518 \
-     --static-report /tmp/1020096-static.json \
-     --cdp-report /tmp/1020096-cdp.json
-   ```
-
-   Otherwise, publish the candidate as a derived key. Pass each decision the
-   reports can't make as a flag: `--stale PATH` for a leaf whose class is known
-   to be wrong, and `--note TEXT` for anything a reviewer needs to know.
-
-   ```sh
-   pnpm publish-key --classmap /tmp/1030002.json \
-     --css-map /tmp/1030002-css-map.json --derived-from 1030001 \
-     --spotify-version 1.3.2.100 \
-     --static-report /tmp/1030002-static.json \
-     --cdp-report /tmp/1030002-cdp.json \
-     --stale main.topbar.right.upgrade_button.wrapper \
-     --note "The upgrade button has no rendered instance on a premium account."
+   pnpm publish-key --inherit-from 1020094 --spotify-version 1.2.96.518 \
+     --static-report /tmp/1020096-static.json --cdp-report /tmp/1020096-cdp.json
    ```
 
 3. Run `pnpm check` and open a pull request.
 
-The publisher marks a path `unverified` when it's missing from the target CSS
-and wasn't observed live. An inherited key also keeps its source's
-`unverified` paths until the deep CDP run observes them, and its stale paths
-until a live hit clears them. A derived key tracks the `required_paths` of
-`--derived-from`, or of the newest key when you don't pass one.
+### Changed classes
+
+When Spotify rehashes classes, migrate the previous key's map to the new build
+and publish the result as a derived key:
+
+1. From the CLI repository, migrate the map, using the stock archives of both
+   builds:
+
+   ```sh
+   node scripts/classmap-capture.ts migrate \
+     --base-classmap ../classmaps/1030001/classmap.json \
+     --base-spa /path/to/1.3.1/xpui.spa --target-spa /path/to/1.3.2/xpui.spa \
+     --css-map css-map.json \
+     --out /tmp/1030002.json --report /tmp/1030002-migrate.json --allow-partial
+   ```
+
+2. Read `unmatched` in the migrate report. Each entry kept its old class and is
+   published as stale unless you fix it. Entries with a `tied` list had several
+   equally good candidates; pick the right one by checking its role in the stock
+   CSS or live DOM, write it into `/tmp/1030002.json`, and run
+   `pnpm fix /tmp/1030002.json` to restore canonical form.
+
+3. Generate the overlay that gives the new classes their Spicetify names:
+
+   ```sh
+   node scripts/classmap-capture.ts flatten \
+     --classmap /tmp/1030002.json --base-classmap ../classmaps/1030001/classmap.json \
+     --css-map css-map.json --report /tmp/1030002-migrate.json \
+     --out /tmp/1030002-overlay.json --allow-partial
+   ```
+
+4. Verify the candidate with the same two commands as an unchanged release,
+   passing `--classmap /tmp/1030002.json`, `--target-version 1.3.2.100`, and
+   `--report /tmp/1030002-migrate.json` to `verify`. Alternatively, run the whole
+   CLI side in one command with
+   `SPOTIFY_VERSION=1.3.2.100 BASE_CLASSMAP=... BASE_CSS_DIR=... OUT_DIR=... scripts/classmap-e2e.sh --deep`.
+
+5. From this repository, publish the derived key:
+
+   ```sh
+   pnpm publish-key --classmap /tmp/1030002.json --overlay /tmp/1030002-overlay.json \
+     --derived-from 1030001 --migrate-report /tmp/1030002-migrate.json \
+     --spotify-version 1.3.2.100 \
+     --static-report /tmp/1030002-static.json --cdp-report /tmp/1030002-cdp.json
+   ```
+
+   The source key's stale leaves whose class didn't change, and the leaves the
+   migrate report kept, stay stale. Add `--stale PATH` for any other leaf whose
+   class you know is wrong, `--drop-required PATH` for a required path the new
+   map no longer has, and `--note TEXT` for anything a reviewer needs to know.
+
+6. Run `pnpm check` and open a pull request.
+
+### Fixing a published key
+
+To change the classes of a published key, verify the corrected map and publish
+it over the key with `--replace`. The key keeps its first publication date and
+records the new verification. A key that inherits from it must still match
+byte-for-byte, or the replacement is refused.
+
+### How statuses are decided
+
+A path is `unverified` when it's missing from the stock target CSS and the deep
+CDP run didn't observe it. For such a path only a hit on its stock class
+counts: a hit on its Spicetify name can come from a different class the
+css-map renames to the same name. An inherited key also keeps its source's
+`unverified` paths until the CDP run observes them, and its stale paths until
+a live hit clears them. A derived key tracks the `required_paths` of
+`--derived-from`, of `--required-paths-from`, or of the newest verified key.
 
 ## Checks
 
 `pnpm check` runs everything CI runs: the type check, the index check, the key
 validator, the exposure patch validator, and the unit tests. The scripts are
-TypeScript that Node 24 or later runs directly, and `pnpm install` only adds
+TypeScript that Node 24.2 or later runs directly, and `pnpm install` only adds
 the type checker. Run `pnpm fix` to rewrite every JSON file in canonical form
-and rebuild `index.json`.
+and rebuild `index.json`, or `pnpm fix FILE` to format one file outside the
+repository, such as a hand-edited candidate map.
 
 ## Exposure patches
 

@@ -9,6 +9,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Historical deep CDP runs observed 23/36 paths on stock macOS and 24/36 paths on the patched Windows 1.3.0.277 client. The Windows report records 7/8 successful navigation steps; context-menu activation was not confirmed.
 - Targeted CDP probes verified both modal families and the two settings container hashes that the deep verifier did not render.
 - The remaining search chip-group and Encore control literals are absent from the static xpui stylesheet because Encore loads them at runtime; exact e-10860 selectors were verified recursively in the live CSSOM and the corresponding chip/control instances were observed in the DOM.
+- Correction, 2026-09-30: those Encore classes are in the stock stylesheet, inside `@layer encore`, which the static verifier then skipped. Rechecked with the fixed verifier, 33/36 leaves are present in the stock 1.3.0.277 CSS, not 7.
 - Confirmed settings.section.container (HdwEUcX8xijMdU7doYPt -> x-settings-section) and settings.header.container (Hwax_pfCzrntLhnYXiqL -> x-settings-outputSectionHeader) bridge correctly across both platforms.
 - The source artifacts were Spotify's notarized 1.3.0.277 macOS DMG and Windows Desktop 1.3.0.277 stock installation.
 - The topbar, navigation-link and outer search-container leaves retain their original role-specific classes. The Windows-observed opacity, no-drag and inner-form helper classes coexist with them and are not substitutes for their layout or styling.
