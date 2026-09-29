@@ -100,6 +100,46 @@ class KeyValidationTests(unittest.TestCase):
         self.write_key("1020096", self.classmap, self.child_meta)
         self.assertIn("META.json: spotify_version does not belong to 1020096", self.errors(self.child))
 
+    def test_rejects_a_leaf_stored_as_its_spicetify_name(self):
+        (self.child / "css-map.json").write_text(render_json({"topbarHashAA": "Root__globalNav"}))
+        named = {"main": {"topbar": {"wrapper": "Root__globalNav", "retired": "main-topBar-retired"}}}
+        self.write_key("1020094", named, self.parent_meta())
+        self.write_key("1020096", named, self.child_meta)
+        errors = self.errors(self.child)
+        self.assertIn(
+            "classmap.json: main.topbar.wrapper stores the Spicetify name Root__globalNav, not the stock class",
+            errors,
+        )
+        self.assertIn(
+            "classmap.json: main.topbar.retired stores the Spicetify name main-topBar-retired, not the stock class",
+            errors,
+        )
+
+    def test_rejects_inheritance_across_a_minor_version(self):
+        meta = self.meta("1030004", "1.3.4.100", {"method": "inherited", "key": "1020094"})
+        key_dir = self.write_key("1030004", self.classmap, meta)
+        self.assertIn(
+            "META.json: an inherited map must come from the same major.minor family",
+            self.errors(key_dir),
+        )
+
+    def test_rejects_a_compact_or_week_date(self):
+        for generated in ("20260812", "2026-W33-3"):
+            with self.subTest(generated=generated):
+                self.child_meta["generated"] = generated
+                self.write_key("1020096", self.classmap, self.child_meta)
+                self.assertIn("META.json: generated must be a YYYY-MM-DD date", self.errors(self.child))
+
+    def test_rejects_group_keys_that_would_collide_as_dotted_paths(self):
+        self.write_key("1020096", {"main": {"topbar.wrapper": "a", "topbar": {"wrapper": "b"}}}, self.child_meta)
+        self.assertIn(
+            "classmap.json: main: group key 'topbar.wrapper' must be non-empty and contain no dots",
+            self.errors(self.child),
+        )
+
+    def parent_meta(self) -> dict:
+        return self.meta("1020094", "1.2.94.583", {"method": "derived", "key": None})
+
 
 if __name__ == "__main__":
     unittest.main()

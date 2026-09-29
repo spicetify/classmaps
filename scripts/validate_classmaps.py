@@ -43,6 +43,8 @@ PATH_STATUSES = {
     "verified",
     "unverified",
 }
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+SPICETIFY_NAME = re.compile(r"(main|x)-[A-Za-z0-9]+-")
 KNOWN_FILES = {"classmap.json", "css-map.json", "META.json", "VERIFICATION.md"}
 
 
@@ -81,6 +83,9 @@ def classmap_errors(node: object, parts: tuple[str, ...] = ()) -> list[str]:
         return [f"{where}: empty group"]
     errors: list[str] = []
     for key, value in node.items():
+        if not key or "." in key:
+            errors.append(f"{where}: group key {key!r} must be non-empty and contain no dots")
+            continue
         errors += classmap_errors(value, (*parts, key))
     return errors
 
@@ -131,10 +136,13 @@ def meta_errors(meta: object, key: str, leaves: dict[str, str], root: Path, clas
         errors.append(f"META.json: spotify_version: {e}")
     if meta.get("status") not in STATUSES:
         errors.append(f"META.json: status must be one of {sorted(STATUSES)}")
+    generated = str(meta.get("generated"))
     try:
-        date.fromisoformat(str(meta.get("generated")))
+        if not ISO_DATE.fullmatch(generated):
+            raise ValueError(generated)
+        date.fromisoformat(generated)
     except ValueError:
-        errors.append("META.json: generated must be an ISO date")
+        errors.append("META.json: generated must be a YYYY-MM-DD date")
 
     source = meta.get("source")
     if not isinstance(source, dict) or set(source) != {"method", "key"}:
@@ -149,6 +157,8 @@ def meta_errors(meta: object, key: str, leaves: dict[str, str], root: Path, clas
         parent = root / str(source["key"]) / "classmap.json"
         if source["key"] is None or not parent.is_file():
             errors.append("META.json: an inherited map needs an existing source.key")
+        elif source["key"][:3] != key[:3]:
+            errors.append("META.json: an inherited map must come from the same major.minor family")
         elif parent.read_bytes() != classmap:
             errors.append(f"classmap.json: inherited from {source['key']} but its bytes differ")
 
@@ -191,6 +201,7 @@ def key_errors(key_dir: Path, key: str | None = None, root: Path = ROOT) -> list
         return errors
     leaves = leaf_values(classmap)
 
+    semantic: set[str] = set()
     overlay_path = key_dir / "css-map.json"
     if overlay_path.is_file():
         overlay = load_canonical(overlay_path, errors)
@@ -199,6 +210,12 @@ def key_errors(key_dir: Path, key: str | None = None, root: Path = ROOT) -> list
             and all(isinstance(k, str) and isinstance(v, str) and k and v for k, v in overlay.items())
         ):
             errors.append("css-map.json: must map class names to semantic names")
+        elif isinstance(overlay, dict):
+            semantic = set(overlay.values())
+    for path, value in leaves.items():
+        for token in value.split():
+            if token in semantic or SPICETIFY_NAME.match(token):
+                errors.append(f"classmap.json: {path} stores the Spicetify name {token}, not the stock class")
 
     meta_path = key_dir / "META.json"
     if meta_path.is_file():
