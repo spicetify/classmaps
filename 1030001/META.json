@@ -1,83 +1,30 @@
 {
-  "spotify_version": "1.3.1.234",
   "classmap_key": "1030001",
-  "status": "verified",
   "generated": "2026-09-18",
-  "inherited_from": "1030000",
-  "pipeline": "inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e (deep)",
-  "stats": {
-    "leaves": 36,
-    "inherited": 36,
-    "static_present": 32,
-    "verified_cdp": 24,
-    "live_only": 3,
-    "unresolved_missing": 1,
-    "stale": 0,
-    "cdp_hit_rate": 0.6667,
-    "overlay_entries": 291
-  },
   "required_paths": {
+    "context_menu.menu_item": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
     "main.playbar.buttons.button.wrapper": "verified_cdp",
     "main.topbar.wrapper": "verified_cdp",
-    "main.navbar.link.wrapper": "verified_cdp",
-    "tracklist.column_header": "verified_cdp",
-    "context_menu.menu_item": "verified_cdp",
+    "modal.track_credits.container": "verified_static",
+    "modal.widget_generator.container": "verified_static",
     "search_box.container": "verified_cdp",
-    "search_chips.wrapper": "verified (inherited; present in target CSS)",
-    "sort_box.list.button": "verified_cdp",
+    "search_chips.wrapper": "verified_static",
+    "settings.button.wrapper": "verified_cdp",
     "settings.header.container": "unverified",
     "settings.section.container": "verified_cdp",
-    "settings.button.wrapper": "verified_cdp",
-    "modal.track_credits.container": "verified (inherited; present in target CSS)",
-    "modal.widget_generator.container": "verified (inherited; present in target CSS)"
+    "sort_box.list.button": "verified_cdp",
+    "tracklist.column_header": "verified_cdp"
   },
+  "schema_version": 2,
+  "source": {
+    "key": "1030000",
+    "method": "inherited"
+  },
+  "spotify_version": "1.3.1.234",
   "stale_leaves": [],
+  "status": "verified",
   "unverified_leaves": [
     "settings.header.container"
-  ],
-  "notes": [
-    "Classmap inherited byte-for-byte from 1030000; no migration guesses were accepted.",
-    "Static verification found 32/36 paths in the target CSS.",
-    "3 CSS-only misses were observed live and remain verified.",
-    "Deep CDP verification observed 24/36 paths on the routes and transient surfaces exercised by the verifier.",
-    "Unresolved new misses remain usable but are marked unverified; inherited stale paths stay blocked.",
-    "The CSS overlay includes the four entity-header, action-bar and Home background hooks added to 1030000 on 2026-09-29. Their selectors and layout declarations also occur in the signed Spotify 1.3.1.234 macOS ARM64 stock archive; the 36-leaf classmap remains unchanged.",
-    "The headline statistics describe the original promotion. The patched macOS candidate run and its narrower observed coverage are recorded separately in verification_runs."
-  ],
-  "verification_summary": {
-    "needs_manual_check": 32,
-    "missing_in_css": 4
-  },
-  "verification_runs": {
-    "macos_arm64_2026_09_29": {
-      "spotify_version": "1.3.1.234",
-      "client_state": "patched",
-      "cli_version": "3.0.0-beta.17",
-      "cli_source": "d74970010d22a9497bf84070a6ff75801a74657f",
-      "stock_spa_sha256": "97824b5bc802dcdf7b13b35c790da1d49dd8c5415294375f585f393de2eb4c61",
-      "apply": "Passed using the candidate 1030001 classmap and 291-entry CSS overlay.",
-      "live_workflows": [
-        "Opened Module Store through its topbar button.",
-        "Opened native Settings from the account menu; 14 sections and 22 toggles matched.",
-        "Searched for Burial and opened its artist page through the search result. All three entity/action-bar background hooks are present; Ziro hides the color and action-bar layers.",
-        "Home header hook is present and hidden by Ziro."
-      ],
-      "theme": "Existing local Ziro 0.1.6 override; no claim of published-theme validation.",
-      "limitations": [
-        "Windows and Linux were not rerun.",
-        "The output-device Settings header was not rendered.",
-        "The candidate map was selected through SPICETIFY_CLASSMAPS_DIR; the published feed path was not exercised.",
-        "The deep verifier did not confirm context-menu activation."
-      ],
-      "os": "macOS",
-      "architecture": "arm64",
-      "cli_path": "~/.spicetify/spicetify",
-      "daemon": "Stopped during isolated-client verification; no daemon runtime claim.",
-      "classmap_sha256": "17d9575c38a5a7cce9d6bb28665aff0c6e88b4ce4d94955bad297e19c97b33dc",
-      "deep_hits": 15,
-      "deep_total": 36,
-      "deep_navigation_succeeded": 7,
-      "deep_navigation_attempted": 8
-    }
-  }
+  ]
 }

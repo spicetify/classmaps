@@ -1,74 +1,34 @@
 {
-  "spotify_version": "1.2.95.453",
   "classmap_key": "1020095",
-  "status": "verified",
   "generated": "2026-09-29",
-  "derived_from": "1020094",
-  "pipeline": "derive 1020094 with three settings corrections + stock source/CSS verification + deep CDP + Linux workflow verification",
-  "stats": {
-    "leaves": 36,
-    "unchanged_from_1020094": 33,
-    "corrected": 3,
-    "static_present": 31,
-    "verified_cdp": 22,
-    "live_only": 2,
-    "unresolved_missing": 3,
-    "stale": 2,
-    "cdp_hit_rate": 0.6111,
-    "overlay_entries": 2
-  },
   "required_paths": {
+    "context_menu.menu_item": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
     "main.playbar.buttons.button.wrapper": "verified_cdp",
     "main.topbar.wrapper": "verified_cdp",
-    "main.navbar.link.wrapper": "verified_cdp",
-    "tracklist.column_header": "verified_cdp",
-    "context_menu.menu_item": "verified_cdp",
+    "modal.track_credits.container": "verified_static",
+    "modal.widget_generator.container": "verified_static",
     "search_box.container": "verified_cdp",
     "search_chips.wrapper": "verified_cdp",
-    "sort_box.list.button": "verified_cdp",
-    "settings.header.container": "source_verified; not rendered on Linux",
-    "settings.section.container": "verified_cdp",
     "settings.button.wrapper": "verified_cdp",
-    "modal.track_credits.container": "verified_static; not observed in this live run",
-    "modal.widget_generator.container": "verified_static; not observed in this live run"
+    "settings.header.container": "unverified",
+    "settings.section.container": "verified_cdp",
+    "sort_box.list.button": "verified_cdp",
+    "tracklist.column_header": "verified_cdp"
   },
+  "schema_version": 2,
+  "source": {
+    "key": "1020094",
+    "method": "derived"
+  },
+  "spotify_version": "1.2.95.453",
   "stale_leaves": [
     "main.topbar.left.button.icon.wrapper",
     "main.topbar.right.upgrade_button.wrapper"
   ],
+  "status": "verified",
   "unverified_leaves": [
     "main.playbar.buttons.button.wrapper__indicator",
     "settings.header.container"
-  ],
-  "notes": [
-    "Linux stable Spotify 1.2.95.453.g0eeebbed tested on Ubuntu 24.04.5 x86_64, X11, emulated on Apple Silicon. No Windows, macOS or Wayland runtime claim.",
-    "Settings header KsnD09q3oqAjJX3e belongs to the output-device section in xpui-routes-desktop-settings.js. It did not render in this Linux session and remains unverified live.",
-    "Settings section fNaaQ0Cp8Yzy19j8 wraps real settings groups; settings buttons use the observed small Encore secondary-button classes. nHgEqWYM1q0omZ6y is a proxy-settings container, not a button.",
-    "Removed the inherited fEEfljGMIEhhmWVi and nWR7PbHjFXQJiYNL overlays: xpui-root-dialogs.js uses them for concert-location dialog content and its section, not settings.",
-    "The two retained overlays identify search category links and the panel-gap grid. The panel-gap stock CSS has pointer-events:none and black child backgrounds.",
-    "Deep CDP found 22/36 leaves with seven successful navigation steps out of eight. Context-menu dispatch was not counted as successful; the profile and library sort menus were separately exercised.",
-    "Paired 1.2.96 and 1.2.95 Flow settings checks changed and restored a toggle and quality selection, and entered/cleared settings search. Store install/removal and the profile Spicetify Settings entry worked on 1.2.95.",
-    "Tested CLI /home/test/.spicetify/spicetify and daemon 3.0.0-beta.19 are matching local builds from a036e07de398b437288d13c1cec26217207ecabb; this is not published-artifact verification.",
-    "The normal `spicetify spotify install` stable path failed without 1020095, then downloaded, patched and launched 1.2.95 with classmapVerified=true and classmapSpotify=1.2.95 using a temporary localhost candidate index. The native VM window returned to Home with the styled Store button; native input injection was unreliable, so interaction checks used CDP.",
-    "The managed installer intentionally restarted the daemon during activation. Its health returned with both watchers active; service and protocol-registration files were unchanged. This is not a daemon-continuity claim.",
-    "At an 800px-wide Flow window, scrolling a control into view shifted the settings view horizontally. The paired initial layouts matched; the full-width Store and final default-settings captures were aligned. Queue toggled active, and its empty-state panel was visible after removing Flow. Playback, credits/embed dialogs and external navigation were not exercised."
-  ],
-  "verification_summary": {
-    "needs_manual_check": 31,
-    "missing_in_css": 5
-  },
-  "verification": {
-    "platform": "linux-x86_64",
-    "spotify_package_sha256": "256e2eb1ec96fbc0c51afab247298e4e6eabfabbafafd4617584f44cca2fb31f",
-    "stock_spa_sha256": "7ce05c0001be22c7b5124d9dd59dd1ab1e0c188640967836b996f0d32a62f74e",
-    "classmap_sha256": "57cbc252b22f7fd914be7c8d7fc1e932168b28ebde8a4ecaa2129297fe6010a2",
-    "static_report_sha256": "51eba62de40ba5055acca2554e79d7e9f2468fe42116d66bd182815fc3f5fcb7",
-    "cdp_report_sha256": "08c086085bab4d37d32716d9f41ba844ae69026c346a98a05b33045795404b1b",
-    "core_modules": {
-      "manager": "1.4.0",
-      "stdlib": "1.13.1",
-      "store": "1.7.8"
-    },
-    "theme": "Flow 0.1.2, Ocean palette, removed after testing"
-  }
+  ]
 }

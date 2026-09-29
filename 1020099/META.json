@@ -1,91 +1,31 @@
 {
-  "spotify_version": "1.2.99.317",
   "classmap_key": "1020099",
-  "status": "verified",
   "generated": "2026-09-05",
-  "inherited_from": "1020097",
-  "pipeline": "runtime CDP extraction (Spotify --remote-debugging-port=9222) + live DOM/CSS verification + static xpui CSS cross-check",
-  "stats": {
-    "leaves": 36,
-    "inherited": 2,
-    "static_present": 36,
-    "verified_cdp": 25,
-    "live_only": 0,
-    "unresolved_missing": 0,
-    "stale": 1,
-    "cdp_hit_rate": 0.6944,
-    "overlay_entries": 2
-  },
   "required_paths": {
+    "context_menu.menu_item": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
     "main.playbar.buttons.button.wrapper": "verified_cdp",
     "main.topbar.wrapper": "verified_cdp",
-    "main.navbar.link.wrapper": "verified_cdp",
-    "tracklist.column_header": "verified_cdp",
-    "context_menu.menu_item": "verified_cdp",
+    "modal.track_credits.container": "verified_cdp",
+    "modal.widget_generator.container": "verified_cdp",
     "search_box.container": "verified_cdp",
-    "sort_box.list.button": "verified_cdp",
+    "settings.button.wrapper": "verified_cdp",
     "settings.header.container": "unverified",
     "settings.section.container": "verified_cdp",
-    "settings.button.wrapper": "verified_cdp",
-    "modal.track_credits.container": "verified_cdp",
-    "modal.widget_generator.container": "verified_cdp"
+    "sort_box.list.button": "verified_cdp",
+    "tracklist.column_header": "verified_cdp"
   },
+  "schema_version": 2,
+  "source": {
+    "key": "1020097",
+    "method": "derived"
+  },
+  "spotify_version": "1.2.99.317",
   "stale_leaves": [
     "main.topbar.right.upgrade_button.wrapper"
   ],
+  "status": "verified",
   "unverified_leaves": [
-    "main.topbar.right.upgrade_button.wrapper",
     "settings.header.container"
-  ],
-  "notes": [
-    "Values were extracted from the live 1.2.99.317 client over CDP (port 9222), not guessed.",
-    "Spotify 1.2.99 replaced most hashed css-module classnames with readable names; encore build tag moved e-10451 -> e-10810.",
-    "Topbar merged into Root__globalNav; wrapper class oy96nRTKcIs7wm5K observed on [data-testid=global-nav-bar].",
-    "Playbar controls use encore legacy-button shapes; active state = legacy-button-primary.",
-    "Search category chips render through the encore chip factory (e-10810-chip-group* rules verified in CSS).",
-    "Track credits modal now ships readable main-trackCreditsModalV2-* classes.",
-    "upgrade_button has no rendered instance on this premium account; value taken from the encore legacy-button-primary factory shape (stale-marked, same policy as 1020097).",
-    "Historical extraction observed 25/36 leaves in the DOM and 11/36 only in live CSS. The headline statistics retain that extraction; the current candidate run is recorded separately below.",
-    "The settings overlay now maps KsnD09q3oqAjJX3e to x-settings-outputSectionHeader and fNaaQ0Cp8Yzy19j8 to x-settings-section. The old hashes belong to a concert-location dialog in the exact 1.2.99 archive.",
-    "Tertiary button leaves include both legacy-button and legacy-button-tertiary, plus generic icon-only padding where applicable. The playbar retains its small-size modifier; the medium modifier has no CSS rule.",
-    "The left button icon was observed by the current deep verifier and is no longer stale. Matching the generic primary-button classes does not establish the unrendered upgrade-button role, so that leaf remains stale."
-  ],
-  "verification_summary": {
-    "cdp_dom_probes": 47,
-    "css_classes_live": 4726,
-    "dom_hits": 25,
-    "css_only_hits": 11,
-    "misses": 0,
-    "scope": "Historical 2026-09-05 extraction; CSS presence is not DOM observation."
-  },
-  "verification_runs": {
-    "macos_arm64_2026_09_29": {
-      "spotify_version": "1.2.99.317",
-      "os": "macOS",
-      "architecture": "arm64",
-      "client_state": "patched",
-      "cli_version": "3.0.0-beta.17",
-      "cli_source": "d74970010d22a9497bf84070a6ff75801a74657f",
-      "cli_path": "~/.spicetify/spicetify",
-      "daemon": "Stopped during isolated-client verification; no daemon runtime claim.",
-      "classmap_sha256": "d015b23c52199fe287ad60f1da8c34c168349d6dd3b9f6a66e874bda1740c2e6",
-      "deep_hits": 24,
-      "deep_total": 36,
-      "deep_navigation_succeeded": 7,
-      "deep_navigation_attempted": 8,
-      "limitations": [
-        "Windows and Linux were not rerun.",
-        "The output-device Settings header was not rendered.",
-        "The candidate map was selected through SPICETIFY_CLASSMAPS_DIR; the published feed path was not exercised.",
-        "The deep verifier did not confirm context-menu activation.",
-        "The upgrade-button role and transient modal families were not exercised."
-      ],
-      "apply": "Passed using the candidate 1020099 classmap and corrected two-entry settings overlay.",
-      "live_workflows": [
-        "Opened native Settings from the account menu; 14 correctly mapped sections render as grids with aligned labels and controls.",
-        "Opened Module Store through its topbar button. Home and Store retain circular 48px hit areas."
-      ],
-      "theme": "Existing local Ziro 0.1.6 override; no claim of published-theme validation."
-    }
-  }
+  ]
 }
