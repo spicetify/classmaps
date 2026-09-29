@@ -100,8 +100,10 @@ The promoter refuses mismatched versions, maps, leaf values, shallow CDP runs,
 inconsistent summaries, low hit rates, and existing targets. It writes
 `META.json` and `VERIFICATION.md`, validates the new key, copies through a
 temporary directory, and rolls back both the release and `index.json` if
-publication preparation fails. Newly absent paths are marked `unverified`;
-only paths already known to be stale remain blocked by the CLI.
+publication preparation fails. Newly absent paths are marked `unverified`,
+and paths the source already marked `unverified` stay that way until the deep
+CDP run observes them. Only paths already known to be stale remain blocked by
+the CLI.
 
 If migration proposes changed hashes, do not use inheritance. Run the full
 capture pipeline from the CLI repository and verify each changed leaf before
@@ -112,10 +114,9 @@ publishing it.
 
 `expose.json` is the set of regex rewrites the CLI applies to the extracted
 `xpui-modules.js` so `Spicetify.Platform`, `Spicetify.Snackbar`, and the
-other globals exist. It is
-one file for every build: the CLI fetches it through `index.json` beside the
-classmaps, verifies its digest, and falls back to the copy embedded in the
-binary when it cannot. A Spotify update that reshapes the minified code is
+other globals exist. It is one file for every build: the CLI fetches it
+through `index.json` beside the classmaps, verifies its digest, and falls back
+to the copy embedded in the binary when it cannot. A Spotify update that reshapes the minified code is
 answered here, with a data commit, instead of a CLI release.
 
 To change a pattern, measure it against real bundles first. From the CLI

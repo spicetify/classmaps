@@ -408,7 +408,7 @@ class PromoteInheritedTests(unittest.TestCase):
         meta = json.loads((target / "META.json").read_text())
         self.assertNotIn("main.topbar.retired", meta["stale_leaves"])
 
-    def test_a_path_present_in_target_css_is_statically_verified(self):
+    def test_a_source_unverified_path_stays_unverified_without_a_live_hit(self):
         source_meta = json.loads((self.source / "META.json").read_text())
         source_meta["required_paths"]["main.topbar.wrapper"] = "unverified"
         source_meta["unverified_leaves"] = ["main.topbar.wrapper"]
@@ -427,8 +427,28 @@ class PromoteInheritedTests(unittest.TestCase):
         )
 
         meta = json.loads((target / "META.json").read_text())
-        self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "verified_static")
-        self.assertEqual(meta["unverified_leaves"], [])
+        self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "unverified")
+        self.assertEqual(meta["unverified_leaves"], ["main.topbar.wrapper"])
+
+    def test_a_live_hit_clears_a_source_unverified_path(self):
+        source_meta = json.loads((self.source / "META.json").read_text())
+        source_meta["required_paths"]["main.topbar.wrapper"] = "unverified"
+        source_meta["unverified_leaves"] = ["main.topbar.wrapper"]
+        (self.source / "META.json").write_text(render_json(source_meta))
+
+        target = promote.promote_inherited_release(
+            root=self.root,
+            source_key="1020094",
+            spotify_version="1.2.96.518",
+            static_report=self.static_report,
+            cdp_report=self.cdp_report,
+            generated="2026-08-12",
+            min_hit_rate=0.25,
+        )
+
+        meta = json.loads((target / "META.json").read_text())
+        self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "verified_cdp")
+        self.assertEqual(meta["unverified_leaves"], ["main.playbar.indicator"])
 
     def test_refuses_a_release_that_keeps_a_required_path_stale(self):
         source_meta = json.loads((self.source / "META.json").read_text())

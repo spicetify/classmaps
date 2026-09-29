@@ -208,7 +208,8 @@ def build_meta(
     live_hits: set[str],
 ) -> dict:
     stale = sorted(set(source_meta.get("stale_leaves") or []) - live_hits)
-    unverified = missing_in_target - live_hits - set(stale)
+    doubted = missing_in_target | set(source_meta.get("unverified_leaves") or [])
+    unverified = doubted - live_hits - set(stale)
     return {
         "schema_version": 2,
         "classmap_key": target_key,
