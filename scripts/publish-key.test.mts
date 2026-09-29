@@ -344,7 +344,7 @@ test("--replace refuses a map that would break the keys inheriting from it", () 
 
 test("publishes a derived key from a candidate map", () => {
 	const overlay = path.join(root, "overlay.json");
-	writeFileSync(overlay, '{"topbarHashAA":"Root__globalNav"}');
+	writeFileSync(overlay, renderJson({ topbarHashAA: "Root__globalNav" }));
 	const target = publishRelease(
 		options(derived(classmap, { overlayPath: overlay, notes: ["The retired leaf has no rendered instance."] })),
 	);
@@ -360,6 +360,28 @@ test("publishes a derived key from a candidate map", () => {
 	});
 	assert.ok(readVerification(target).includes("- Classmap derived from 1020094."));
 	assert.ok(readVerification(target).includes("- The retired leaf has no rendered instance."));
+});
+
+test("binds the published overlay to the one the CDP run applied", () => {
+	const overlay = path.join(root, "overlay.json");
+	writeFileSync(overlay, renderJson({ topbarHashAA: "Root__globalNav" }));
+	cdpReport.cssMap = { sha256: "c".repeat(64), overlaySha256: sha256(readFileSync(overlay)) };
+	const target = publishRelease(options(derived(classmap, { overlayPath: overlay })));
+	assert.ok(!readVerification(target).includes("did not apply this key's overlay"));
+	rmSync(target, { recursive: true });
+
+	cdpReport.cssMap.overlaySha256 = "d".repeat(64);
+	assert.throws(() => publishRelease(options(derived(classmap, { overlayPath: overlay }))), /different overlay/);
+
+	delete cdpReport.cssMap;
+	const unchecked = publishRelease(options(derived(classmap, { overlayPath: overlay })));
+	assert.ok(readVerification(unchecked).includes("The CDP run did not apply this key's overlay"));
+});
+
+test("refuses an overlay that is not in canonical form", () => {
+	const overlay = path.join(root, "overlay.json");
+	writeFileSync(overlay, '{"topbarHashAA":"Root__globalNav"}');
+	assert.throws(() => publishRelease(options(derived(classmap, { overlayPath: overlay }))), /overlay is not in canonical form/);
 });
 
 test("a derived key keeps the leaves the migrate report kept as stale", () => {

@@ -337,14 +337,18 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	if (sourceKey) checkSource(sourceKey, targetKey, sourceMeta, inherited);
 
 	let classmapBytes: Buffer;
-	let overlay: Record<string, string> | undefined;
+	let overlayText: string | null = null;
 	if (inherited) {
 		classmapBytes = readFileSync(path.join(o.root, o.inheritFrom as string, "classmap.json"));
 		const sourceOverlay = path.join(o.root, o.inheritFrom as string, "css-map.json");
-		if (isFile(sourceOverlay)) overlay = JSON.parse(readUtf8(sourceOverlay));
+		if (isFile(sourceOverlay)) overlayText = readUtf8(sourceOverlay);
 	} else {
 		classmapBytes = readFileSync(o.classmapPath as string);
-		if (o.overlayPath) overlay = JSON.parse(readUtf8(o.overlayPath));
+		if (o.overlayPath) overlayText = readUtf8(o.overlayPath);
+	}
+	const overlay: Record<string, string> | undefined = overlayText === null ? undefined : JSON.parse(overlayText);
+	if (overlayText !== null && overlayText !== renderJson(overlay)) {
+		throw new Error("the overlay is not in canonical form; run pnpm fix on it before the CDP run");
 	}
 	const classmap: Classmap = JSON.parse(classmapBytes.toString("utf8"));
 	if (classmapBytes.toString("utf8") !== renderJson(classmap)) {
@@ -357,6 +361,8 @@ export function publishRelease(o: PublishOptions, index = false): string {
 
 	const evidence = checkReports(o.spotifyVersion, classmap, sha256(classmapBytes), o.staticReport, o.cdpReport, o.minHitRate);
 	const { missing, live, deadHashes } = evidence;
+	const overlaySha = overlayText === null ? null : sha256(overlayText);
+	const liveOverlaySha: unknown = o.cdpReport.cssMap?.overlaySha256;
 
 	const notes = [...(o.notes ?? [])];
 	let stale: Set<string>;
@@ -393,10 +399,15 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	const observedStale = [...stale].filter((p) => live.has(p)).sort();
 	if (observedStale.length) notes.push(`Marked stale although observed live: ${observedStale.join(", ")}.`);
 	if (exists) notes.push(`Replaces an earlier verification of this key; its history is in git.`);
+	if (liveOverlaySha !== undefined && liveOverlaySha !== overlaySha) {
+		throw new Error("the CDP report was run with a different overlay than the one being published");
+	}
+	if (overlaySha && liveOverlaySha === undefined) {
+		notes.push("The CDP run did not apply this key's overlay, so its names were not checked live.");
+	}
 	const unverified = new Set([...doubted].filter((p) => !live.has(p) && !stale.has(p)));
 
 	const method = inherited ? "inherited" : "derived";
-	const overlayText = overlay ? renderJson(overlay) : null;
 	const meta = {
 		schema_version: 2,
 		classmap_key: targetKey,
@@ -420,7 +431,7 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		cdpReport: o.cdpReport,
 		staticReport: o.staticReport,
 		classmapSha: sha256(classmapBytes),
-		overlaySha: overlayText ? sha256(overlayText) : null,
+		overlaySha,
 		overlayEntries: overlay ? Object.keys(overlay).length : 0,
 		notes,
 	});
