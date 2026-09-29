@@ -4,21 +4,21 @@
       "wrapper": "oy96nRTKcIs7wm5K",
       "left": {
         "button": {
-          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium",
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only",
           "icon": {
             "wrapper": "e-10810-icon e-10810-icon--auto-mirror"
           }
         },
         "button_t": {
-          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium"
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only"
         }
       },
       "right": {
         "button": {
-          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--condensed-all"
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--condensed-all"
         },
         "button_t": {
-          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--condensed-all"
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--condensed-all"
         },
         "upgrade_button": {
           "wrapper": "e-10810-legacy-button e-10810-legacy-button-primary"
@@ -30,7 +30,7 @@
       "controls": {},
       "buttons": {
         "button": {
-          "wrapper": "e-10810-legacy-button e-10810-button-tertiary--icon-only-small",
+          "wrapper": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only e-10810-button-tertiary--icon-only-small",
           "wrapper__active": "e-10810-legacy-button e-10810-legacy-button-primary",
           "wrapper__indicator": "e-10810-button-primary__inner"
         }
@@ -80,10 +80,10 @@
   },
   "settings": {
     "header": {
-      "container": "fEEfljGMIEhhmWVi"
+      "container": "x-settings-outputSectionHeader"
     },
     "section": {
-      "container": "nWR7PbHjFXQJiYNL"
+      "container": "x-settings-section"
     },
     "button": {
       "wrapper": "e-10810-legacy-button e-10810-legacy-button--small e-10810-legacy-button-secondary"
@@ -101,7 +101,7 @@
   },
   "search_box": {
     "container": "main-globalNav-searchContainer",
-    "expand_button": "e-10810-legacy-button e-10810-button-tertiary--icon-only-medium main-globalNav-link-icon"
+    "expand_button": "e-10810-legacy-button e-10810-legacy-button-tertiary e-10810-button-tertiary--icon-only main-globalNav-link-icon"
   },
   "context_menu": {
     "menu_item": "main-contextMenu-menuItemButton"
