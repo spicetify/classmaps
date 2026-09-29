@@ -15,7 +15,7 @@
     "unresolved_missing": 0,
     "stale": 0,
     "cdp_hit_rate": 0.6389,
-    "overlay_entries": 287
+    "overlay_entries": 291
   },
   "required_paths": {
     "main.playbar.buttons.button.wrapper": "verified_cdp",
@@ -106,6 +106,18 @@
       },
       "verification": "Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS with published Text 0.1.6. Text restores its full-width 16px seek track. Text 0.1.6 returns the absolutely positioned timestamp spans to normal flow and aligns the seek handle. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.",
       "previous_version_check": "Archived Spotify 1.2.94 CSS maps o9SONbmdTWwKgbUo, _xaGcuWD6w4FNkGu, and jYB3Yggec0UDIsZh to the same hooks and preserves their container and timestamp roles. Older maps are unchanged. No older client was run live."
+    },
+    "entity_header_backgrounds": {
+      "date": "2026-09-29",
+      "spotify_version": "1.3.0.277",
+      "mappings": {
+        "kMUtWcOMOZmCWTMAc_gu": "main-entityHeader-background",
+        "ELsCw_Koqs_Q2dLHtg7z": "main-entityHeader-overlay",
+        "M7ECcaA17LC8UqL2GKVD": "main-actionBarBackground-background",
+        "dqwQhIudKoD98eWJzj5E": "main-home-homeHeader"
+      },
+      "verification": "Stock CSS confirms the roles: kMUtWc is the absolute full-size header layer that carries the inline colour, ELsCw adds the dark gradient on a second kMUtWc layer, M7ECcaA is the 232px z-index -1 gradient behind the action bar, and dqwQhIud is the Home header gradient hidden by its Jyc7 modifier. Spotify 1.3 dropped the separate backgroundColor modifier, so the colour layer maps to the shared background hook. Applied with SPICETIFY_CLASSMAPS_DIR through Rust CLI 3.0.0-beta.17 on macOS: on Burial (avatar header), Liked Songs and Home the readable classes are present, Ziro 0.1.5 hides the action-bar gradient and Home header, and Text renders its flat header. All 14 first-party themes reference these hooks and matched nothing on 1.3.0 before.",
+      "previous_version_check": "The base css-map maps older hashes to the same four hooks; dribbblish and matte select .main-entityHeader-background.main-entityHeader-overlay, matching the two-class overlay layer. No older client was run live."
     }
   }
 }
