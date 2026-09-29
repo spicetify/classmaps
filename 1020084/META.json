@@ -32,5 +32,6 @@
     "main.playbar.buttons.button.wrapper__active",
     "main.playbar.buttons.button.wrapper__indicator",
     "main.topbar.left.button_t.wrapper"
-  ]
+  ],
+  "verified_classmap_sha256": null
 }

@@ -29,5 +29,6 @@
   "status": "verified",
   "unverified_leaves": [
     "main.playbar.buttons.button.wrapper__indicator"
-  ]
+  ],
+  "verified_classmap_sha256": null
 }

@@ -26,5 +26,6 @@
   "status": "verified",
   "unverified_leaves": [
     "settings.header.container"
-  ]
+  ],
+  "verified_classmap_sha256": null
 }

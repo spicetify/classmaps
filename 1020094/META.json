@@ -29,5 +29,6 @@
   "status": "verified",
   "unverified_leaves": [
     "settings.button.wrapper"
-  ]
+  ],
+  "verified_classmap_sha256": null
 }

@@ -11,10 +11,22 @@
 //
 //   node scripts/validate-classmaps.ts
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import { type Classmap, KEY_DIR, keyDirs, leafValues, renderJson, ROOT, versionToKey } from "./lib.ts";
+import {
+	type Classmap,
+	compareCodePoints,
+	isFile,
+	KEY_DIR,
+	keyDirs,
+	leafValues,
+	readUtf8,
+	renderJson,
+	ROOT,
+	sha256,
+	versionToKey,
+} from "./lib.ts";
 
 const META_FIELDS = [
 	"classmap_key",
@@ -26,6 +38,7 @@ const META_FIELDS = [
 	"stale_leaves",
 	"status",
 	"unverified_leaves",
+	"verified_classmap_sha256",
 ];
 const STATUSES = ["unverified", "verified"];
 const SOURCE_METHODS = ["derived", "inherited"];
@@ -33,6 +46,9 @@ const PATH_STATUSES = ["unverified", "verified", "verified_cdp", "verified_stati
 const KNOWN_FILES = new Set(["classmap.json", "css-map.json", "META.json", "VERIFICATION.md"]);
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const SPICETIFY_NAME = /^(main|x)-[A-Za-z0-9]+-/;
+const SHA256 = /^[0-9a-f]{64}$/;
+// The characters Python's str.split() treats as whitespace.
+const WHITESPACE = /[\t\n\v\f\r\x1c-\x1f \x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+/;
 
 type Meta = Record<string, unknown>;
 
@@ -43,7 +59,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 function classmapErrors(node: unknown, parts: string[] = []): string[] {
 	const where = parts.join(".") || "<root>";
 	if (typeof node === "string") {
-		const normal = node.split(/\s+/).filter(Boolean).join(" ");
+		const normal = node.split(WHITESPACE).filter(Boolean).join(" ");
 		return node && node === normal ? [] : [`${where}: classes must be single-space separated with no padding`];
 	}
 	if (!isObject(node)) return [`${where}: must be a group or a class string`];
@@ -60,9 +76,10 @@ function classmapErrors(node: unknown, parts: string[] = []): string[] {
 }
 
 function loadCanonical(file: string, errors: string[]): unknown {
-	const raw = readFileSync(file, "utf8");
+	let raw: string;
 	let value: unknown;
 	try {
+		raw = readUtf8(file);
 		value = JSON.parse(raw);
 	} catch (e) {
 		errors.push(`${path.basename(file)}: ${(e as Error).message}`);
@@ -80,7 +97,7 @@ function stringList(meta: Meta, field: string, leaves: Map<string, string>, erro
 		errors.push(`META.json: ${field} must be a list of paths`);
 		return new Set();
 	}
-	const sorted = [...new Set(items)].sort();
+	const sorted = [...new Set(items)].sort(compareCodePoints);
 	if (sorted.length !== items.length || sorted.some((item, i) => item !== items[i])) {
 		errors.push(`META.json: ${field} must be sorted and unique`);
 	}
@@ -134,13 +151,20 @@ function metaErrors(meta: unknown, key: string, leaves: Map<string, string>, roo
 		errors.push("META.json: source.key must be null or an older seven-digit key");
 	} else if (source.method === "inherited") {
 		const parent = source.key === null ? "" : path.join(root, source.key as string, "classmap.json");
-		if (!parent || !existsSync(parent)) {
+		if (!parent || !isFile(parent)) {
 			errors.push("META.json: an inherited map needs an existing source.key");
 		} else if ((source.key as string).slice(0, 3) !== key.slice(0, 3)) {
 			errors.push("META.json: an inherited map must come from the same major.minor family");
 		} else if (!readFileSync(parent).equals(classmap)) {
 			errors.push(`classmap.json: inherited from ${source.key} but its bytes differ`);
 		}
+	}
+
+	const digest = meta.verified_classmap_sha256;
+	if (digest !== null && !(typeof digest === "string" && SHA256.test(digest))) {
+		errors.push("META.json: verified_classmap_sha256 must be null or a SHA-256 digest");
+	} else if (digest !== null && digest !== sha256(classmap)) {
+		errors.push("classmap.json: its bytes differ from the map that was verified; republish the key with --replace");
 	}
 
 	const stale = stringList(meta, "stale_leaves", leaves, errors);
@@ -174,7 +198,7 @@ export function keyErrors(keyDir: string, key = path.basename(keyDir), root = RO
 	}
 
 	const classmapPath = path.join(keyDir, "classmap.json");
-	if (!existsSync(classmapPath)) return [...errors, "classmap.json: missing"];
+	if (!isFile(classmapPath)) return [...errors, "classmap.json: missing"];
 	const classmap = loadCanonical(classmapPath, errors);
 	if (classmap === undefined) return errors;
 	const treeErrors = classmapErrors(classmap);
@@ -184,7 +208,7 @@ export function keyErrors(keyDir: string, key = path.basename(keyDir), root = RO
 
 	let semantic = new Set<string>();
 	const overlayPath = path.join(keyDir, "css-map.json");
-	if (existsSync(overlayPath)) {
+	if (isFile(overlayPath)) {
 		const overlay = loadCanonical(overlayPath, errors);
 		if (overlay !== undefined) {
 			const valid =
@@ -194,7 +218,7 @@ export function keyErrors(keyDir: string, key = path.basename(keyDir), root = RO
 		}
 	}
 	for (const [leaf, value] of leaves) {
-		for (const token of value.split(" ")) {
+		for (const token of value.split(WHITESPACE)) {
 			if (semantic.has(token) || SPICETIFY_NAME.test(token)) {
 				errors.push(`classmap.json: ${leaf} stores the Spicetify name ${token}, not the stock class`);
 			}
@@ -202,10 +226,10 @@ export function keyErrors(keyDir: string, key = path.basename(keyDir), root = RO
 	}
 
 	const metaPath = path.join(keyDir, "META.json");
-	if (existsSync(metaPath)) {
+	if (isFile(metaPath)) {
 		const meta = loadCanonical(metaPath, errors);
 		if (meta !== undefined) errors.push(...metaErrors(meta, key, leaves, root, readFileSync(classmapPath)));
-		if (!existsSync(path.join(keyDir, "VERIFICATION.md"))) {
+		if (!isFile(path.join(keyDir, "VERIFICATION.md"))) {
 			errors.push("VERIFICATION.md: required beside META.json");
 		}
 	}

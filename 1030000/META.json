@@ -24,5 +24,6 @@
   "spotify_version": "1.3.0.277",
   "stale_leaves": [],
   "status": "verified",
-  "unverified_leaves": []
+  "unverified_leaves": [],
+  "verified_classmap_sha256": null
 }

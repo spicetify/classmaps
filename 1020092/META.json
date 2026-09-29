@@ -28,5 +28,6 @@
     "settings.text_input"
   ],
   "status": "verified",
-  "unverified_leaves": []
+  "unverified_leaves": [],
+  "verified_classmap_sha256": null
 }

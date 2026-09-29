@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, test } from "node:test";
 
-import { renderJson } from "./lib.ts";
+import { renderJson, sha256 } from "./lib.ts";
 import { keyErrors } from "./validate-classmaps.ts";
 
 const classmap = { main: { topbar: { retired: "retiredHashBB", wrapper: "topbarHashAA" } } };
@@ -24,6 +24,7 @@ function meta(key: string, version: string, source: Record<string, unknown>) {
 		required_paths: { "main.topbar.wrapper": "verified_cdp" },
 		stale_leaves: ["main.topbar.retired"],
 		unverified_leaves: [],
+		verified_classmap_sha256: null,
 	};
 }
 
@@ -133,4 +134,38 @@ test("rejects group keys that would collide as dotted paths", () => {
 	assert.ok(
 		errors(child).includes('classmap.json: main: group key "topbar.wrapper" must be non-empty and contain no dots'),
 	);
+});
+
+test("rejects a classmap whose bytes differ from the verified digest", () => {
+	childMeta.verified_classmap_sha256 = sha256(renderJson(classmap));
+	writeKey("1020096", classmap, childMeta);
+	assert.deepEqual(errors(child), []);
+	childMeta.source = { method: "derived", key: "1020094" };
+	childMeta.verified_classmap_sha256 = "0".repeat(64);
+	writeKey("1020096", classmap, childMeta);
+	assert.ok(
+		errors(child).includes("classmap.json: its bytes differ from the map that was verified; republish the key with --replace"),
+	);
+});
+
+test("rejects a null classmap and invalid UTF-8", () => {
+	writeFileSync(path.join(child, "classmap.json"), "null\n");
+	assert.ok(errors(child).includes("classmap.json: <root>: must be a group or a class string"));
+	writeFileSync(path.join(child, "classmap.json"), Buffer.from([0x7b, 0x22, 0xff, 0x22, 0x3a, 0x22, 0x61, 0x22, 0x7d, 0x0a]));
+	assert.ok(errors(child).includes("classmap.json: not valid UTF-8"));
+});
+
+test("treats Python's whitespace as class separators", () => {
+	writeKey("1020096", { main: { topbar: { retired: "retiredHashBB", wrapper: "b\u001cc" } } }, childMeta);
+	assert.ok(
+		errors(child).includes("classmap.json: main.topbar.wrapper: classes must be single-space separated with no padding"),
+	);
+});
+
+test("reports a directory named like a published file instead of crashing", () => {
+	mkdirSync(path.join(child, "css-map.json"));
+	assert.doesNotThrow(() => errors(child));
+	rmSync(path.join(child, "VERIFICATION.md"));
+	mkdirSync(path.join(child, "VERIFICATION.md"));
+	assert.ok(errors(child).includes("VERIFICATION.md: required beside META.json"));
 });

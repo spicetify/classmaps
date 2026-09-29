@@ -30,5 +30,6 @@
   "unverified_leaves": [
     "main.playbar.buttons.button.wrapper__indicator",
     "settings.text_input"
-  ]
+  ],
+  "verified_classmap_sha256": null
 }
