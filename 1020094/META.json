@@ -53,11 +53,12 @@
     "search_chips.wrapper_wrapper remapped to the 1.2.9x search results chips bar (qZHfdckfFVY5AURF), DOM-verified; search_chips.chip corrected from the home filterChips class to the search page chip link (U4idT8HUFwfj7PWP).",
     "main.topbar.left.button_t.wrapper remapped to main-globalNav-link-icon (_Bg_zSvFrEutyacG), live on the nav buttons custom navlinks clone.",
     "Retired in 1.2.9x (kept stale, no candidate hash anywhere in the spa): topbar.left.button.icon.wrapper (icon span unclassed), topbar.right.upgrade_button.wrapper (no Upgrade button surface).",
-    "settings.text_input remapped to the Encore form control classes (e-10451-form-input e-10451-form-control encore-text-body-medium), CDP-verified on a live 1.2.94.583 settings page (Search locations input). Multi-class value; valid for className contexts, which is the leaf's only use."
+    "settings.text_input remapped to the Encore form control classes (e-10451-form-input e-10451-form-control encore-text-body-medium), CDP-verified on a live 1.2.94.583 settings page (Search locations input). Multi-class value; valid for className contexts, which is the leaf's only use.",
+    "The qnaFIKUJ9oUIkN97 overlay has pointer-events:none, an absolute three-column panel-gap grid, and black child backgrounds in the stock xpui-snapshot.css. It supplies the existing Flow theme main-layoutResizer-seam child-background rule. No visibility-state mapping is added because its element role has not been verified."
   ],
   "overlay": {
     "file": "css-map.json",
-    "entries": 2,
-    "note": "Flat hash -> semantic bridge for the classic preprocess pipeline; only verified corrections the global css-map lacks. Hashes already covered by the global css-map are intentionally excluded."
+    "entries": 4,
+    "note": "Flat hash -> semantic bridge for the classic preprocess pipeline. The layout resizer seam is identified from stock 1.2.94.583 CSS; its Flow theme hover and resize behavior has not been verified live."
   }
 }
