@@ -18,6 +18,8 @@ import re
 import sys
 from pathlib import Path
 
+from validate_classmaps import render_json
+
 ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "index.json"
 KEY_DIR = re.compile(r"^\d+$")
@@ -28,13 +30,8 @@ def sha256(path: Path) -> str:
 
 
 def classmap_file(key_dir: Path) -> Path | None:
-    """The classmap the CLI would pick: classmap.json, else the highest-sorting
-    classmap-*.json. Mirrors find_classmap_file in the Rust CLI."""
-    direct = key_dir / "classmap.json"
-    if direct.is_file():
-        return direct
-    hashed = sorted(key_dir.glob("classmap-*.json"))
-    return hashed[-1] if hashed else None
+    path = key_dir / "classmap.json"
+    return path if path.is_file() else None
 
 
 def entry_for(key_dir: Path) -> dict | None:
@@ -84,7 +81,7 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="fail if index.json is stale")
     args = parser.parse_args()
 
-    rendered = json.dumps(build(), indent=2, sort_keys=True) + "\n"
+    rendered = render_json(build())
 
     if args.check:
         current = INDEX.read_text() if INDEX.is_file() else ""

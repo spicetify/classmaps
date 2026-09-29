@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import promote_inherited as promote  # noqa: E402
 import build_index  # noqa: E402
+from validate_classmaps import render_json  # noqa: E402
 
 
 class PromoteInheritedTests(unittest.TestCase):
@@ -27,29 +28,33 @@ class PromoteInheritedTests(unittest.TestCase):
                 "playbar": {"indicator": "indicatorHashCC"},
             }
         }
-        (self.source / "classmap-source.json").write_text(json.dumps(self.classmap) + "\n")
-        (self.source / "css-map.json").write_text('{"customHash": "semantic-name"}\n')
+        (self.source / "classmap.json").write_text(render_json(self.classmap))
+        (self.source / "css-map.json").write_text(render_json({"customHash": "semantic-name"}))
         (self.source / "META.json").write_text(
-            json.dumps(
+            render_json(
                 {
+                    "schema_version": 2,
                     "spotify_version": "1.2.94.583",
                     "classmap_key": "1020094",
                     "status": "verified",
+                    "generated": "2026-07-21",
+                    "source": {"method": "derived", "key": None},
                     "stale_leaves": ["main.topbar.retired"],
+                    "unverified_leaves": [],
                     "required_paths": {
                         "main.topbar.wrapper": "verified",
                         "main.playbar.indicator": "verified",
                     },
                 }
             )
-            + "\n"
         )
+        (self.source / "VERIFICATION.md").write_text("# Spotify 1.2.94.583 (1020094)\n")
         self.static_report = {
             "target": {
                 "spotify_version": "1.2.96.518",
                 "css_sha256": "a" * 64,
                 "classmap_sha256": hashlib.sha256(
-                    (self.source / "classmap-source.json").read_bytes()
+                    (self.source / "classmap.json").read_bytes()
                 ).hexdigest(),
             },
             "summary": {"needs_manual_check": 1, "missing_in_css": 2},
@@ -109,7 +114,9 @@ class PromoteInheritedTests(unittest.TestCase):
         )
 
         self.assertEqual(target, self.root / "1020096")
-        self.assertEqual(json.loads((target / "classmap-source.json").read_text()), self.classmap)
+        self.assertEqual(
+            (target / "classmap.json").read_bytes(), (self.source / "classmap.json").read_bytes()
+        )
         self.assertEqual(
             json.loads((target / "css-map.json").read_text()),
             {"customHash": "semantic-name"},
@@ -117,14 +124,15 @@ class PromoteInheritedTests(unittest.TestCase):
         meta = json.loads((target / "META.json").read_text())
         self.assertNotIn(b"\r", (target / "META.json").read_bytes())
         self.assertEqual(meta["status"], "verified")
-        self.assertEqual(meta["inherited_from"], "1020094")
+        self.assertEqual(meta["source"], {"method": "inherited", "key": "1020094"})
         self.assertEqual(
             meta["stale_leaves"],
             ["main.topbar.retired"],
         )
         self.assertEqual(meta["unverified_leaves"], ["main.playbar.indicator"])
-        self.assertEqual(meta["stats"]["static_present"], 1)
-        self.assertEqual(meta["stats"]["verified_cdp"], 1)
+        verification = (target / "VERIFICATION.md").read_text()
+        self.assertIn("| static_present | 1 |", verification)
+        self.assertIn("| verified_cdp | 1 |", verification)
         self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "verified_cdp")
         self.assertEqual(meta["required_paths"]["main.playbar.indicator"], "unverified")
 
@@ -209,9 +217,9 @@ class PromoteInheritedTests(unittest.TestCase):
         self.assertEqual(meta["stale_leaves"], ["main.topbar.retired"])
         self.assertEqual(meta["unverified_leaves"], [])
         self.assertEqual(meta["required_paths"]["main.playbar.indicator"], "verified_cdp")
-        self.assertEqual(meta["stats"]["live_only"], 1)
-        self.assertEqual(meta["stats"]["unresolved_missing"], 1)
-        self.assertTrue(any("One CSS-only miss was observed live" in note for note in meta["notes"]))
+        verification = (target / "VERIFICATION.md").read_text()
+        self.assertIn("| live_only | 1 |", verification)
+        self.assertIn("| unresolved_missing | 1 |", verification)
 
     def test_refuses_a_live_report_below_the_required_hit_rate(self):
         self.cdp_report["rows"][0]["hit"] = False
@@ -399,6 +407,46 @@ class PromoteInheritedTests(unittest.TestCase):
 
         meta = json.loads((target / "META.json").read_text())
         self.assertNotIn("main.topbar.retired", meta["stale_leaves"])
+
+    def test_a_path_present_in_target_css_is_statically_verified(self):
+        source_meta = json.loads((self.source / "META.json").read_text())
+        source_meta["required_paths"]["main.topbar.wrapper"] = "unverified"
+        source_meta["unverified_leaves"] = ["main.topbar.wrapper"]
+        (self.source / "META.json").write_text(render_json(source_meta))
+        self.cdp_report["rows"][0]["hit"] = False
+        self.cdp_report["rows"][2]["hit"] = True
+
+        target = promote.promote_inherited_release(
+            root=self.root,
+            source_key="1020094",
+            spotify_version="1.2.96.518",
+            static_report=self.static_report,
+            cdp_report=self.cdp_report,
+            generated="2026-08-12",
+            min_hit_rate=0.25,
+        )
+
+        meta = json.loads((target / "META.json").read_text())
+        self.assertEqual(meta["required_paths"]["main.topbar.wrapper"], "verified_static")
+        self.assertEqual(meta["unverified_leaves"], [])
+
+    def test_refuses_a_release_that_keeps_a_required_path_stale(self):
+        source_meta = json.loads((self.source / "META.json").read_text())
+        source_meta["required_paths"]["main.topbar.retired"] = "verified"
+        (self.source / "META.json").write_text(render_json(source_meta))
+
+        with self.assertRaisesRegex(ValueError, "required path main.topbar.retired is stale"):
+            promote.promote_inherited_release(
+                root=self.root,
+                source_key="1020094",
+                spotify_version="1.2.96.518",
+                static_report=self.static_report,
+                cdp_report=self.cdp_report,
+                generated="2026-08-12",
+                min_hit_rate=0.25,
+            )
+        self.assertFalse((self.root / "1020096").exists())
+        self.assertEqual(list(self.root.glob(".1020096-*")), [])
 
     def test_failed_copy_leaves_no_partial_target(self):
         with mock.patch.object(promote.shutil, "copy2", side_effect=OSError("disk full")):

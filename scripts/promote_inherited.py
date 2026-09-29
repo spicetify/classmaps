@@ -20,38 +20,11 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
+from validate_classmaps import key_errors, leaf_values, render_json, version_to_key
+
 ROOT = Path(__file__).resolve().parent.parent
 MIN_PROMOTION_HIT_RATE = 0.25
 SHA256_RE = re.compile(r"[0-9a-f]{64}")
-
-
-def version_to_key(version: str) -> str:
-    match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)(?:\..*)?", version)
-    if not match:
-        raise ValueError(f"need major.minor.patch, got {version!r}")
-    major, minor, patch = (int(part) for part in match.groups())
-    return f"{major}{minor:02d}{patch:04d}"
-
-
-def classmap_file(key_dir: Path) -> Path:
-    direct = key_dir / "classmap.json"
-    if direct.is_file():
-        return direct
-    candidates = sorted(key_dir.glob("classmap-*.json"))
-    if not candidates:
-        raise FileNotFoundError(f"no classmap in {key_dir}")
-    return candidates[-1]
-
-
-def leaf_paths(node: object, parts: tuple[str, ...] = ()) -> set[str]:
-    if isinstance(node, dict):
-        paths: set[str] = set()
-        for key, value in node.items():
-            paths |= leaf_paths(value, (*parts, key))
-        return paths
-    if isinstance(node, str):
-        return {".".join(parts)}
-    raise ValueError(f"invalid classmap leaf at {'.'.join(parts)}")
 
 
 def report_rows(
@@ -73,17 +46,6 @@ def report_rows(
     if mismatched:
         raise ValueError(f"{name} does not match classmap at {sorted(mismatched)}")
     return rows
-
-
-def leaf_values(node: object, parts: tuple[str, ...] = ()) -> dict[str, str]:
-    if isinstance(node, dict):
-        values: dict[str, str] = {}
-        for key, value in node.items():
-            values.update(leaf_values(value, (*parts, key)))
-        return values
-    if isinstance(node, str):
-        return {".".join(parts): node}
-    raise ValueError(f"invalid classmap leaf at {'.'.join(parts)}")
 
 
 def sha256(path: Path) -> str:
@@ -183,36 +145,56 @@ def updated_required_paths(
             required[path] = "verified_cdp"
         elif path in unverified:
             required[path] = "unverified"
-        elif str(required[path]).startswith("verified"):
-            required[path] = "verified (inherited; present in target CSS)"
+        else:
+            required[path] = "verified_static"
     return required
 
 
-def verification_notes(
+def verification_markdown(
     source_key: str,
+    target_key: str,
+    spotify_version: str,
     paths: set[str],
     missing_in_target: set[str],
     live_hits: set[str],
-) -> list[str]:
+    cdp_report: dict,
+    cdp_hit_rate: float,
+    overlay_entries: int,
+) -> str:
     live_only = missing_in_target & live_hits
-    live_only_note = (
-        "One CSS-only miss was observed live and remains verified."
-        if len(live_only) == 1
-        else f"{len(live_only)} CSS-only misses were observed live and remain verified."
-    )
-    return [
-        f"Classmap inherited byte-for-byte from {source_key}; no migration guesses were accepted.",
+    navigation = cdp_report["navigation"]
+    rows = {
+        "leaves": len(paths),
+        "static_present": len(paths - missing_in_target),
+        "verified_cdp": len(live_hits),
+        "live_only": len(live_only),
+        "unresolved_missing": len(missing_in_target - live_hits),
+        "cdp_hit_rate": cdp_hit_rate,
+        "overlay_entries": overlay_entries,
+    }
+    lines = [
+        f"# Spotify {spotify_version} ({target_key})",
+        "",
+        f"Pipeline: inherit({source_key} -> {target_key}) + static target-CSS verification + CDP e2e (deep).",
+        "",
+        "## Notes",
+        "",
+        f"- Classmap inherited byte-for-byte from {source_key}; no migration guesses were accepted.",
+        f"- Static verification found {rows['static_present']}/{len(paths)} paths in the target CSS.",
+        f"- CSS-only misses observed live, which remain verified: {len(live_only)}.",
         (
-            f"Static verification found {len(paths - missing_in_target)}/{len(paths)} paths "
-            "in the target CSS."
+            f"- Deep CDP verification observed {len(live_hits)}/{len(paths)} paths with "
+            f"{navigation['succeeded']}/{navigation['attempted']} successful navigation steps."
         ),
-        live_only_note,
-        (
-            f"Deep CDP verification observed {len(live_hits)}/{len(paths)} paths on the "
-            "routes and transient surfaces exercised by the verifier."
-        ),
-        "Unresolved new misses remain usable but are marked unverified; inherited stale paths stay blocked.",
+        "- Unresolved new misses remain usable but are marked unverified; inherited stale paths stay blocked.",
+        "",
+        "## Statistics at publication",
+        "",
+        "| Field | Value |",
+        "| --- | --- |",
+        *(f"| {field} | {value} |" for field, value in rows.items()),
     ]
+    return "\n".join(lines) + "\n"
 
 
 def build_meta(
@@ -220,45 +202,23 @@ def build_meta(
     target_key: str,
     spotify_version: str,
     generated: str,
-    classmap: dict,
     source_meta: dict,
-    static_report: dict,
-    cdp_report: dict,
+    paths: set[str],
     missing_in_target: set[str],
     live_hits: set[str],
-    overlay_entries: int,
-    cdp_hit_rate: float,
 ) -> dict:
-    paths = leaf_paths(classmap)
-    live_only = missing_in_target & live_hits
     stale = sorted(set(source_meta.get("stale_leaves") or []) - live_hits)
     unverified = missing_in_target - live_hits - set(stale)
     return {
-        "spotify_version": spotify_version,
+        "schema_version": 2,
         "classmap_key": target_key,
+        "spotify_version": spotify_version,
         "status": "verified",
         "generated": generated,
-        "inherited_from": source_key,
-        "pipeline": (
-            f"inherit({source_key} -> {target_key}) + static target-CSS verification "
-            "+ CDP e2e (deep)"
-        ),
-        "stats": {
-            "leaves": len(paths),
-            "inherited": len(paths),
-            "static_present": len(paths - missing_in_target),
-            "verified_cdp": len(live_hits),
-            "live_only": len(live_only),
-            "unresolved_missing": len(missing_in_target - live_hits),
-            "stale": len(stale),
-            "cdp_hit_rate": cdp_hit_rate,
-            "overlay_entries": overlay_entries,
-        },
+        "source": {"method": "inherited", "key": source_key},
         "required_paths": updated_required_paths(source_meta, unverified, live_hits),
         "stale_leaves": stale,
         "unverified_leaves": sorted(unverified),
-        "notes": verification_notes(source_key, paths, missing_in_target, live_hits),
-        "verification_summary": static_report.get("summary", {}),
     }
 
 
@@ -278,7 +238,7 @@ def promote_inherited_release(
         raise FileExistsError(f"{target_key} already exists")
 
     source_dir = root / source_key
-    source_classmap = classmap_file(source_dir)
+    source_classmap = source_dir / "classmap.json"
     classmap = json.loads(source_classmap.read_text())
     source_meta = json.loads((source_dir / "META.json").read_text())
     classmap_digest = sha256(source_classmap)
@@ -299,19 +259,27 @@ def promote_inherited_release(
 
     overlay = source_dir / "css-map.json"
     overlay_entries = len(json.loads(overlay.read_text())) if overlay.is_file() else 0
+    paths = set(leaf_values(classmap))
     meta = build_meta(
         source_key,
         target_key,
         spotify_version,
         generated,
-        classmap,
         source_meta,
-        static_report,
-        cdp_report,
+        paths,
         missing_in_target,
         live_hits,
-        overlay_entries,
+    )
+    verification = verification_markdown(
+        source_key,
+        target_key,
+        spotify_version,
+        paths,
+        missing_in_target,
+        live_hits,
+        cdp_report,
         cdp_hit_rate,
+        overlay_entries,
     )
 
     staging_dir = Path(tempfile.mkdtemp(prefix=f".{target_key}-", dir=root))
@@ -319,9 +287,11 @@ def promote_inherited_release(
         shutil.copy2(source_classmap, staging_dir / source_classmap.name)
         if overlay.is_file():
             shutil.copy2(overlay, staging_dir / overlay.name)
-        (staging_dir / "META.json").write_text(
-            json.dumps(meta, indent=2, allow_nan=False) + "\n", encoding="utf-8", newline="\n"
-        )
+        (staging_dir / "META.json").write_text(render_json(meta), encoding="utf-8", newline="\n")
+        (staging_dir / "VERIFICATION.md").write_text(verification, encoding="utf-8", newline="\n")
+        errors = key_errors(staging_dir, key=target_key, root=root)
+        if errors:
+            raise ValueError("promoted release fails validation: " + "; ".join(errors))
         staging_dir.rename(target_dir)
     except Exception:
         shutil.rmtree(staging_dir, ignore_errors=True)
