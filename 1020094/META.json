@@ -2,19 +2,19 @@
   "classmap_key": "1020094",
   "generated": "2026-07-21",
   "required_paths": {
-    "context_menu.menu_item": "verified",
-    "main.navbar.link.wrapper": "verified",
-    "main.playbar.buttons.button.wrapper": "verified",
-    "main.topbar.wrapper": "verified",
-    "modal.track_credits.container": "verified",
-    "modal.widget_generator.container": "verified",
-    "search_box.container": "verified",
-    "search_chips.wrapper": "verified",
-    "settings.button.wrapper": "unverified",
-    "settings.header.container": "verified",
-    "settings.section.container": "verified",
-    "sort_box.list.button": "verified",
-    "tracklist.column_header": "verified"
+    "context_menu.menu_item": "verified_cdp",
+    "main.navbar.link.wrapper": "verified_cdp",
+    "main.playbar.buttons.button.wrapper": "verified_cdp",
+    "main.topbar.wrapper": "verified_cdp",
+    "modal.track_credits.container": "verified_cdp",
+    "modal.widget_generator.container": "verified_cdp",
+    "search_box.container": "verified_cdp",
+    "search_chips.wrapper": "verified_cdp",
+    "settings.button.wrapper": "verified_cdp",
+    "settings.header.container": "verified_cdp",
+    "settings.section.container": "verified_cdp",
+    "sort_box.list.button": "verified_cdp",
+    "tracklist.column_header": "verified_cdp"
   },
   "schema_version": 2,
   "source": {
@@ -28,7 +28,7 @@
   ],
   "status": "verified",
   "unverified_leaves": [
-    "settings.button.wrapper"
+    "main.playbar.buttons.button.wrapper__indicator"
   ],
-  "verified_classmap_sha256": null
+  "verified_classmap_sha256": "dc5212855a7b460980548d296313bfaf76696d9f5a43aa456289990273eefec3"
 }

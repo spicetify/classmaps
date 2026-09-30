@@ -10,6 +10,7 @@ Pipeline: derive(stock CSS -> 1020084) + static target-CSS verification + CDP e2
 - Deep CDP verification observed 30/36 paths with 10/10 successful navigation steps.
 - Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
 - Replaces an earlier verification of this key, kept below under Earlier verification.
+- Checked on 2026-09-30: the stock 1.2.84.476 package (archived by the Internet Archive from repository.spotify.com) has CSS byte-identical to this 1.2.84.475 build (CSS SHA-256 `24756a80b952a949…`), so the result also holds for the build this key was first verified on.
 - Kept the earlier live status of search_chips.wrapper, which this run didn't reach.
 
 ## Statistics at publication
