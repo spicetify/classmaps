@@ -185,6 +185,18 @@ css-map renames to the same name. An inherited key also keeps its source's
 a live hit clears them. A derived key tracks the `required_paths` of
 `--derived-from`, of `--required-paths-from`, or of the newest verified key.
 
+### New Spotify releases
+
+`.github/workflows/watch-spotify.yml` checks Spotify's Linux apt channels every
+day. For each build without a key, it downloads the package, statically
+verifies the newest older key's map against its stock CSS, and opens an issue.
+The issue says whether the map still fits, in which case you publish an
+inherited key, or which leaves lost a hashed class, in which case you migrate.
+macOS and Windows builds aren't published anywhere a job can read without a
+signed-in client, so those still need someone to notice them. To re-run the
+check for a published build, use
+`node scripts/watch-spotify.ts --cli ../cli --dry-run --only <key>`.
+
 ## Checks
 
 `pnpm check` runs everything CI runs: the type check, the index check, the key
