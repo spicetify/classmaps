@@ -7,12 +7,44 @@ Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e
 - Classmap inherited byte-for-byte from 1030000; no migration guesses were accepted.
 - Static verification found 32/36 paths in the target CSS.
 - CSS-only misses observed live by their stock class, which remain verified: 3.
+- Deep CDP verification observed 32/36 paths with 10/10 successful navigation steps.
+- Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
+- Replaces an earlier verification of this key, kept below under Earlier verification.
+
+## Statistics at publication
+
+| Field | Value |
+| --- | --- |
+| leaves | 36 |
+| static_present | 32 |
+| verified_cdp | 32 |
+| live_only | 3 |
+| unresolved_missing | 1 |
+| cdp_hit_rate | 0.8889 |
+| overlay_entries | 291 |
+
+## Evidence
+
+- Classmap SHA-256: `d91fa1f1b40a19c51c5c7781a46e1ac41a44c56f2ea4f10096ce3e289f5f0f85`
+- Overlay SHA-256: `c0c993277547bfc8ec53f4fa0a055c6e6a470dc5dbb38e37e53ed13514f20e01`
+- Target CSS SHA-256: `674b4e92bd00a513cef999978933dc49c8d31cff42c6e5b275b0960741b1a978`
+- CDP report generated: 2026-09-30T11:51:34.933Z
+
+## Earlier verification
+
+Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e (deep). Published 2026-09-30.
+
+### Notes
+
+- Classmap inherited byte-for-byte from 1030000; no migration guesses were accepted.
+- Static verification found 32/36 paths in the target CSS.
+- CSS-only misses observed live by their stock class, which remain verified: 3.
 - Deep CDP verification observed 23/36 paths with 7/8 successful navigation steps.
 - Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
 - Replaces an earlier verification of this key, kept below under Earlier verification.
 - Kept the earlier live status of settings.section.container, which this run didn't reach.
 
-## Statistics at publication
+### Statistics at publication
 
 | Field | Value |
 | --- | --- |
@@ -24,18 +56,18 @@ Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e
 | cdp_hit_rate | 0.6389 |
 | overlay_entries | 291 |
 
-## Evidence
+### Evidence
 
 - Classmap SHA-256: `d91fa1f1b40a19c51c5c7781a46e1ac41a44c56f2ea4f10096ce3e289f5f0f85`
 - Overlay SHA-256: `c0c993277547bfc8ec53f4fa0a055c6e6a470dc5dbb38e37e53ed13514f20e01`
 - Target CSS SHA-256: `674b4e92bd00a513cef999978933dc49c8d31cff42c6e5b275b0960741b1a978`
 - CDP report generated: 2026-09-29T23:31:18.380Z
 
-## Earlier verification
+### Earlier verification
 
 Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e (deep).
 
-### Notes
+#### Notes
 
 - Classmap inherited byte-for-byte from 1030000; no migration guesses were accepted.
 - Static verification found 32/36 paths in the target CSS.
@@ -45,7 +77,7 @@ Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e
 - The CSS overlay includes the four entity-header, action-bar and Home background hooks added to 1030000 on 2026-09-29. Their selectors and layout declarations also occur in the signed Spotify 1.3.1.234 macOS ARM64 stock archive; the 36-leaf classmap remains unchanged.
 - The headline statistics describe the original promotion. The patched macOS candidate run and its narrower observed coverage are recorded under Verification runs.
 
-### Statistics at publication
+#### Statistics at publication
 
 | Field | Value |
 | --- | --- |
@@ -59,14 +91,14 @@ Pipeline: inherit(1030000 -> 1030001) + static target-CSS verification + CDP e2e
 | cdp_hit_rate | 0.6667 |
 | overlay_entries | 291 |
 
-### Verification summary at publication
+#### Verification summary at publication
 
 - Needs manual check: 32
 - Missing in CSS: 4
 
-### Verification runs
+#### Verification runs
 
-#### macos_arm64_2026_09_29
+##### macos_arm64_2026_09_29
 
 - Spotify version: 1.3.1.234
 - Client state: patched
