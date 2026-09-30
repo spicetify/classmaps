@@ -7,12 +7,45 @@ Pipeline: derive(1020097 -> 1030000) + static target-CSS verification + CDP e2e 
 - Classmap derived from 1020097.
 - Static verification found 33/36 paths in the target CSS.
 - CSS-only misses observed live by their stock class, which remain verified: 3.
+- Deep CDP verification observed 32/36 paths with 10/10 successful navigation steps.
+- Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
+- Replaces an earlier verification of this key, kept below under Earlier verification.
+- Kept the earlier live status of search_chips.wrapper, settings.header.container, which this run didn't reach.
+
+## Statistics at publication
+
+| Field | Value |
+| --- | --- |
+| leaves | 36 |
+| static_present | 33 |
+| verified_cdp | 32 |
+| live_only | 3 |
+| unresolved_missing | 0 |
+| cdp_hit_rate | 0.8889 |
+| overlay_entries | 291 |
+
+## Evidence
+
+- Classmap SHA-256: `d91fa1f1b40a19c51c5c7781a46e1ac41a44c56f2ea4f10096ce3e289f5f0f85`
+- Overlay SHA-256: `c0c993277547bfc8ec53f4fa0a055c6e6a470dc5dbb38e37e53ed13514f20e01`
+- Target CSS SHA-256: `154bef4f3c5d8c1cd6455a6b1d75e06fa0675f870a35b50e04371ae90a117ce7`
+- CDP report generated: 2026-09-30T11:52:09.734Z
+
+## Earlier verification
+
+Pipeline: derive(1020097 -> 1030000) + static target-CSS verification + CDP e2e (deep). Published 2026-09-30.
+
+### Notes
+
+- Classmap derived from 1020097.
+- Static verification found 33/36 paths in the target CSS.
+- CSS-only misses observed live by their stock class, which remain verified: 3.
 - Deep CDP verification observed 23/36 paths with 8/8 successful navigation steps.
 - Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
 - Replaces an earlier verification of this key, kept below under Earlier verification.
 - Kept the earlier live status of modal.track_credits.container, modal.widget_generator.container, search_chips.wrapper, settings.header.container, settings.section.container, which this run didn't reach.
 
-## Statistics at publication
+### Statistics at publication
 
 | Field | Value |
 | --- | --- |
@@ -24,18 +57,18 @@ Pipeline: derive(1020097 -> 1030000) + static target-CSS verification + CDP e2e 
 | cdp_hit_rate | 0.6389 |
 | overlay_entries | 291 |
 
-## Evidence
+### Evidence
 
 - Classmap SHA-256: `d91fa1f1b40a19c51c5c7781a46e1ac41a44c56f2ea4f10096ce3e289f5f0f85`
 - Overlay SHA-256: `c0c993277547bfc8ec53f4fa0a055c6e6a470dc5dbb38e37e53ed13514f20e01`
 - Target CSS SHA-256: `154bef4f3c5d8c1cd6455a6b1d75e06fa0675f870a35b50e04371ae90a117ce7`
 - CDP report generated: 2026-09-29T23:31:53.821Z
 
-## Earlier verification
+### Earlier verification
 
 Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS verification + deep CDP e2e on macOS and Windows + targeted live DOM/CSSOM probes.
 
-### Notes
+#### Notes
 
 - Spotify 1.3.0 is a CSS-module rehash, so this key was derived rather than inherited from a 1.2.x classmap.
 - The 280-entry css-map overlay was generated only from unique exact selector/declaration signatures shared by the stock 1.2.97 and 1.3.0 xpui stylesheets; 82 ambiguous signatures were excluded and 0 generated mappings conflicted with targeted live overrides.
@@ -49,7 +82,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - The headline statistics and targeted checks describe the historical verification runs. Current candidate coverage is recorded under the macos_2026_09_29 run.
 - On 2026-09-30 the modal, sort-box and context-menu leaves, which had been stored as their css-map names, were rewritten to their stock hashes from the 291-entry overlay. The css-map stages each back to the same name, and the map is again byte-identical to 1030001.
 
-### Statistics at publication
+#### Statistics at publication
 
 | Field | Value |
 | --- | --- |
@@ -64,7 +97,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 | cdp_hit_rate | 0.6667 |
 | overlay_entries | 291 |
 
-### Verification summary at publication
+#### Verification summary at publication
 
 - Deep DOM hits: 24
 - Targeted live hits: 12
@@ -75,9 +108,9 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - CSS overlay conflicts: 0
 - CSS overlay ambiguous excluded: 82
 
-### Regression checks
+#### Regression checks
 
-#### topbar_right_button
+##### topbar_right_button
 
 - Date: 2026-09-15
 - Spotify version: 1.3.0.277
@@ -90,7 +123,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Gap (px): 8
 - Verification: Measured Bookmark, Full App Display, and Popup Lyrics after Rust apply and a client restart. Their hitboxes and gaps match the native notification and activity buttons. The unchanged 1.2.97 classmap resolves to the same semantic class, whose archived CSS also specifies 32px width and height.
 
-#### root_containers
+##### root_containers
 
 - Date: 2026-09-15
 - Spotify version: 1.3.0.277
@@ -104,7 +137,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
   - Method: archived stock CSS inspection
   - Verification: The embedded CSS-map already maps qPaMr9Jzt0_Doy3C, vEHGULrufZMHBNrp, and YdGOYWQYr6kqh7KU to the same three hooks. Their stock declarations preserve the same grid areas, sizing, and player gutters as 1.3.0; black library and player container backgrounds are already present in 1.2.94. Older version maps remain unchanged. This is archived CSS evidence, not a live older-client check.
 
-#### settings_toggle_input
+##### settings_toggle_input
 
 - Date: 2026-09-15
 - Spotify version: 1.3.0.277
@@ -112,7 +145,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Staged class: x-toggle-input
 - Verification: The native checkbox uses opacity:0, pointer-events:none, and position:absolute in five stock stylesheets. The missing semantic hook left stdlib Settings rows showing both a native checkbox and their styled indicator. Reapply restores the shared input styling; live Spicetify Settings inputs have opacity 0 and absolute positioning while their toggle indicators remain visible. Regression coverage fails without the mapping.
 
-#### playback_bar
+##### playback_bar
 
 - Date: 2026-09-16
 - Spotify version: 1.3.0.277
@@ -123,7 +156,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Verification: Stock CSS and live playback controls confirm the container, elapsed-time, and duration roles. Applied through Rust CLI 3.0.0-beta.17 on macOS with published Text 0.1.6. Text restores its full-width 16px seek track. Text 0.1.6 returns the absolutely positioned timestamp spans to normal flow and aligns the seek handle. Pointer seeking, ArrowRight seeking, and the duration/remaining-time toggle passed through UI input.
 - Previous version check: Archived Spotify 1.2.94 CSS maps o9SONbmdTWwKgbUo, _xaGcuWD6w4FNkGu, and jYB3Yggec0UDIsZh to the same hooks and preserves their container and timestamp roles. Older maps are unchanged. No older client was run live.
 
-#### entity_header_backgrounds
+##### entity_header_backgrounds
 
 - Date: 2026-09-29
 - Spotify version: 1.3.0.277
@@ -135,9 +168,9 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Verification: Stock CSS confirms the roles: kMUtWc is the absolute full-size header layer that carries the inline colour, ELsCw adds the dark gradient on a second kMUtWc layer, M7ECcaA is the 232px z-index -1 gradient behind the action bar, and dqwQhIud is the Home header gradient hidden by its Jyc7 modifier. Spotify 1.3 dropped the separate backgroundColor modifier, so the colour layer maps to the shared background hook. Applied with SPICETIFY_CLASSMAPS_DIR through Rust CLI 3.0.0-beta.17 on macOS: on Burial (avatar header), Liked Songs and Home the readable classes are present, Ziro 0.1.5 hides the action-bar gradient and Home header, and Text renders its flat header. All 14 first-party themes reference these hooks and matched nothing on 1.3.0 before.
 - Previous version check: The base css-map maps older hashes to the same four hooks; dribbblish and matte select .main-entityHeader-background.main-entityHeader-overlay, matching the two-class overlay layer. No older client was run live.
 
-### Verification runs
+#### Verification runs
 
-#### windows_2026_09_16
+##### windows_2026_09_16
 
 - Classmap SHA-256: `879140c1dddb65b2ff14440c34abe3b2d166274a1309ce3214108e21c8430bc7`
 - Client state: patched
@@ -147,7 +180,7 @@ Pipeline: exact stock-CSS signature migration from 1020097 + static target-CSS v
 - Navigation succeeded: 7
 - Note: Historical evidence for the contributor map before restoring the topbar, navigation-link and outer-search-container roles.
 
-#### macos_2026_09_29
+##### macos_2026_09_29
 
 - Spotify version: 1.3.0.277
 - OS: macOS
