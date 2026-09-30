@@ -167,5 +167,10 @@ test("reports a directory named like a published file instead of crashing", () =
 	assert.doesNotThrow(() => errors(child));
 	rmSync(path.join(child, "VERIFICATION.md"));
 	mkdirSync(path.join(child, "VERIFICATION.md"));
-	assert.ok(errors(child).includes("VERIFICATION.md: required beside META.json"));
+	assert.ok(errors(child).includes("VERIFICATION.md: missing"));
+});
+
+test("requires META.json for every key", () => {
+	rmSync(path.join(child, "META.json"));
+	assert.ok(errors(child).includes("META.json: missing"));
 });

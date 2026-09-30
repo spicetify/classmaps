@@ -2,7 +2,7 @@
 //
 //   <key>/classmap.json     nested groups of class-name leaves (required)
 //   <key>/css-map.json      flat hash -> semantic overlay (optional)
-//   <key>/META.json         schema_version 2 metadata (optional for legacy keys)
+//   <key>/META.json         schema_version 2 metadata (required)
 //   <key>/VERIFICATION.md   verification history (required beside META.json)
 //
 // JSON files must be in canonical form (renderJson). META claims are checked
@@ -226,13 +226,10 @@ export function keyErrors(keyDir: string, key = path.basename(keyDir), root = RO
 	}
 
 	const metaPath = path.join(keyDir, "META.json");
-	if (isFile(metaPath)) {
-		const meta = loadCanonical(metaPath, errors);
-		if (meta !== undefined) errors.push(...metaErrors(meta, key, leaves, root, readFileSync(classmapPath)));
-		if (!isFile(path.join(keyDir, "VERIFICATION.md"))) {
-			errors.push("VERIFICATION.md: required beside META.json");
-		}
-	}
+	if (!isFile(metaPath)) return [...errors, "META.json: missing"];
+	const meta = loadCanonical(metaPath, errors);
+	if (meta !== undefined) errors.push(...metaErrors(meta, key, leaves, root, readFileSync(classmapPath)));
+	if (!isFile(path.join(keyDir, "VERIFICATION.md"))) errors.push("VERIFICATION.md: missing");
 	return errors;
 }
 

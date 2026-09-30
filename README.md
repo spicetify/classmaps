@@ -14,14 +14,13 @@ SHA-256 digests, and the CLI downloads only what the index names.
 | --- | --- | --- |
 | `classmap.json` | Yes | Nested groups whose leaves are Spotify's stock class strings. |
 | `css-map.json` | No | Flat overlay from stock class to Spicetify name for this build. |
-| `META.json` | For verified keys | The fields the CLI and tooling read, described below. |
-| `VERIFICATION.md` | With `META.json` | Pipeline, notes, statistics, and verification runs. |
+| `META.json` | Yes | The fields the CLI and tooling read, described below. |
+| `VERIFICATION.md` | Yes | Pipeline, notes, statistics, and verification runs. |
 
 Leaves store the class exactly as it appears in the stock client, never the
 Spicetify name the css-map rewrites it to. The CLI rewrites staged modules in
 the same css-map pass as the client, so both forms reach the same DOM class,
-but only the stock form can be checked against a stock archive. Keys
-1020038, 1020040, and 1020045 predate the pipeline and have no `META.json`.
+but only the stock form can be checked against a stock archive.
 
 Every JSON file uses two-space indentation and ends with a newline.
 `classmap.json`, `css-map.json`, `META.json`, and `index.json` also sort their
