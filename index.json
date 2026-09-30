@@ -27,9 +27,9 @@
       },
       "meta": {
         "file": "META.json",
-        "sha256": "55c303d2b977ccf359e718f508c3784d34e82b392d380ed1b1e231f02140e043"
+        "sha256": "66ee0250ad8de296ddaa8d6ffe855aa4619bee9bddb59d0709b9019edf9aeb06"
       },
-      "spotifyVersion": "1.2.92.147",
+      "spotifyVersion": "1.2.92.148",
       "status": "verified"
     },
     "1020094": {
@@ -43,7 +43,7 @@
       },
       "meta": {
         "file": "META.json",
-        "sha256": "1e0e0e0a68e08b54110055adc1f1a9e01e798620b5b7b0a9244c5fb3f439d36d"
+        "sha256": "d861681baec69cccec6a7fb6f35d051193fc8eb1cf3765faf407d0c0504f67d8"
       },
       "spotifyVersion": "1.2.94.583",
       "status": "verified"
@@ -91,7 +91,7 @@
       },
       "meta": {
         "file": "META.json",
-        "sha256": "8dfa71738326b1507d389f57b1501d24d3030b99f8f036bb65efef2828450b01"
+        "sha256": "979062ef9fb2c2779a369da8d9d908001328cff5bc62594b783232b84653a056"
       },
       "spotifyVersion": "1.2.97.270",
       "status": "verified"
@@ -107,7 +107,7 @@
       },
       "meta": {
         "file": "META.json",
-        "sha256": "d2aadb1c486736811930db20089b901683b06520146e0ad094844d452b92f247"
+        "sha256": "c90f11a6332d0f4ec3b0445241e349bd39fd98ee9c27f0eef56f62d9f93495c5"
       },
       "spotifyVersion": "1.2.98.301",
       "status": "verified"

@@ -9,7 +9,7 @@
     "modal.track_credits.container": "verified_cdp",
     "modal.widget_generator.container": "verified_cdp",
     "search_box.container": "verified_cdp",
-    "search_chips.wrapper": "verified_static",
+    "search_chips.wrapper": "verified_cdp",
     "settings.button.wrapper": "verified_cdp",
     "settings.header.container": "verified_cdp",
     "settings.section.container": "verified_cdp",
@@ -21,7 +21,7 @@
     "key": null,
     "method": "derived"
   },
-  "spotify_version": "1.2.92.147",
+  "spotify_version": "1.2.92.148",
   "stale_leaves": [
     "main.topbar.left.button.icon.wrapper",
     "main.topbar.right.upgrade_button.wrapper",
