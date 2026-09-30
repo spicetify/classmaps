@@ -1,8 +1,40 @@
 # Spotify 1.2.95.453 (1020095)
 
-Pipeline: derive 1020094 with three settings corrections + stock source/CSS verification + deep CDP + Linux workflow verification.
+Pipeline: derive(1020094 -> 1020095) + static target-CSS verification + CDP e2e (deep). Published 2026-09-30.
 
 ## Notes
+
+- Classmap derived from 1020094.
+- Static verification found 33/36 paths in the target CSS.
+- CSS-only misses observed live by their stock class, which remain verified: 0.
+- Deep CDP verification observed 29/36 paths with 10/10 successful navigation steps.
+- Unresolved new misses remain usable but are marked unverified; stale paths stay blocked.
+- Replaces an earlier verification of this key, kept below under Earlier verification.
+
+## Statistics at publication
+
+| Field | Value |
+| --- | --- |
+| leaves | 36 |
+| static_present | 33 |
+| verified_cdp | 29 |
+| live_only | 0 |
+| unresolved_missing | 3 |
+| cdp_hit_rate | 0.8056 |
+| overlay_entries | 2 |
+
+## Evidence
+
+- Classmap SHA-256: `98a516adfa3161e7ace6ff4d28e9048f953aa88027ab3d55bff25920ef6d9aac`
+- Overlay SHA-256: `108d9a0fcd9f6a23da409da11fce3cdfde6dc854ba0795be73ffd49d1ea266ba`
+- Target CSS SHA-256: `3ff74770ffd77b4fca017cff20a83475bf2fa9b5b3f270b19c2b153c4206e4c6`
+- CDP report generated: 2026-09-30T13:39:46.364Z
+
+## Earlier verification
+
+Pipeline: derive 1020094 with three settings corrections + stock source/CSS verification + deep CDP + Linux workflow verification.
+
+### Notes
 
 - Linux stable Spotify 1.2.95.453.g0eeebbed tested on Ubuntu 24.04.5 x86_64, X11, emulated on Apple Silicon. No Windows, macOS or Wayland runtime claim.
 - Settings header KsnD09q3oqAjJX3e belongs to the output-device section in xpui-routes-desktop-settings.js. It did not render in this Linux session and remains unverified live.
@@ -16,7 +48,7 @@ Pipeline: derive 1020094 with three settings corrections + stock source/CSS veri
 - The managed installer intentionally restarted the daemon during activation. Its health returned with both watchers active; service and protocol-registration files were unchanged. This is not a daemon-continuity claim.
 - At an 800px-wide Flow window, scrolling a control into view shifted the settings view horizontally. The paired initial layouts matched; the full-width Store and final default-settings captures were aligned. Queue toggled active, and its empty-state panel was visible after removing Flow. Playback, credits/embed dialogs and external navigation were not exercised.
 
-## Statistics at publication
+### Statistics at publication
 
 | Field | Value |
 | --- | --- |
@@ -31,12 +63,12 @@ Pipeline: derive 1020094 with three settings corrections + stock source/CSS veri
 | cdp_hit_rate | 0.6111 |
 | overlay_entries | 2 |
 
-## Verification summary at publication
+### Verification summary at publication
 
 - Needs manual check: 31
 - Missing in CSS: 5
 
-## Linux verification
+### Linux verification
 
 - Platform: linux-x86_64
 - Spotify package SHA-256: `256e2eb1ec96fbc0c51afab247298e4e6eabfabbafafd4617584f44cca2fb31f`

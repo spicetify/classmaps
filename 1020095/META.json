@@ -6,12 +6,12 @@
     "main.navbar.link.wrapper": "verified_cdp",
     "main.playbar.buttons.button.wrapper": "verified_cdp",
     "main.topbar.wrapper": "verified_cdp",
-    "modal.track_credits.container": "verified_static",
-    "modal.widget_generator.container": "verified_static",
+    "modal.track_credits.container": "verified_cdp",
+    "modal.widget_generator.container": "verified_cdp",
     "search_box.container": "verified_cdp",
     "search_chips.wrapper": "verified_cdp",
     "settings.button.wrapper": "verified_cdp",
-    "settings.header.container": "unverified",
+    "settings.header.container": "verified_static",
     "settings.section.container": "verified_cdp",
     "sort_box.list.button": "verified_cdp",
     "tracklist.column_header": "verified_cdp"
@@ -28,8 +28,7 @@
   ],
   "status": "verified",
   "unverified_leaves": [
-    "main.playbar.buttons.button.wrapper__indicator",
-    "settings.header.container"
+    "main.playbar.buttons.button.wrapper__indicator"
   ],
-  "verified_classmap_sha256": null
+  "verified_classmap_sha256": "98a516adfa3161e7ace6ff4d28e9048f953aa88027ab3d55bff25920ef6d9aac"
 }
