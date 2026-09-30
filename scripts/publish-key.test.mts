@@ -456,7 +456,15 @@ test("refuses a derived candidate that stores Spicetify names", () => {
 	assert.ok(!existsSync(path.join(root, "1020096")));
 });
 
+test("an inherited key can keep an overlay of its own", () => {
+	const overlay = path.join(root, "overlay.json");
+	writeFileSync(overlay, renderJson({ ownHash: "own-name" }));
+	const target = publishRelease(options({ overlayPath: overlay }));
+	assert.deepEqual(JSON.parse(readFileSync(path.join(target, "css-map.json"), "utf8")), { ownHash: "own-name" });
+	assert.deepEqual(readFileSync(path.join(target, "classmap.json")), readFileSync(path.join(source, "classmap.json")));
+});
+
 test("refuses stale paths or required-path changes for an inherited key", () => {
-	assert.throws(() => publishRelease(options({ stale: ["main.topbar.wrapper"] })), /takes its map, overlay and stale paths/);
+	assert.throws(() => publishRelease(options({ stale: ["main.topbar.wrapper"] })), /takes its map and stale paths/);
 	assert.throws(() => publishRelease(options({ dropRequired: ["main.topbar.wrapper"] })), /tracks its source's required paths/);
 });

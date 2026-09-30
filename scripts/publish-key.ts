@@ -14,7 +14,7 @@
 // Flags:
 //   --inherit-from KEY          copy KEY's map and overlay (an unchanged patch release)
 //   --classmap FILE             candidate map for a derived key, in canonical form
-//   --overlay FILE              css-map overlay for a derived key
+//   --overlay FILE              css-map overlay (default for an inherited key: its source's)
 //   --derived-from KEY          key the candidate was migrated from; its stale leaves carry over
 //   --migrate-report FILE       migrate report; the leaves it kept as stale stay stale
 //   --stale PATH                mark a leaf stale (repeatable)
@@ -329,8 +329,8 @@ export function publishRelease(o: PublishOptions, index = false): string {
 		throw new Error("pass exactly one of --inherit-from or --classmap");
 	}
 	const inherited = o.inheritFrom !== undefined;
-	if (inherited && (o.overlayPath || o.derivedFrom || o.migrateReport || o.stale?.length)) {
-		throw new Error("an inherited key takes its map, overlay and stale paths from its source");
+	if (inherited && (o.derivedFrom || o.migrateReport || o.stale?.length)) {
+		throw new Error("an inherited key takes its map and stale paths from its source");
 	}
 	if (inherited && (o.requiredFrom || o.dropRequired?.length)) {
 		throw new Error("an inherited key tracks its source's required paths");
@@ -357,8 +357,10 @@ export function publishRelease(o: PublishOptions, index = false): string {
 	let overlayText: string | null = null;
 	if (inherited) {
 		classmapBytes = readFileSync(path.join(o.root, o.inheritFrom as string, "classmap.json"));
+		// The map is inherited byte-for-byte; the overlay can carry fixes of its own.
 		const sourceOverlay = path.join(o.root, o.inheritFrom as string, "css-map.json");
-		if (isFile(sourceOverlay)) overlayText = readUtf8(sourceOverlay);
+		if (o.overlayPath) overlayText = readUtf8(o.overlayPath);
+		else if (isFile(sourceOverlay)) overlayText = readUtf8(sourceOverlay);
 	} else {
 		classmapBytes = readFileSync(o.classmapPath as string);
 		if (o.overlayPath) overlayText = readUtf8(o.overlayPath);
