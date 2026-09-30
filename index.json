@@ -4,24 +4,6 @@
     "sha256": "9d6ceb358e7e7d7e4099e0e8bce13bd9d9825e69741411b0d235eada8a48c655"
   },
   "keys": {
-    "1020038": {
-      "classmap": {
-        "file": "classmap.json",
-        "sha256": "d5be975944065eff2525b0df7d6d3c87e5abd913757e1c92a8f4e6d510ea18dd"
-      }
-    },
-    "1020040": {
-      "classmap": {
-        "file": "classmap.json",
-        "sha256": "49babed3d08a81926bbd860d0320904510c88e5c614705539839bb33154dcf31"
-      }
-    },
-    "1020045": {
-      "classmap": {
-        "file": "classmap.json",
-        "sha256": "bd36f3890364fe30db8a41b5a34cb9ca24c05309e29ae57b7b3670a947a0ad1d"
-      }
-    },
     "1020084": {
       "classmap": {
         "file": "classmap.json",
