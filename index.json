@@ -159,6 +159,22 @@
       },
       "spotifyVersion": "1.3.1.234",
       "status": "verified"
+    },
+    "1030003": {
+      "classmap": {
+        "file": "classmap.json",
+        "sha256": "d91fa1f1b40a19c51c5c7781a46e1ac41a44c56f2ea4f10096ce3e289f5f0f85"
+      },
+      "cssMapOverlay": {
+        "file": "css-map.json",
+        "sha256": "c0c993277547bfc8ec53f4fa0a055c6e6a470dc5dbb38e37e53ed13514f20e01"
+      },
+      "meta": {
+        "file": "META.json",
+        "sha256": "79c9e7390ada33e1d45b349365108e801ea52505afb9c18abe823a4978b34737"
+      },
+      "spotifyVersion": "1.3.3.264",
+      "status": "verified"
     }
   },
   "version": 1
